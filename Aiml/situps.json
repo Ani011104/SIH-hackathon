@@ -1,0 +1,3139 @@
+{
+  "cheat_detection": {
+    "detailed_flags": [
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 0,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 1,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 2,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 3,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 4,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 5,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 5,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 6,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 6,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 7,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 7,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 8,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 8,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 9,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 9,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 10,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 10,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 11,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 11,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 12,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 12,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 13,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 13,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 14,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 14,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 15,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 15,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 16,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 16,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 17,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 17,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 18,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 18,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 19,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 19,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 20,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 20,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 21,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 21,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 22,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 22,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 23,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 23,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 24,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 24,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 25,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 25,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 26,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 26,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 27,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 27,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 28,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 28,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 29,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 29,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 30,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 30,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 31,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 31,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 32,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 32,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 33,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 33,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 34,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 34,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 35,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 35,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 36,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 36,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 37,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 37,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 38,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 38,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 39,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 39,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 40,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 40,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 41,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 41,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 42,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 42,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 43,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 43,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 44,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 44,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 45,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 45,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 46,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 46,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 47,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 47,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 48,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 48,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 49,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 49,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 50,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 50,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 51,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 51,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 52,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 52,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 53,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 53,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 54,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 54,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 55,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 55,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 56,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 56,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 57,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 57,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 58,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 58,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 59,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 59,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 60,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 60,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 61,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 61,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 62,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 62,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 63,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 63,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 64,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 64,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 65,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 65,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 66,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 66,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 67,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 67,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 68,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 68,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 69,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 69,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 70,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 70,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 71,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 71,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 72,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 72,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 73,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 73,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 74,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 74,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 75,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 75,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 76,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 76,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 77,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 77,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 78,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 78,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 79,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 79,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 80,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 80,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 81,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 81,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 82,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 82,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 83,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 83,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 84,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 84,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 85,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 85,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 86,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 86,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 87,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 87,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 88,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 88,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 89,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 89,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 90,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 90,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 91,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 91,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 92,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 92,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 93,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 93,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 94,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 94,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 95,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 95,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 96,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 96,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 97,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 97,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 98,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 98,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 99,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 99,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 100,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 100,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 101,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 101,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 102,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 102,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 103,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 103,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 104,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 104,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 105,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 105,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 106,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 106,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 107,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 107,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 108,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 108,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 109,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 109,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 110,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 110,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 111,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 111,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 112,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 112,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 113,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 113,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 114,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 114,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 115,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 115,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 116,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 116,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 117,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 117,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 118,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 118,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 119,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 119,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 120,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 120,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 121,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 121,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 122,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 122,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 123,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 123,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 124,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 124,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 125,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 125,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 126,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 126,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 127,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 127,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 128,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 128,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 129,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 129,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 130,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 130,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 131,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 131,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 132,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 132,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 133,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 133,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 134,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 134,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 135,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 135,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 136,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 136,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 137,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 137,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 138,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 138,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 139,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 139,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 140,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 140,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 141,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 141,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 142,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 142,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 143,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 143,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 144,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 144,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 145,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 145,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 146,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 146,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 147,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 147,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 148,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 148,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 149,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 149,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 150,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 150,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 151,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 151,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 152,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 152,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 153,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 153,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 154,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 154,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 155,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 155,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 156,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 156,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 157,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 157,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 158,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 158,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 159,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 159,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 160,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 160,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 161,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 161,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 162,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 162,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 163,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 163,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 164,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 164,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 165,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 165,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 166,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 166,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 167,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 167,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 168,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 168,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 169,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 169,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 170,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 170,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 171,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 171,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 172,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 172,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 173,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 173,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 174,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 174,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 175,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 175,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 176,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 176,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 177,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 177,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 178,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 178,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 179,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 179,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 180,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 180,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 181,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 181,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 182,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 182,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 183,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 183,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 184,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 184,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 185,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 185,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 186,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 186,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 187,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 187,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 188,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 188,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 189,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 189,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 190,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 190,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 191,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 191,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 192,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 192,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 193,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 193,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 194,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 194,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 195,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 195,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 196,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 196,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 197,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 197,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 198,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 198,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 199,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 199,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 200,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 200,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 201,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 201,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 202,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 202,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 203,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 203,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 204,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 204,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 205,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 205,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 206,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 206,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 207,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 207,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 208,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 208,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 209,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 209,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 210,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 210,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 211,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 211,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 212,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 212,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 213,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 213,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 214,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 214,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 215,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 215,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 216,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 216,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 217,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 217,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 218,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 218,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 219,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 219,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 220,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 220,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 221,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 221,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 222,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 222,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 223,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 223,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 224,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 224,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 225,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 225,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 226,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 226,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 227,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 227,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 228,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 228,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 229,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 229,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 230,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 230,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 231,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 231,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 232,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 232,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 233,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 233,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 234,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 234,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 235,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 235,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 236,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 236,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 237,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 237,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 238,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 238,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 239,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 239,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 240,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 240,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 241,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 241,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 242,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 242,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 243,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 243,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 244,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 244,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 245,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 245,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 246,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 246,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 247,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 247,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 248,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 248,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 249,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 249,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 250,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 250,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 251,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 251,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 252,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 252,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 253,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 253,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 254,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 254,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 255,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 255,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 256,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 256,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 257,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 257,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 258,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 258,
+        "severity": "medium",
+        "type": "static_pose"
+      },
+      {
+        "details": "Average confidence: 0.000",
+        "frame": 259,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Pose variance: 0.000",
+        "frame": 259,
+        "severity": "medium",
+        "type": "static_pose"
+      }
+    ],
+    "flag_categories": {
+      "low_confidence": 260,
+      "static_pose": 255
+    },
+    "overall_risk": "medium",
+    "recommendations": [
+      "Poor video quality or pose detection accuracy",
+      "Person appears too static, may indicate image manipulation"
+    ],
+    "severity_breakdown": {
+      "high": 0,
+      "medium": 515
+    },
+    "total_flags": 515
+  },
+  "duration": 10.844155555555556,
+  "exercise_results": {
+    "angle_data": [],
+    "form_analysis": {
+      "error": "No valid angle data"
+    },
+    "rep_count": 0,
+    "set_count": 1,
+    "sets_details": [
+      {
+        "duration": 10.844155555555556,
+        "end_frame": 260,
+        "reps": 0,
+        "start_frame": 0
+      }
+    ]
+  },
+  "exercise_type": "pushups",
+  "fps": 23.97604854227674,
+  "overall_assessment": {
+    "confidence": "medium",
+    "recommendations": [
+      "Some authenticity concerns detected - interpret results with caution",
+      "Excellent exercise form demonstrated"
+    ],
+    "validity": "valid"
+  },
+  "timestamp": "2025-09-10T23:31:56.417441",
+  "total_frames": 260
+}
