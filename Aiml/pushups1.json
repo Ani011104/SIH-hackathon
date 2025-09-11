@@ -1,0 +1,75 @@
+{
+    "cheat_detection": {
+        "confidence_score": 95,
+        "detailed_analysis": "No suspicious patterns detected",
+        "flag_categories": {},
+        "overall_risk": "low",
+        "recommendations": [
+            "Video appears authentic"
+        ],
+        "risk_score": 0,
+        "total_flags": 0
+    },
+    "duration": 18.125066666666665,
+    "dynamic_thresholds": {
+        "confidence_min": 0.3,
+        "duplicate_tolerance": 3,
+        "movement_base": 50,
+        "movement_threshold": 37.086070488016595,
+        "static_variance_threshold": 1.0
+    },
+    "exercise_results": {
+        "form_analysis": {
+            "angle_range": 179.2559714400808,
+            "consistency": 31.79015829686603,
+            "form_score": 85,
+            "issues": [
+                "Inconsistent form"
+            ]
+        },
+        "joint_names": [
+            "shoulder",
+            "elbow",
+            "wrist"
+        ],
+        "keypoints_used": [
+            5,
+            7,
+            9
+        ],
+        "live_rep_count": 16,
+        "rep_count": 16
+    },
+    "exercise_type": "pushups",
+    "fps": 29.792993864850153,
+    "output_video": "analyzed_pushups_1757610327.mp4",
+    "overall_assessment": {
+        "confidence": "high",
+        "performance_insights": [
+            "\ud83d\udcaa Detected 16 repetitions",
+            "\ud83c\udfc6 Good exercise form"
+        ],
+        "recommendations": [
+            "\u2705 Video passed authenticity verification"
+        ],
+        "reliability_score": 85,
+        "validity": "valid"
+    },
+    "processing_time": 39.14000344276428,
+    "timestamp": "2025-09-11T22:36:06.486651",
+    "total_frames": 540,
+    "valid_frames": 540,
+    "video_properties": {
+        "duration": 18.125066666666665,
+        "fps": 29.792993864850153,
+        "resolution": "848x478",
+        "total_frames": 540
+    },
+    "video_stats": {
+        "fps": 29.792993864850153,
+        "fps_factor": 0.9930997954950052,
+        "height": 478,
+        "resolution_factor": 0.746875,
+        "width": 848
+    }
+}

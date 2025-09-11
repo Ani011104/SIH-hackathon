@@ -1,0 +1,311 @@
+{
+  "cheat_detection": {
+    "confidence_score": 20,
+    "detailed_analysis": "Risk score: 771/100, based on 177 total flags",
+    "detailed_flags": [
+      {
+        "details": "Low confidence: 0.399",
+        "frame": 1372,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.383",
+        "frame": 1373,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.384",
+        "frame": 1374,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.377",
+        "frame": 1375,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.383",
+        "frame": 1376,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.384",
+        "frame": 1377,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.357",
+        "frame": 1378,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Excessive movement: 136.7 pixels",
+        "frame": 1378,
+        "severity": "high",
+        "type": "impossible_movement"
+      },
+      {
+        "details": "Low confidence: 0.383",
+        "frame": 1379,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Excessive movement: 156.3 pixels",
+        "frame": 1379,
+        "severity": "high",
+        "type": "impossible_movement"
+      },
+      {
+        "details": "Low confidence: 0.373",
+        "frame": 1380,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.377",
+        "frame": 1381,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.364",
+        "frame": 1382,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.375",
+        "frame": 1383,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.377",
+        "frame": 1384,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.379",
+        "frame": 1385,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.379",
+        "frame": 1386,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.370",
+        "frame": 1387,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Low confidence: 0.363",
+        "frame": 1388,
+        "severity": "medium",
+        "type": "low_confidence"
+      },
+      {
+        "details": "Excessive movement: 151.1 pixels",
+        "frame": 1388,
+        "severity": "high",
+        "type": "impossible_movement"
+      }
+    ],
+    "flag_categories": {
+      "impossible_movement": 139,
+      "low_confidence": 38
+    },
+    "overall_risk": "critical",
+    "recommendations": [
+      "Unnatural movement patterns detected"
+    ],
+    "risk_score": 771,
+    "severity_breakdown": {
+      "high": 139,
+      "medium": 38
+    },
+    "total_flags": 177
+  },
+  "duration": 46.2855,
+  "exercise_results": {
+    "angle_data": [
+      178.31635800160527,
+      179.57321669645125,
+      179.20213495476295,
+      179.1356844448781,
+      175.19497794246175,
+      170.2152289623943,
+      173.4495741614919,
+      164.40472903165283,
+      163.71621063375252,
+      167.83362275221413,
+      167.82809276169374,
+      164.0093610097228,
+      159.76209516956146,
+      159.71408792421602,
+      157.01193740790936,
+      158.38598947451064,
+      161.41568014761268,
+      160.73228699148777,
+      159.97442529961296,
+      162.77062500137666,
+      164.03408491210473,
+      163.26705242709792,
+      163.6636198503138,
+      162.2472016207748,
+      162.61754082696396,
+      161.94882133795429,
+      160.60521699423623,
+      156.5750702754322,
+      154.37595468628567,
+      153.830602083553,
+      161.47380546625627,
+      162.73462940203453,
+      157.93899553159255,
+      156.145839460022,
+      157.7303713209671,
+      157.26840049211364,
+      156.18110023789328,
+      161.13509775864912,
+      162.99993311414926,
+      166.72838196715662,
+      165.96658933127821,
+      166.1355908909191,
+      165.5444879195594,
+      166.8065490536492,
+      166.08849548966822,
+      166.2420843668379,
+      164.0505051364124,
+      162.8067574917664,
+      162.46421059183146,
+      162.4377734537381,
+      162.75544160573287,
+      161.68020323451532,
+      161.18571441332512,
+      162.1374204363483,
+      163.08541948766782,
+      164.45567077913623,
+      163.69492467662624,
+      165.90590798983592,
+      169.185220666121,
+      169.4479045083142,
+      169.56925260412146,
+      169.28615539254375,
+      168.59607473481643,
+      168.28213080771062,
+      166.95178696149787,
+      166.18777614040414,
+      165.30087020568527,
+      165.11064731789344,
+      165.51953428355532,
+      166.40359580127873,
+      167.95365762532646,
+      167.11592261877468,
+      167.81149620923821,
+      167.18218132475047,
+      166.7572223365186,
+      165.10266920607637,
+      165.1821517307107,
+      166.99175855809983,
+      164.88073370017608,
+      158.6102169195169,
+      158.45299841994577,
+      158.0262235161045,
+      158.2227709801012,
+      159.04666655514632,
+      161.42826676372755,
+      162.1505975670308,
+      162.87700552843307,
+      164.78964482336528,
+      166.17628108076673,
+      166.7125444264382,
+      166.95532471464992,
+      165.86556306045114,
+      165.9176705232418,
+      165.73133696343902,
+      164.89262645993838,
+      164.80884357697204,
+      164.66231387408365,
+      164.00290591636994,
+      164.0885631712191,
+      163.3951560438919
+    ],
+    "form_analysis": {
+      "angle_range": 122.78258934547901,
+      "consistency_std": 39.754392090890725,
+      "expected_range": 70,
+      "form_score": 85,
+      "issues": [
+        "Inconsistent form (std: 39.8\u00b0)"
+      ],
+      "max_angle": 179.88901723451335,
+      "mean_angle": 129.75566452539198,
+      "min_angle": 57.10642788903434,
+      "quality": "Good",
+      "range_ratio": 1.7540369906497002
+    },
+    "joint_names": [
+      "hip",
+      "knee",
+      "ankle"
+    ],
+    "keypoints_used": [
+      11,
+      13,
+      15
+    ],
+    "rep_count": 15,
+    "set_count": 2,
+    "sets_details": [
+      {
+        "duration": 2.5658628509719223,
+        "end_frame": 77,
+        "reps": 0,
+        "start_frame": 0
+      },
+      {
+        "duration": 39.58759827213823,
+        "end_frame": 1325,
+        "reps": 15,
+        "start_frame": 137
+      }
+    ]
+  },
+  "exercise_type": "squats",
+  "fps": 30.009398191658295,
+  "overall_assessment": {
+    "confidence": "very_low",
+    "performance_insights": [
+      "\ud83d\udc4d Good form with minor areas for improvement",
+      "\ud83d\udcaa Completed 15 repetitions"
+    ],
+    "recommendations": [
+      "\u274c Video failed authenticity verification - results unreliable"
+    ],
+    "reliability_score": 10,
+    "validity": "invalid"
+  },
+  "processing_time": 119.04029583930969,
+  "timestamp": "2025-09-11T21:59:22.160344",
+  "total_frames": 1389,
+  "valid_frames": 1388,
+  "video_properties": {
+    "duration": 46.2855,
+    "fps": 30.009398191658295,
+    "resolution": "1080x1920",
+    "total_frames": 1389
+  }
+}

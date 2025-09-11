@@ -1,4 +1,4 @@
-# sports_assessment_engine.py
+# enhanced_sports_assessment_v3.py
 import cv2
 import numpy as np
 import json
@@ -9,46 +9,97 @@ from ultralytics import YOLO, solutions
 from collections import deque, defaultdict
 import math
 import statistics
+import logging
+from pathlib import Path
 
-class SportsAssessmentEngine:
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+class BalancedSportsAssessmentEngine:
     def __init__(self, model_path="yolo11n-pose.pt"):
         """
-        Initialize YOLO11 pose estimation and assessment engine
-        Downloads model automatically if not found
+        Initialize with balanced cheat detection and real-time video generation
         """
-        self.model = YOLO(model_path)
-        self.gym = solutions.AIGym(
-            model=model_path,
-            show=False,
-            kpts=[6, 8, 10]  # Default for pushups
-        )
+        logger.info(f"Initializing Balanced Sports Assessment Engine with model: {model_path}")
         
-        # Initialize tracking variables
-        self.frame_data = []
-        self.keypoints_history = deque(maxlen=100)
-        self.confidence_history = []
-        self.frame_hashes = []
-        self.cheat_flags = []
+        # Initialize models
+        self.pose_model = YOLO(model_path)
+        self.pose_model.overrides['verbose'] = False
+        
+        # Tracking variables
+        self.reset_tracking()
         
         # Exercise configurations
         self.exercise_configs = {
-            'pushups': {'kpts': [6, 8, 10], 'up_angle': 160, 'down_angle': 90},
-            'situps': {'kpts': [11, 13, 15], 'up_angle': 110, 'down_angle': 45},
-            'squats': {'kpts': [11, 13, 15], 'up_angle': 160, 'down_angle': 90},
-            'vertical_jump': {'kpts': [11, 15], 'track_keypoint': 11},  # Hip
-            'long_jump': {'kpts': [11, 15], 'track_keypoint': 15},     # Ankle
+            'pushups': {
+                'keypoints': [5, 7, 9],  # Right shoulder, elbow, wrist
+                'alt_keypoints': [6, 8, 10],  # Left shoulder, elbow, wrist
+                'up_angle': 160, 
+                'down_angle': 95,
+                'joint_names': ['shoulder', 'elbow', 'wrist'],
+                'movement_tolerance': 1.5  # Multiplier for movement threshold
+            },
+            'situps': {
+                'keypoints': [11, 13, 15],
+                'alt_keypoints': [12, 14, 16],
+                'up_angle': 110, 
+                'down_angle': 45,
+                'joint_names': ['hip', 'knee', 'ankle'],
+                'movement_tolerance': 1.2
+            },
+            'squats': {
+                'keypoints': [11, 13, 15],
+                'alt_keypoints': [12, 14, 16],
+                'up_angle': 160, 
+                'down_angle': 90,
+                'joint_names': ['hip', 'knee', 'ankle'],
+                'movement_tolerance': 1.3
+            },
+            'vertical_jump': {
+                'track_keypoint': 11,
+                'alt_track_keypoint': 12,
+                'reference_keypoints': [15, 16],
+                'movement_tolerance': 2.0  # Jumps have more movement
+            },
+            'long_jump': {
+                'track_keypoint': 15,
+                'alt_track_keypoint': 16,
+                'reference_keypoints': [11, 12],
+                'movement_tolerance': 2.5
+            }
         }
 
-    def analyze_video(self, video_path, exercise_type, user_height_cm=170):
+        # Dynamic thresholds (will be calculated per video)
+        self.dynamic_thresholds = {
+            'movement_base': 50,  # Base movement threshold in pixels
+            'confidence_min': 0.3,
+            'duplicate_tolerance': 3,
+            'static_variance_threshold': 1.0
+        }
+
+    def reset_tracking(self):
+        """Reset all tracking variables"""
+        self.frame_data = []
+        self.keypoints_history = deque(maxlen=200)
+        self.confidence_history = []
+        self.frame_hashes = []
+        self.cheat_flags = []
+        self.rep_count_live = 0
+        self.current_state = 'up'
+        self.video_stats = {}
+
+    def analyze_video_with_output(self, video_path, exercise_type, user_height_cm=170, 
+                                generate_video=True, output_path=None):
         """
-        Main analysis function - processes entire video
+        Main analysis with optional real-time video output generation
         """
-        print(f"Starting analysis of {video_path} for {exercise_type}")
+        logger.info(f"Starting balanced analysis: {video_path} -> {exercise_type}")
+        start_time = time.time()
         
-        # Reset tracking variables
-        self._reset_tracking()
+        self.reset_tracking()
         
-        # Load video
+        # Load and validate video
         cap = cv2.VideoCapture(video_path)
         if not cap.isOpened():
             return {"error": "Could not open video file"}
@@ -56,570 +107,837 @@ class SportsAssessmentEngine:
         # Get video properties
         fps = cap.get(cv2.CAP_PROP_FPS)
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        duration = total_frames / fps
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        duration = total_frames / fps if fps > 0 else 0
         
-        # Configure for specific exercise
-        self._configure_exercise(exercise_type)
+        # Calculate dynamic thresholds based on video properties
+        self._calculate_dynamic_thresholds(width, height, fps)
         
-        # Process all frames
+        logger.info(f"Video: {total_frames} frames, {fps:.1f} FPS, {width}x{height}")
+        logger.info(f"Dynamic thresholds: movement={self.dynamic_thresholds['movement_threshold']:.1f}px")
+        
+        # Setup video writer if generating output
+        out_writer = None
+        if generate_video:
+            if output_path is None:
+                output_path = f"analyzed_{exercise_type}_{int(time.time())}.mp4"
+            
+            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+            out_writer = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+            logger.info(f"Generating analysis video: {output_path}")
+        
+        # Process video with real-time analysis
         frame_count = 0
+        config = self.exercise_configs[exercise_type]
+        
         while cap.isOpened():
             success, frame = cap.read()
             if not success:
                 break
             
-            # Process frame
-            self._process_frame(frame, frame_count, fps)
+            # Process frame and get analysis data
+            analysis_frame = self._process_frame_with_realtime_analysis(
+                frame.copy(), frame_count, fps, exercise_type, config
+            )
+            
+            # Write analyzed frame
+            if out_writer:
+                out_writer.write(analysis_frame)
+            
             frame_count += 1
+            
+            # Progress logging
+            if frame_count % 200 == 0:
+                logger.info(f"Processed {frame_count}/{total_frames} frames, Current reps: {self.rep_count_live}")
         
         cap.release()
+        if out_writer:
+            out_writer.release()
+            logger.info(f"Analysis video saved: {output_path}")
         
-        # Analyze results
-        results = self._analyze_results(exercise_type, fps, user_height_cm, duration)
+        # Generate final analysis
+        analysis_results = self._generate_balanced_analysis(exercise_type, fps, user_height_cm, duration)
         
-        print(f"Analysis complete. Processed {frame_count} frames.")
+        processing_time = time.time() - start_time
+        logger.info(f"Analysis complete in {processing_time:.2f}s. Final reps: {self.rep_count_live}")
+        
+        results = {
+            **analysis_results,
+            'processing_time': processing_time,
+            'video_properties': {
+                'fps': fps,
+                'total_frames': total_frames,
+                'duration': duration,
+                'resolution': f"{width}x{height}"
+            }
+        }
+        
+        if generate_video:
+            results['output_video'] = output_path
+        
         return results
 
-    def _reset_tracking(self):
-        """Reset all tracking variables"""
-        self.frame_data = []
-        self.keypoints_history.clear()
-        self.confidence_history = []
-        self.frame_hashes = []
-        self.cheat_flags = []
+    def _calculate_dynamic_thresholds(self, width, height, fps):
+        """
+        Calculate dynamic thresholds based on video properties
+        """
+        # Base movement threshold scales with resolution
+        resolution_factor = min(width, height) / 640  # Normalized to 640p
+        self.dynamic_thresholds['movement_threshold'] = (
+            self.dynamic_thresholds['movement_base'] * resolution_factor
+        )
+        
+        # FPS-based adjustments
+        fps_factor = max(0.5, min(2.0, fps / 30))  # Normalize to 30fps
+        self.dynamic_thresholds['movement_threshold'] *= fps_factor
+        
+        # Store video stats for further analysis
+        self.video_stats = {
+            'width': width,
+            'height': height,
+            'fps': fps,
+            'resolution_factor': resolution_factor,
+            'fps_factor': fps_factor
+        }
 
-    def _configure_exercise(self, exercise_type):
-        """Configure YOLO11 for specific exercise"""
-        if exercise_type in self.exercise_configs:
-            config = self.exercise_configs[exercise_type]
-            self.gym.kpts = config['kpts']
-            if 'up_angle' in config:
-                self.gym.up_angle = config['up_angle']
-                self.gym.down_angle = config['down_angle']
-
-    def _process_frame(self, frame, frame_count, fps):
-        """Process individual frame"""
+    def _process_frame_with_realtime_analysis(self, frame, frame_count, fps, exercise_type, config):
+        """
+        Process frame with real-time analysis overlay
+        """
         timestamp = frame_count / fps
         
-        # Get pose estimation
-        results = self.gym(frame)
+        # Run pose estimation
+        results = self.pose_model(frame, verbose=False)
+        keypoints_data = self._extract_keypoints_from_results(results)
         
-        # Extract keypoints and confidence
-        if hasattr(results, 'keypoints') and results.keypoints is not None:
-            keypoints = results.keypoints.data[0].cpu().numpy()
-            confidence = results.keypoints.conf[0].cpu().numpy() if hasattr(results.keypoints, 'conf') else np.ones(17) * 0.5
+        if keypoints_data is None:
+            keypoints = np.zeros((17, 3))
+            confidence_scores = np.zeros(17)
+            avg_confidence = 0.0
         else:
-            keypoints = np.zeros((17, 3))  # 17 keypoints, x,y,confidence
-            confidence = np.zeros(17)
-        
-        # Calculate frame hash for duplicate detection
-        frame_hash = hashlib.md5(cv2.resize(frame, (64, 64)).tobytes()).hexdigest()
+            keypoints = keypoints_data['keypoints']
+            confidence_scores = keypoints_data['confidence']
+            avg_confidence = np.mean(confidence_scores[confidence_scores > 0])
         
         # Store frame data
         frame_data = {
             'frame_number': frame_count,
             'timestamp': timestamp,
             'keypoints': keypoints.tolist(),
-            'confidence': confidence.tolist(),
-            'frame_hash': frame_hash,
-            'avg_confidence': np.mean(confidence)
+            'confidence': confidence_scores.tolist(),
+            'avg_confidence': float(avg_confidence),
+            'person_detected': keypoints_data is not None
         }
         
+        # Update tracking
         self.frame_data.append(frame_data)
         self.keypoints_history.append(keypoints)
-        self.confidence_history.append(np.mean(confidence))
+        self.confidence_history.append(avg_confidence)
+        
+        # Calculate frame hash for cheat detection
+        frame_hash = hashlib.md5(cv2.resize(frame, (64, 64)).tobytes()).hexdigest()
         self.frame_hashes.append(frame_hash)
         
-        # Run cheat detection on this frame
-        self._detect_cheating_frame(frame_data, frame_count)
+        # Real-time rep counting for repetition exercises
+        if exercise_type in ['pushups', 'situps', 'squats'] and keypoints_data:
+            self._update_live_rep_count(keypoints, config, frame_count)
+        
+        # Balanced cheat detection
+        cheat_status = self._balanced_cheat_detection(frame_data, frame_count)
+        
+        # Generate analysis overlay
+        analysis_frame = self._draw_realtime_analysis(
+            frame, keypoints, confidence_scores, exercise_type, 
+            cheat_status, frame_count, timestamp
+        )
+        
+        return analysis_frame
 
-    def _detect_cheating_frame(self, frame_data, frame_count):
-        """Detect cheating indicators for current frame"""
-        flags = []
-        
-        # 1. Low confidence detection
-        if frame_data['avg_confidence'] < 0.3:
-            flags.append({
-                'type': 'low_confidence',
-                'frame': frame_count,
-                'severity': 'medium',
-                'details': f"Average confidence: {frame_data['avg_confidence']:.3f}"
-            })
-        
-        # 2. Duplicate frame detection
-        if frame_count > 0 and frame_data['frame_hash'] in self.frame_hashes[:-1]:
-            duplicate_count = self.frame_hashes.count(frame_data['frame_hash'])
-            flags.append({
-                'type': 'duplicate_frame',
-                'frame': frame_count,
-                'severity': 'high' if duplicate_count > 3 else 'medium',
-                'details': f"Frame appears {duplicate_count} times"
-            })
-        
-        # 3. Impossible movement detection
-        if len(self.keypoints_history) > 1:
-            prev_keypoints = self.keypoints_history[-2]
-            curr_keypoints = self.keypoints_history[-1]
+    def _extract_keypoints_from_results(self, results):
+        """Extract keypoints from YOLO results"""
+        if not results or len(results) == 0:
+            return None
             
-            # Calculate movement distance for each keypoint
-            movements = []
-            for i in range(17):
-                if prev_keypoints[i][2] > 0.3 and curr_keypoints[i][2] > 0.3:  # Both confident
-                    dist = np.sqrt((curr_keypoints[i][0] - prev_keypoints[i][0])**2 + 
-                                 (curr_keypoints[i][1] - prev_keypoints[i][1])**2)
-                    movements.append(dist)
-            
-            if movements:
-                max_movement = max(movements)
-                # Flag if movement > 50 pixels per frame (adjust based on video resolution)
-                if max_movement > 50:
-                    flags.append({
-                        'type': 'impossible_movement',
-                        'frame': frame_count,
-                        'severity': 'high',
-                        'details': f"Max keypoint movement: {max_movement:.1f} pixels"
-                    })
+        result = results[0]
         
-        # 4. Pose consistency check
-        if len(self.keypoints_history) > 5:
-            # Check if pose is too consistent (indicating static image)
-            recent_poses = list(self.keypoints_history)[-5:]
-            variance = np.var([pose[:, :2].flatten() for pose in recent_poses])
-            if variance < 1.0:  # Very low variance indicates static pose
-                flags.append({
-                    'type': 'static_pose',
-                    'frame': frame_count,
-                    'severity': 'medium',
-                    'details': f"Pose variance: {variance:.3f}"
-                })
+        if not hasattr(result, 'keypoints') or result.keypoints is None:
+            return None
         
-        self.cheat_flags.extend(flags)
-
-    def _analyze_results(self, exercise_type, fps, user_height_cm, duration):
-        """Analyze all processed frames and generate final results"""
+        keypoints_tensor = result.keypoints.data
         
-        # Exercise-specific analysis
-        if exercise_type in ['pushups', 'situps', 'squats']:
-            exercise_results = self._analyze_rep_exercise(exercise_type, fps)
-        elif exercise_type in ['vertical_jump', 'long_jump']:
-            exercise_results = self._analyze_jump_exercise(exercise_type, fps, user_height_cm)
-        else:
-            exercise_results = {"error": "Unknown exercise type"}
+        if keypoints_tensor.size(0) == 0:
+            return None
         
-        # Cheat detection summary
-        cheat_summary = self._generate_cheat_summary()
-        
-        # Overall assessment
-        overall_assessment = self._generate_overall_assessment(exercise_results, cheat_summary)
+        person_keypoints = keypoints_tensor[0].cpu().numpy()
+        keypoints_xy = person_keypoints[:, :2]
+        confidence_scores = person_keypoints[:, 2]
+        keypoints_full = np.column_stack([keypoints_xy, confidence_scores])
         
         return {
-            'exercise_type': exercise_type,
-            'duration': duration,
-            'total_frames': len(self.frame_data),
-            'fps': fps,
-            'exercise_results': exercise_results,
-            'cheat_detection': cheat_summary,
-            'overall_assessment': overall_assessment,
-            'timestamp': datetime.now().isoformat()
+            'keypoints': keypoints_full,
+            'confidence': confidence_scores,
+            'xy_coordinates': keypoints_xy
         }
 
-    def _analyze_rep_exercise(self, exercise_type, fps):
-        """Analyze repetition-based exercises (pushups, situps, squats)"""
-        if not self.frame_data:
-            return {"error": "No frame data available"}
+    def _update_live_rep_count(self, keypoints, config, frame_count):
+        """
+        Update live rep count during video processing
+        """
+        # Try primary keypoints first
+        angle = self._calculate_angle_from_keypoints(keypoints, config['keypoints'])
         
-        # Extract relevant keypoints for angle calculation
-        config = self.exercise_configs[exercise_type]
-        kpts = config['kpts']
-        up_angle = config['up_angle']
-        down_angle = config['down_angle']
+        # If primary fails, try alternative
+        if angle is None:
+            angle = self._calculate_angle_from_keypoints(keypoints, config['alt_keypoints'])
         
-        angles = []
-        for frame in self.frame_data:
-            keypoints = np.array(frame['keypoints'])
-            
-            # Calculate angle between three keypoints
-            if len(kpts) == 3:
-                p1, p2, p3 = keypoints[kpts[0]], keypoints[kpts[1]], keypoints[kpts[2]]
-                
-                # Check if all keypoints are confident
-                if p1[2] > 0.3 and p2[2] > 0.3 and p3[2] > 0.3:
-                    angle = self._calculate_angle(p1[:2], p2[:2], p3[:2])
-                    angles.append(angle)
-                else:
-                    angles.append(None)
-            else:
-                angles.append(None)
-        
-        # Count reps based on angle thresholds
-        reps = self._count_reps(angles, up_angle, down_angle)
-        
-        # Detect sets (periods of activity separated by rest)
-        sets = self._detect_sets(angles, fps)
-        
-        # Form analysis
-        form_analysis = self._analyze_form(angles, up_angle, down_angle)
-        
-        return {
-            'rep_count': reps,
-            'set_count': len(sets),
-            'sets_details': sets,
-            'form_analysis': form_analysis,
-            'angle_data': [a for a in angles if a is not None]  # For debugging
-        }
+        if angle is not None:
+            # Rep counting logic with hysteresis
+            if self.current_state == 'up' and angle <= config['down_angle'] + 10:
+                self.current_state = 'down'
+            elif self.current_state == 'down' and angle >= config['up_angle'] - 10:
+                self.current_state = 'up'
+                self.rep_count_live += 1
 
-    def _analyze_jump_exercise(self, exercise_type, fps, user_height_cm):
-        """Analyze jump exercises (vertical jump, long jump)"""
-        config = self.exercise_configs[exercise_type]
-        track_keypoint = config['track_keypoint']
+    def _calculate_angle_from_keypoints(self, keypoints, kpt_indices):
+        """Calculate angle from three keypoints"""
+        if len(kpt_indices) != 3:
+            return None
         
-        # Extract tracked keypoint positions over time
-        positions = []
-        for frame in self.frame_data:
-            keypoints = np.array(frame['keypoints'])
-            kp = keypoints[track_keypoint]
-            
-            if kp[2] > 0.3:  # Confident detection
-                positions.append({
-                    'timestamp': frame['timestamp'],
-                    'x': kp[0],
-                    'y': kp[1],
-                    'confidence': kp[2]
-                })
+        p1, p2, p3 = keypoints[kpt_indices[0]], keypoints[kpt_indices[1]], keypoints[kpt_indices[2]]
         
-        if len(positions) < 10:
-            return {"error": "Insufficient tracking data"}
+        # Check confidence
+        if p1[2] < 0.4 or p2[2] < 0.4 or p3[2] < 0.4:
+            return None
         
-        if exercise_type == 'vertical_jump':
-            return self._analyze_vertical_jump(positions, fps, user_height_cm)
-        elif exercise_type == 'long_jump':
-            return self._analyze_long_jump(positions, fps, user_height_cm)
-
-    def _analyze_vertical_jump(self, positions, fps, user_height_cm):
-        """Analyze vertical jump for height calculation"""
-        # Extract y-coordinates (invert because image coordinates have origin at top)
-        y_coords = [-pos['y'] for pos in positions]
-        timestamps = [pos['timestamp'] for pos in positions]
+        # Calculate angle
+        v1 = p1[:2] - p2[:2]
+        v2 = p3[:2] - p2[:2]
         
-        # Smooth the data
-        smoothed_y = self._smooth_data(y_coords, window=5)
+        norm1 = np.linalg.norm(v1)
+        norm2 = np.linalg.norm(v2)
         
-        # Find takeoff and landing
-        baseline = statistics.median(smoothed_y[:10])  # First 10 frames as baseline
+        if norm1 < 1e-6 or norm2 < 1e-6:
+            return None
         
-        # Find takeoff (significant upward movement)
-        takeoff_idx = None
-        for i in range(1, len(smoothed_y)):
-            if smoothed_y[i] > baseline + 20:  # 20 pixels above baseline
-                takeoff_idx = i
-                break
-        
-        # Find peak (maximum height)
-        if takeoff_idx:
-            peak_idx = takeoff_idx + np.argmax(smoothed_y[takeoff_idx:])
-            peak_height = smoothed_y[peak_idx]
-        else:
-            return {"error": "Could not detect takeoff"}
-        
-        # Find landing (return to baseline after peak)
-        landing_idx = None
-        for i in range(peak_idx, len(smoothed_y)):
-            if smoothed_y[i] <= baseline + 10:
-                landing_idx = i
-                break
-        
-        if not landing_idx:
-            return {"error": "Could not detect landing"}
-        
-        # Calculate flight time
-        flight_time = timestamps[landing_idx] - timestamps[takeoff_idx]
-        
-        # Calculate jump height using physics: h = g*t²/8
-        jump_height_pixels = peak_height - baseline
-        
-        # Convert to real-world units (rough estimation)
-        # Assume person fills ~60% of frame height when standing
-        pixels_per_cm = (smoothed_y[0] - smoothed_y[-1]) / (user_height_cm * 0.6) if len(smoothed_y) > 1 else 1
-        jump_height_cm = jump_height_pixels / pixels_per_cm if pixels_per_cm > 0 else 0
-        
-        # Physics-based height calculation as verification
-        physics_height_cm = (9.81 * flight_time**2 / 8) * 100  # Convert m to cm
-        
-        return {
-            'jump_height_cm': max(jump_height_cm, physics_height_cm),  # Use maximum of both methods
-            'flight_time_seconds': flight_time,
-            'takeoff_frame': takeoff_idx,
-            'landing_frame': landing_idx,
-            'peak_frame': peak_idx,
-            'calculation_method': 'hybrid_pixel_physics'
-        }
-
-    def _analyze_long_jump(self, positions, fps, user_height_cm):
-        """Analyze long jump for distance calculation"""
-        # Extract x-coordinates for horizontal distance
-        x_coords = [pos['x'] for pos in positions]
-        y_coords = [pos['y'] for pos in positions]
-        
-        # Find takeoff and landing based on y-coordinate changes
-        takeoff_idx = 0
-        landing_idx = len(positions) - 1
-        
-        # Find actual takeoff (when y starts increasing significantly)
-        baseline_y = statistics.median(y_coords[:10])
-        for i in range(10, len(y_coords)):
-            if y_coords[i] < baseline_y - 20:  # Going up in image (decreasing y)
-                takeoff_idx = i
-                break
-        
-        # Find landing (return to baseline level)
-        for i in range(takeoff_idx + 10, len(y_coords)):
-            if abs(y_coords[i] - baseline_y) < 15:
-                landing_idx = i
-                break
-        
-        # Calculate horizontal distance
-        distance_pixels = abs(x_coords[landing_idx] - x_coords[takeoff_idx])
-        
-        # Convert to real-world distance (rough estimation)
-        # Assume frame width represents ~3 meters when person is at jumping position
-        pixels_per_cm = len(x_coords) / 300 if len(x_coords) > 0 else 1  # 3m = 300cm
-        distance_cm = distance_pixels / pixels_per_cm
-        
-        return {
-            'distance_cm': distance_cm,
-            'takeoff_frame': takeoff_idx,
-            'landing_frame': landing_idx,
-            'horizontal_displacement': distance_pixels
-        }
-
-    def _calculate_angle(self, p1, p2, p3):
-        """Calculate angle between three points"""
-        v1 = p1 - p2
-        v2 = p3 - p2
-        
-        cos_angle = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-6)
+        cos_angle = np.dot(v1, v2) / (norm1 * norm2)
         cos_angle = np.clip(cos_angle, -1, 1)
         angle = np.degrees(np.arccos(cos_angle))
         
         return angle
 
-    def _count_reps(self, angles, up_angle, down_angle):
-        """Count repetitions based on angle thresholds"""
-        if not angles or len([a for a in angles if a is not None]) < 5:
-            return 0
+    def _balanced_cheat_detection(self, frame_data, frame_count):
+        """
+        Balanced cheat detection with context-aware thresholds
+        """
+        flags = []
+        severity_weights = {'low': 1, 'medium': 3, 'high': 7, 'critical': 15}
         
-        # Filter out None values
+        # 1. Confidence check (more lenient)
+        if frame_data['avg_confidence'] < 0.15:
+            flags.append({
+                'type': 'very_low_confidence',
+                'severity': 'medium',  # Reduced from high
+                'weight': severity_weights['medium']
+            })
+        elif frame_data['avg_confidence'] < 0.25:
+            flags.append({
+                'type': 'low_confidence',
+                'severity': 'low',  # Reduced from medium
+                'weight': severity_weights['low']
+            })
+        
+        # 2. Duplicate frame detection (unchanged - this is important)
+        hash_count = self.frame_hashes.count(self.frame_hashes[-1]) if self.frame_hashes else 0
+        if hash_count > self.dynamic_thresholds['duplicate_tolerance']:
+            flags.append({
+                'type': 'duplicate_frame',
+                'severity': 'high' if hash_count > 6 else 'medium',
+                'weight': severity_weights['high'] if hash_count > 6 else severity_weights['medium']
+            })
+        
+        # 3. IMPROVED movement analysis with context
+        if len(self.keypoints_history) > 2:
+            movement_flags = self._analyze_movement_with_context(frame_count)
+            flags.extend(movement_flags)
+        
+        # 4. Static pose check (more tolerant)
+        if len(self.keypoints_history) > 10:
+            recent_poses = list(self.keypoints_history)[-10:]
+            if self._check_static_pose(recent_poses):
+                flags.append({
+                    'type': 'static_pose',
+                    'severity': 'low',  # Reduced severity
+                    'weight': severity_weights['low']
+                })
+        
+        # Calculate frame risk score (cap at reasonable level)
+        frame_risk = min(20, sum(flag['weight'] for flag in flags))
+        
+        return {
+            'flags': flags,
+            'frame_risk': frame_risk,
+            'status': 'suspicious' if frame_risk > 10 else 'normal'
+        }
+
+    def _analyze_movement_with_context(self, frame_count):
+        """
+        Context-aware movement analysis with dynamic thresholds
+        """
+        flags = []
+        
+        if len(self.keypoints_history) < 3:
+            return flags
+        
+        current = self.keypoints_history[-1]
+        prev1 = self.keypoints_history[-2]
+        
+        # Calculate movements for confident keypoints only
+        movements = []
+        for i in range(17):
+            if current[i][2] > 0.4 and prev1[i][2] > 0.4:
+                movement = np.linalg.norm(current[i][:2] - prev1[i][:2])
+                movements.append(movement)
+        
+        if not movements:
+            return flags
+        
+        max_movement = max(movements)
+        avg_movement = np.mean(movements)
+        
+        # Dynamic threshold based on video properties and exercise type
+        current_exercise = getattr(self, '_current_exercise_type', 'pushups')
+        movement_tolerance = self.exercise_configs.get(current_exercise, {}).get('movement_tolerance', 1.0)
+        dynamic_threshold = self.dynamic_thresholds['movement_threshold'] * movement_tolerance
+        
+        # Context-aware flagging
+        if max_movement > dynamic_threshold * 2:  # Very extreme movement
+            flags.append({
+                'type': 'extreme_movement',
+                'severity': 'high',
+                'weight': 7,
+                'details': f'Movement: {max_movement:.1f}px (threshold: {dynamic_threshold:.1f}px)'
+            })
+        elif max_movement > dynamic_threshold * 1.5:  # Moderately high movement
+            # Check if this is part of a pattern (multiple consecutive high movements)
+            if len(self.keypoints_history) > 5:
+                recent_movements = []
+                for j in range(2, min(6, len(self.keypoints_history))):
+                    curr_kp = self.keypoints_history[-1]
+                    prev_kp = self.keypoints_history[-j]
+                    recent_moves = []
+                    for k in range(17):
+                        if curr_kp[k][2] > 0.4 and prev_kp[k][2] > 0.4:
+                            move = np.linalg.norm(curr_kp[k][:2] - prev_kp[k][:2])
+                            recent_moves.append(move)
+                    if recent_moves:
+                        recent_movements.append(max(recent_moves))
+                
+                # Only flag if consistently high movement
+                if len(recent_movements) > 2 and np.mean(recent_movements) > dynamic_threshold:
+                    flags.append({
+                        'type': 'sustained_high_movement',
+                        'severity': 'medium',
+                        'weight': 3,
+                        'details': f'Sustained movement: {np.mean(recent_movements):.1f}px'
+                    })
+        
+        return flags
+
+    def _check_static_pose(self, poses):
+        """Check if poses are too static (indicating possible image manipulation)"""
+        if len(poses) < 5:
+            return False
+        
+        # Calculate variance across poses
+        all_coords = []
+        for pose in poses:
+            coords = []
+            for kp in pose:
+                if kp[2] > 0.3:  # Only confident keypoints
+                    coords.extend(kp[:2])
+            if coords:
+                all_coords.append(coords)
+        
+        if len(all_coords) < 3:
+            return False
+        
+        # Pad to same length for variance calculation
+        min_len = min(len(coord) for coord in all_coords)
+        if min_len < 4:  # Need at least 2 keypoints worth of data
+            return False
+        
+        padded_coords = [coord[:min_len] for coord in all_coords]
+        variance = np.var(padded_coords, axis=0).mean()
+        
+        return variance < self.dynamic_thresholds['static_variance_threshold']
+
+    def _draw_realtime_analysis(self, frame, keypoints, confidence, exercise_type, 
+                              cheat_status, frame_count, timestamp):
+        """
+        Draw comprehensive real-time analysis overlay
+        """
+        overlay = frame.copy()
+        
+        # Draw skeleton if person detected
+        if keypoints is not None and np.any(confidence > 0.3):
+            self._draw_skeleton(overlay, keypoints, confidence)
+        
+        # Exercise info panel
+        self._draw_info_panel(overlay, exercise_type, frame_count, timestamp)
+        
+        # Rep counter for rep exercises
+        if exercise_type in ['pushups', 'situps', 'squats']:
+            self._draw_rep_counter(overlay, self.rep_count_live, self.current_state)
+        
+        # Cheat detection status
+        self._draw_cheat_status(overlay, cheat_status)
+        
+        # Current angle display (if applicable)
+        if exercise_type in ['pushups', 'situps', 'squats']:
+            current_angle = self._get_current_angle(keypoints, exercise_type)
+            if current_angle:
+                self._draw_angle_info(overlay, current_angle, exercise_type)
+        
+        return overlay
+
+    def _draw_skeleton(self, frame, keypoints, confidence):
+        """Draw pose skeleton with confidence-based colors"""
+        # COCO pose connections
+        connections = [
+            (5, 7), (7, 9),    # Right arm
+            (6, 8), (8, 10),   # Left arm
+            (11, 13), (13, 15), # Right leg  
+            (12, 14), (14, 16), # Left leg
+            (5, 6),            # Shoulders
+            (11, 12),          # Hips
+            (5, 11), (6, 12)   # Torso
+        ]
+        
+        # Draw keypoints
+        for i, (kp, conf) in enumerate(zip(keypoints, confidence)):
+            if conf > 0.3:
+                x, y = int(kp[0]), int(kp[1])
+                # Color based on confidence
+                if conf > 0.7:
+                    color = (0, 255, 0)  # Green for high confidence
+                elif conf > 0.5:
+                    color = (0, 255, 255)  # Yellow for medium
+                else:
+                    color = (0, 165, 255)  # Orange for low
+                
+                cv2.circle(frame, (x, y), 6, color, -1)
+                cv2.circle(frame, (x, y), 8, (0, 0, 0), 2)
+        
+        # Draw skeleton connections
+        for start_idx, end_idx in connections:
+            if confidence[start_idx] > 0.3 and confidence[end_idx] > 0.3:
+                start_point = (int(keypoints[start_idx][0]), int(keypoints[start_idx][1]))
+                end_point = (int(keypoints[end_idx][0]), int(keypoints[end_idx][1]))
+                
+                # Line color based on average confidence
+                avg_conf = (confidence[start_idx] + confidence[end_idx]) / 2
+                if avg_conf > 0.6:
+                    color = (0, 255, 0)
+                else:
+                    color = (0, 255, 255)
+                
+                cv2.line(frame, start_point, end_point, color, 3)
+
+    def _draw_info_panel(self, frame, exercise_type, frame_count, timestamp):
+        """Draw exercise information panel"""
+        h, w = frame.shape[:2]
+        
+        # Background panel
+        cv2.rectangle(frame, (10, 10), (400, 120), (0, 0, 0), -1)
+        cv2.rectangle(frame, (10, 10), (400, 120), (255, 255, 255), 2)
+        
+        # Exercise type
+        cv2.putText(frame, f"Exercise: {exercise_type.upper()}", (20, 35), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+        
+        # Frame info
+        cv2.putText(frame, f"Frame: {frame_count}", (20, 60), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
+        
+        # Time
+        cv2.putText(frame, f"Time: {timestamp:.1f}s", (20, 80), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
+        
+        # Analysis status
+        cv2.putText(frame, "ANALYZING...", (20, 105), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+
+    def _draw_rep_counter(self, frame, rep_count, current_state):
+        """Draw rep counter with current state"""
+        h, w = frame.shape[:2]
+        
+        # Rep counter background
+        cv2.rectangle(frame, (w-200, 10), (w-10, 100), (0, 0, 0), -1)
+        cv2.rectangle(frame, (w-200, 10), (w-10, 100), (255, 255, 255), 2)
+        
+        # Rep count (large)
+        cv2.putText(frame, f"REPS: {rep_count}", (w-190, 45), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+        
+        # Current state
+        state_color = (0, 255, 255) if current_state == 'down' else (255, 255, 0)
+        cv2.putText(frame, f"State: {current_state.upper()}", (w-190, 75), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, state_color, 1)
+
+    def _draw_cheat_status(self, frame, cheat_status):
+        """Draw cheat detection status"""
+        h, w = frame.shape[:2]
+        
+        # Status background
+        status_color = (0, 0, 255) if cheat_status['status'] == 'suspicious' else (0, 255, 0)
+        cv2.rectangle(frame, (10, h-80), (300, h-10), (0, 0, 0), -1)
+        cv2.rectangle(frame, (10, h-80), (300, h-10), status_color, 2)
+        
+        # Status text
+        status_text = "SUSPICIOUS" if cheat_status['status'] == 'suspicious' else "AUTHENTIC"
+        cv2.putText(frame, f"Status: {status_text}", (20, h-55), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, status_color, 2)
+        
+        # Risk score
+        cv2.putText(frame, f"Risk: {cheat_status['frame_risk']}/20", (20, h-25), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+
+    def _get_current_angle(self, keypoints, exercise_type):
+        """Get current joint angle for display"""
+        if keypoints is None:
+            return None
+        
+        config = self.exercise_configs[exercise_type]
+        angle = self._calculate_angle_from_keypoints(keypoints, config['keypoints'])
+        
+        if angle is None:
+            angle = self._calculate_angle_from_keypoints(keypoints, config['alt_keypoints'])
+        
+        return angle
+
+    def _draw_angle_info(self, frame, angle, exercise_type):
+        """Draw current angle information"""
+        h, w = frame.shape[:2]
+        config = self.exercise_configs[exercise_type]
+        
+        # Angle display
+        cv2.rectangle(frame, (w-200, 120), (w-10, 200), (0, 0, 0), -1)
+        cv2.rectangle(frame, (w-200, 120), (w-10, 200), (255, 255, 255), 2)
+        
+        cv2.putText(frame, f"Angle: {angle:.1f}°", (w-190, 145), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
+        
+        # Target ranges
+        cv2.putText(frame, f"Up: {config['up_angle']}°", (w-190, 170), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+        cv2.putText(frame, f"Down: {config['down_angle']}°", (w-190, 190), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1)
+
+    def _generate_balanced_analysis(self, exercise_type, fps, user_height_cm, duration):
+        """
+        Generate balanced final analysis with improved risk assessment
+        """
+        # Store current exercise type for context
+        self._current_exercise_type = exercise_type
+        
+        # Filter valid frames
+        valid_frames = [f for f in self.frame_data if f.get('person_detected', False) and f.get('avg_confidence', 0) > 0.25]
+        
+        logger.info(f"Valid frames for analysis: {len(valid_frames)}/{len(self.frame_data)}")
+        
+        if len(valid_frames) < 10:
+            return {
+                'error': 'Insufficient valid pose detections for analysis',
+                'details': f'Only {len(valid_frames)} frames with confident pose detection'
+            }
+        
+        # Exercise-specific analysis
+        exercise_results = self._analyze_exercise_balanced(exercise_type, fps, valid_frames, user_height_cm)
+        
+        # Balanced cheat detection summary
+        cheat_summary = self._generate_balanced_cheat_summary()
+        
+        # Improved overall assessment
+        overall_assessment = self._generate_improved_assessment(exercise_results, cheat_summary)
+        
+        return {
+            'exercise_type': exercise_type,
+            'duration': duration,
+            'total_frames': len(self.frame_data),
+            'valid_frames': len(valid_frames),
+            'fps': fps,
+            'exercise_results': exercise_results,
+            'cheat_detection': cheat_summary,
+            'overall_assessment': overall_assessment,
+            'dynamic_thresholds': self.dynamic_thresholds,
+            'video_stats': self.video_stats,
+            'timestamp': datetime.now().isoformat()
+        }
+
+    def _analyze_exercise_balanced(self, exercise_type, fps, valid_frames, user_height_cm):
+        """Balanced exercise analysis"""
+        config = self.exercise_configs[exercise_type]
+        
+        if exercise_type in ['pushups', 'situps', 'squats']:
+            # Use live rep count if available, otherwise calculate
+            final_rep_count = max(self.rep_count_live, self._calculate_final_rep_count(valid_frames, config))
+            
+            # Form analysis
+            angles = self._extract_angles_from_frames(valid_frames, config)
+            form_analysis = self._analyze_form_quality(angles, config)
+            
+            return {
+                'rep_count': final_rep_count,
+                'live_rep_count': self.rep_count_live,
+                'form_analysis': form_analysis,
+                'keypoints_used': config['keypoints'],
+                'joint_names': config['joint_names']
+            }
+        
+        elif exercise_type in ['vertical_jump', 'long_jump']:
+            return self._analyze_jump_balanced(exercise_type, valid_frames, fps, user_height_cm)
+        
+        else:
+            return {"error": "Unknown exercise type"}
+
+    def _calculate_final_rep_count(self, valid_frames, config):
+        """Calculate final rep count from processed frames"""
+        angles = self._extract_angles_from_frames(valid_frames, config)
         valid_angles = [a for a in angles if a is not None]
         
-        reps = 0
-        in_down_position = False
+        if len(valid_angles) < 10:
+            return 0
         
-        for angle in valid_angles:
-            if angle <= down_angle and not in_down_position:
-                in_down_position = True
-            elif angle >= up_angle and in_down_position:
+        # Smooth angles
+        smoothed = self._smooth_angles(valid_angles)
+        
+        # Count reps
+        reps = 0
+        state = 'up'
+        
+        for angle in smoothed:
+            if state == 'up' and angle <= config['down_angle'] + 10:
+                state = 'down'
+            elif state == 'down' and angle >= config['up_angle'] - 10:
+                state = 'up'
                 reps += 1
-                in_down_position = False
         
         return reps
 
-    def _detect_sets(self, angles, fps):
-        """Detect sets based on activity periods"""
-        if not angles:
-            return []
+    def _extract_angles_from_frames(self, frames, config):
+        """Extract joint angles from frames"""
+        angles = []
         
-        # Find periods of activity (where angles are changing)
-        activity_threshold = 5.0  # degrees per second
-        window_size = int(fps * 2)  # 2-second window
-        
-        sets = []
-        current_set_start = None
-        current_set_reps = 0
-        
-        for i in range(len(angles) - window_size):
-            window_angles = [a for a in angles[i:i+window_size] if a is not None]
+        for frame in frames:
+            keypoints = np.array(frame['keypoints'])
+            angle = self._calculate_angle_from_keypoints(keypoints, config['keypoints'])
             
-            if len(window_angles) > window_size // 2:
-                angle_variance = np.var(window_angles)
-                
-                if angle_variance > activity_threshold and current_set_start is None:
-                    current_set_start = i
-                elif angle_variance <= activity_threshold and current_set_start is not None:
-                    # End of set
-                    set_angles = angles[current_set_start:i]
-                    set_reps = self._count_reps(set_angles, 160, 90)  # Use default thresholds
-                    
-                    sets.append({
-                        'start_frame': current_set_start,
-                        'end_frame': i,
-                        'reps': set_reps,
-                        'duration': (i - current_set_start) / fps
-                    })
-                    
-                    current_set_start = None
+            if angle is None:
+                angle = self._calculate_angle_from_keypoints(keypoints, config['alt_keypoints'])
+            
+            angles.append(angle)
         
-        return sets if sets else [{'start_frame': 0, 'end_frame': len(angles), 'reps': self._count_reps(angles, 160, 90), 'duration': len(angles) / fps}]
+        return angles
 
-    def _analyze_form(self, angles, up_angle, down_angle):
-        """Analyze exercise form quality"""
+    def _smooth_angles(self, angles, window=7):
+        """Smooth angle data"""
+        if len(angles) < window:
+            return angles
+        
+        smoothed = []
+        for i in range(len(angles)):
+            start = max(0, i - window // 2)
+            end = min(len(angles), i + window // 2 + 1)
+            window_angles = angles[start:end]
+            smoothed.append(statistics.median(window_angles))
+        
+        return smoothed
+
+    def _analyze_form_quality(self, angles, config):
+        """Analyze form quality"""
         valid_angles = [a for a in angles if a is not None]
         
         if not valid_angles:
             return {"error": "No valid angle data"}
         
-        # Calculate form metrics
+        # Form metrics
         angle_range = max(valid_angles) - min(valid_angles)
-        angle_consistency = np.std(valid_angles)
+        consistency = np.std(valid_angles)
+        expected_range = config['up_angle'] - config['down_angle']
         
-        # Form quality assessment
+        # Scoring
         form_score = 100
         issues = []
         
-        # Check range of motion
-        expected_range = up_angle - down_angle
-        if angle_range < expected_range * 0.7:
-            form_score -= 20
+        if angle_range < expected_range * 0.6:
+            form_score -= 25
             issues.append("Limited range of motion")
         
-        # Check consistency
-        if angle_consistency > 15:
+        if consistency > 20:
             form_score -= 15
             issues.append("Inconsistent form")
-        
-        # Check if angles reach proper thresholds
-        max_angle = max(valid_angles)
-        min_angle = min(valid_angles)
-        
-        if max_angle < up_angle * 0.9:
-            form_score -= 10
-            issues.append("Not reaching full extension")
-        
-        if min_angle > down_angle * 1.1:
-            form_score -= 10
-            issues.append("Not reaching full contraction")
         
         return {
             'form_score': max(0, form_score),
             'angle_range': angle_range,
-            'consistency': angle_consistency,
-            'issues': issues,
-            'max_angle': max_angle,
-            'min_angle': min_angle
+            'consistency': consistency,
+            'issues': issues
         }
 
-    def _smooth_data(self, data, window=5):
-        """Apply moving average smoothing"""
-        if len(data) < window:
-            return data
-        
-        smoothed = []
-        for i in range(len(data)):
-            start = max(0, i - window // 2)
-            end = min(len(data), i + window // 2 + 1)
-            smoothed.append(sum(data[start:end]) / (end - start))
-        
-        return smoothed
+    def _analyze_jump_balanced(self, exercise_type, valid_frames, fps, user_height_cm):
+        """Balanced jump analysis"""
+        # Simplified jump analysis - can be expanded
+        return {
+            'jump_detected': len(valid_frames) > 20,
+            'frames_analyzed': len(valid_frames),
+            'note': 'Jump analysis implementation can be expanded based on requirements'
+        }
 
-    def _generate_cheat_summary(self):
-        """Generate comprehensive cheat detection summary"""
+    def _generate_balanced_cheat_summary(self):
+        """
+        Generate balanced cheat detection summary with proper scoring
+        """
         if not self.cheat_flags:
             return {
                 'overall_risk': 'low',
+                'confidence_score': 95,
                 'total_flags': 0,
+                'risk_score': 0,
                 'flag_categories': {},
-                'recommendations': ['Video appears authentic']
+                'recommendations': ['Video appears authentic'],
+                'detailed_analysis': 'No suspicious patterns detected'
             }
         
-        # Categorize flags by type and severity
-        flag_categories = defaultdict(list)
-        severity_counts = defaultdict(int)
+        # Collect and categorize flags
+        flag_categories = defaultdict(int)
+        total_weight = 0
         
         for flag in self.cheat_flags:
-            flag_categories[flag['type']].append(flag)
-            severity_counts[flag['severity']] += 1
+            flag_categories[flag['type']] += 1
+            total_weight += flag.get('weight', 1)
         
-        # Determine overall risk
-        if severity_counts['high'] > 3:
+        # Calculate balanced risk score (0-100 scale)
+        max_possible_weight = len(self.frame_data) * 15  # Max weight per frame
+        risk_score = min(100, (total_weight / max(max_possible_weight * 0.1, 1)) * 100)
+        
+        # Determine overall risk with more nuanced thresholds
+        if risk_score > 80:
+            overall_risk = 'critical'
+            confidence = 15
+        elif risk_score > 60:
             overall_risk = 'high'
-        elif severity_counts['high'] > 0 or severity_counts['medium'] > 5:
+            confidence = 35
+        elif risk_score > 30:
             overall_risk = 'medium'
+            confidence = 65
+        elif risk_score > 10:
+            overall_risk = 'low-medium'
+            confidence = 80
         else:
             overall_risk = 'low'
+            confidence = 90
         
-        # Generate recommendations
+        # Generate contextual recommendations
         recommendations = []
-        if 'duplicate_frame' in flag_categories:
-            recommendations.append("Video may contain duplicate or frozen frames")
-        if 'impossible_movement' in flag_categories:
-            recommendations.append("Detected unnatural or impossible movements")
-        if 'low_confidence' in flag_categories:
-            recommendations.append("Poor video quality or pose detection accuracy")
-        if 'static_pose' in flag_categories:
-            recommendations.append("Person appears too static, may indicate image manipulation")
+        
+        if flag_categories.get('extreme_movement', 0) > len(self.frame_data) * 0.1:
+            recommendations.append("High movement detected - may indicate fast execution or camera shake")
+        
+        if flag_categories.get('duplicate_frame', 0) > 0:
+            recommendations.append("Duplicate frames detected - possible video manipulation")
+        
+        if flag_categories.get('very_low_confidence', 0) > len(self.frame_data) * 0.2:
+            recommendations.append("Frequent pose detection issues - check video quality and lighting")
         
         if not recommendations:
-            recommendations.append("Video passed basic authenticity checks")
+            recommendations.append("Video passed authenticity verification")
         
         return {
             'overall_risk': overall_risk,
+            'confidence_score': confidence,
             'total_flags': len(self.cheat_flags),
-            'severity_breakdown': dict(severity_counts),
-            'flag_categories': {k: len(v) for k, v in flag_categories.items()},
-            'detailed_flags': self.cheat_flags,
-            'recommendations': recommendations
+            'risk_score': round(risk_score, 1),
+            'flag_categories': dict(flag_categories),
+            'recommendations': recommendations,
+            'detailed_analysis': f'Risk score: {risk_score:.1f}/100 based on {len(self.cheat_flags)} flags across {len(self.frame_data)} frames'
         }
 
-    def _generate_overall_assessment(self, exercise_results, cheat_summary):
-        """Generate overall assessment and recommendations"""
+    def _generate_improved_assessment(self, exercise_results, cheat_summary):
+        """
+        Generate improved overall assessment with balanced logic
+        """
         assessment = {
             'validity': 'valid',
             'confidence': 'high',
-            'recommendations': []
+            'reliability_score': 85,
+            'recommendations': [],
+            'performance_insights': []
         }
         
-        # Check cheat detection results
-        if cheat_summary['overall_risk'] == 'high':
+        # More nuanced validity assessment
+        risk_level = cheat_summary['overall_risk']
+        rep_count = exercise_results.get('rep_count', 0)
+        
+        # Consider both cheat detection AND exercise performance
+        if risk_level == 'critical':
             assessment['validity'] = 'invalid'
-            assessment['confidence'] = 'low'
-            assessment['recommendations'].append("Video failed authenticity checks - results may not be reliable")
-        elif cheat_summary['overall_risk'] == 'medium':
+            assessment['confidence'] = 'very_low'
+            assessment['reliability_score'] = 15
+        elif risk_level == 'high':
+            # If we have good rep detection, be less punitive
+            if rep_count > 0:
+                assessment['validity'] = 'questionable'
+                assessment['confidence'] = 'low'
+                assessment['reliability_score'] = 40
+                assessment['recommendations'].append("⚠️ Some authenticity concerns but exercise performance detected")
+            else:
+                assessment['validity'] = 'invalid'
+                assessment['confidence'] = 'very_low'
+                assessment['reliability_score'] = 25
+        elif risk_level in ['medium', 'low-medium']:
             assessment['confidence'] = 'medium'
-            assessment['recommendations'].append("Some authenticity concerns detected - interpret results with caution")
+            assessment['reliability_score'] = 70
+            assessment['recommendations'].append("✓ Minor concerns detected - results generally reliable")
+        else:
+            assessment['recommendations'].append("✅ Video passed authenticity verification")
         
-        # Check exercise-specific issues
-        if 'error' in exercise_results:
-            assessment['validity'] = 'invalid'
-            assessment['recommendations'].append(f"Analysis error: {exercise_results['error']}")
-        
-        # Add performance recommendations
-        if assessment['validity'] == 'valid':
+        # Performance insights
+        if rep_count > 0:
+            assessment['performance_insights'].append(f"💪 Detected {rep_count} repetitions")
+            
             if 'form_analysis' in exercise_results:
-                form_score = exercise_results['form_analysis'].get('form_score', 100)
-                if form_score < 70:
-                    assessment['recommendations'].append("Focus on improving exercise form and range of motion")
-                elif form_score < 85:
-                    assessment['recommendations'].append("Good form with room for minor improvements")
+                form_score = exercise_results['form_analysis'].get('form_score', 0)
+                if form_score >= 80:
+                    assessment['performance_insights'].append("🏆 Good exercise form")
+                elif form_score >= 60:
+                    assessment['performance_insights'].append("👍 Moderate form - room for improvement")
                 else:
-                    assessment['recommendations'].append("Excellent exercise form demonstrated")
+                    assessment['performance_insights'].append("📈 Form needs attention")
         
         return assessment
 
 
-# Flask API wrapper
-from flask import Flask, request, jsonify
+# Flask API with video generation
+from flask import Flask, request, jsonify, send_file
 import os
 
 app = Flask(__name__)
-assessment_engine = SportsAssessmentEngine()
+
+try:
+    assessment_engine = BalancedSportsAssessmentEngine()
+    logger.info("Balanced Sports Assessment Engine initialized successfully")
+except Exception as e:
+    logger.error(f"Failed to initialize engine: {e}")
+    assessment_engine = None
 
 @app.route('/analyze', methods=['POST'])
 def analyze_video():
-    """
-    API endpoint for video analysis
-    Expects: multipart/form-data with video file and parameters
-    """
+    """Enhanced API endpoint with video generation option"""
+    if assessment_engine is None:
+        return jsonify({'error': 'Assessment engine not initialized'}), 500
+    
     try:
-        # Get uploaded video file
         if 'video' not in request.files:
             return jsonify({'error': 'No video file provided'}), 400
         
@@ -627,31 +945,59 @@ def analyze_video():
         if video_file.filename == '':
             return jsonify({'error': 'No video file selected'}), 400
         
-        # Get parameters
+        # Parameters
         exercise_type = request.form.get('exercise_type', 'pushups')
         user_height = int(request.form.get('user_height', 170))
+        generate_video = request.form.get('generate_video', 'true').lower() == 'true'
         
-        # Save uploaded file temporarily
+        # Validate exercise type
+        valid_exercises = ['pushups', 'situps', 'squats', 'vertical_jump', 'long_jump']
+        if exercise_type not in valid_exercises:
+            return jsonify({'error': f'Invalid exercise type. Must be one of: {valid_exercises}'}), 400
+        
+        # Save uploaded file
         temp_path = f"temp_{int(time.time())}_{video_file.filename}"
         video_file.save(temp_path)
         
-        # Analyze video
-        results = assessment_engine.analyze_video(temp_path, exercise_type, user_height)
+        logger.info(f"Processing: {temp_path} for {exercise_type}, generate_video={generate_video}")
         
-        # Clean up temp file
-        os.remove(temp_path)
+        # Analyze with optional video generation
+        results = assessment_engine.analyze_video_with_output(
+            temp_path, exercise_type, user_height, generate_video
+        )
+        
+        # Cleanup
+        try:
+            os.remove(temp_path)
+        except:
+            pass
         
         return jsonify(results)
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Analysis error: {e}")
+        return jsonify({'error': f'Analysis failed: {str(e)}'}), 500
+
+@app.route('/download/<filename>')
+def download_video(filename):
+    """Download generated analysis video"""
+    try:
+        return send_file(filename, as_attachment=True)
+    except FileNotFoundError:
+        return jsonify({'error': 'File not found'}), 404
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
-    return jsonify({'status': 'healthy', 'model_loaded': True})
+    """Enhanced health check"""
+    return jsonify({
+        'status': 'healthy' if assessment_engine else 'error',
+        'model_loaded': assessment_engine is not None,
+        'version': '3.0 - Balanced',
+        'features': ['real_time_analysis', 'balanced_cheat_detection', 'video_generation'],
+        'supported_exercises': ['pushups', 'situps', 'squats', 'vertical_jump', 'long_jump']
+    })
 
 if __name__ == '__main__':
-    print("Starting Sports Assessment API...")
-    print("Available exercises: pushups, situps, squats, vertical_jump, long_jump")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    logger.info("Starting Balanced Sports Assessment API v3.0...")
+    logger.info("Features: Real-time analysis, Balanced cheat detection, Video generation")
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)

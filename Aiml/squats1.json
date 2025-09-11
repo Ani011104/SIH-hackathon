@@ -1,0 +1,75 @@
+{
+    "cheat_detection": {
+        "confidence_score": 95,
+        "detailed_analysis": "No suspicious patterns detected",
+        "flag_categories": {},
+        "overall_risk": "low",
+        "recommendations": [
+            "Video appears authentic"
+        ],
+        "risk_score": 0,
+        "total_flags": 0
+    },
+    "duration": 46.2855,
+    "dynamic_thresholds": {
+        "confidence_min": 0.3,
+        "duplicate_tolerance": 3,
+        "movement_base": 50,
+        "movement_threshold": 84.40143241403896,
+        "static_variance_threshold": 1.0
+    },
+    "exercise_results": {
+        "form_analysis": {
+            "angle_range": 122.78258934547901,
+            "consistency": 39.75997319733056,
+            "form_score": 85,
+            "issues": [
+                "Inconsistent form"
+            ]
+        },
+        "joint_names": [
+            "hip",
+            "knee",
+            "ankle"
+        ],
+        "keypoints_used": [
+            11,
+            13,
+            15
+        ],
+        "live_rep_count": 15,
+        "rep_count": 15
+    },
+    "exercise_type": "squats",
+    "fps": 30.009398191658295,
+    "output_video": "analyzed_squats_1757610709.mp4",
+    "overall_assessment": {
+        "confidence": "high",
+        "performance_insights": [
+            "\ud83d\udcaa Detected 15 repetitions",
+            "\ud83c\udfc6 Good exercise form"
+        ],
+        "recommendations": [
+            "\u2705 Video passed authenticity verification"
+        ],
+        "reliability_score": 85,
+        "validity": "valid"
+    },
+    "processing_time": 150.53231835365295,
+    "timestamp": "2025-09-11T22:44:19.600947",
+    "total_frames": 1389,
+    "valid_frames": 1389,
+    "video_properties": {
+        "duration": 46.2855,
+        "fps": 30.009398191658295,
+        "resolution": "1080x1920",
+        "total_frames": 1389
+    },
+    "video_stats": {
+        "fps": 30.009398191658295,
+        "fps_factor": 1.0003132730552766,
+        "height": 1920,
+        "resolution_factor": 1.6875,
+        "width": 1080
+    }
+}
