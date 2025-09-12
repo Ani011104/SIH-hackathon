@@ -1,0 +1,2 @@
+# This file is used to ignore files and folders that are too large , unnecessary or contain sensitive information
+node_modules/
