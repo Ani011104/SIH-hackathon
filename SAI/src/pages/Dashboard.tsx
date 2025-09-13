@@ -116,16 +116,19 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    height: 70,
     justifyContent: "space-between",
     backgroundColor: "rgba(22,17,23,0.9)",
   },
-  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  headerTitle: { color: "#fff", fontSize: 20, fontWeight: "bold", marginTop: 12 },
   iconBtn: {
-    width: 40,
-    height: 40,
+    width: 25,
+    height: 25,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 10,
   },
   scrollContent: { padding: 16, paddingBottom: 100 },
   sectionTitle: {

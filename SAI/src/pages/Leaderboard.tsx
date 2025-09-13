@@ -28,13 +28,19 @@ const players = [
   { rank: 10, name: "Kavya Iyer", score: 72 },
 ];
 
+// 🔹 Replace with logged-in user
+const currentUser = "Kavya Iyer";
+
 const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
+  // Check if current user is in top 10
+  const isInTop10 = players.some((p) => p.name === currentUser);
+
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialIcons name="arrow-back-ios" size={22} color="#fff" />
+          <MaterialIcons name="arrow-back-ios" size={22} color="#fff" marginTop={12} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Leaderboard</Text>
         <View style={{ width: 24 }} />
@@ -43,12 +49,19 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
       {/* Podium Top 3 */}
       <View style={styles.podiumContainer}>
         {players.slice(0, 3).map((p, i) => (
-          <View key={i} style={styles.podiumItem}>
+          <View
+            key={i}
+            style={[
+              styles.podiumItem,
+              p.name === currentUser && {
+                borderColor: "#ed6037",
+                borderWidth: 3,
+              },
+            ]}
+          >
             <Text style={styles.medal}>{p.medal}</Text>
             <ImageBackground
-              source={{
-                uri: "https://placehold.co/100x100", // Replace with real image
-              }}
+              source={{ uri: "https://placehold.co/100x100" }}
               style={[
                 styles.avatar,
                 {
@@ -76,7 +89,15 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
       {/* Rest of Leaderboard */}
       <ScrollView style={styles.list}>
         {players.slice(3).map((p) => (
-          <View key={p.rank} style={styles.row}>
+          <View
+            key={p.rank}
+            style={[
+              styles.row,
+              p.name === currentUser && {
+                backgroundColor: "rgba(112,33,134,0.6)",
+              },
+            ]}
+          >
             <Text style={styles.rank}>{p.rank}</Text>
             <ImageBackground
               source={{ uri: "https://placehold.co/80x80" }}
@@ -87,6 +108,22 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
             <Text style={styles.rowScore}>{p.score}</Text>
           </View>
         ))}
+
+        {/* User not in top 10 */}
+        {!isInTop10 && (
+          <View
+            style={[styles.row, { backgroundColor: "rgba(112,33,134,0.6)" }]}
+          >
+            <Text style={styles.rank}>15</Text>
+            <ImageBackground
+              source={{ uri: "https://placehold.co/80x80" }}
+              style={styles.rowAvatar}
+              imageStyle={{ borderRadius: 25 }}
+            />
+            <Text style={styles.rowName}>{currentUser}</Text>
+            <Text style={styles.rowScore}>65</Text>
+          </View>
+        )}
       </ScrollView>
 
       {/* Footer Navigation */}
@@ -103,7 +140,7 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "space-between",
   },
-  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold",marginTop: 12 },
   podiumContainer: {
     flexDirection: "row",
     justifyContent: "center",
