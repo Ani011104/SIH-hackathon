@@ -1,0 +1,177 @@
+/* ========== Global Theme Variables ========== */
+:root {
+  --primary-color: #702186;
+  --secondary-color: #ed6037;
+  --black-color: #0d0d0d;
+  --white-color: #ffffff;
+  --gray-color: #e5e5e5;
+  --flow-chart-gray: #b7b7b7;
+  --primary-gradient: linear-gradient(60deg, #702186, #130866);
+}
+
+/* Reset-ish */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "Space Grotesk", "Noto Sans", sans-serif;
+  background-color: var(--black-color);
+  color: var(--white-color);
+}
+
+/* Hero Section */
+.hero-image-wrap {
+  position: relative;
+  height: 20rem;
+  width: 100%;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, var(--black-color));
+}
+
+.hero-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-bg {
+  background: var(--white-color);
+  border-radius: 50%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.logo-icon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--primary-color);
+}
+
+.app-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--white-color);
+  text-align: center;
+}
+
+.app-sub {
+  margin-top: 0.5rem;
+  font-size: 1.125rem;
+  color: var(--gray-color);
+  text-align: center;
+}
+
+/* Panel */
+.login-panel {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-inner {
+  width: 100%;
+}
+
+.panel-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.panel-sub {
+  color: var(--gray-color);
+  margin-bottom: 1.5rem;
+}
+
+/* Input */
+.input-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icon-phone {
+  position: absolute;
+  left: 0.75rem;
+  color: #9ca3af; /* gray-400 */
+}
+
+.phone-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 2px solid #374151; /* gray-700 */
+  background-color: #1f2937; /* gray-800 */
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  color: var(--white-color);
+  font-size: 1rem;
+}
+
+.phone-input::placeholder {
+  color: #9ca3af; /* gray-400 */
+}
+
+.phone-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+/* Button */
+.send-otp-btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  height: 3rem;
+  border: none;
+  border-radius: 0.75rem;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.send-otp-btn:hover:not(:disabled) {
+  background-color: #5d1b70; /* darker purple */
+}
+
+.send-otp-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Error text */
+.error-text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--secondary-color);
+}
+
+/* Footer */
+.login-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280; /* gray-500 */
+}
+
+.login-footer .link {
+  text-decoration: underline;
+}
