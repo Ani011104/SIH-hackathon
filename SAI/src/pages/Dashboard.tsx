@@ -8,10 +8,15 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+import { RootStackParamList } from "../../App";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import FooterNav from "../components/FooterNav";
+import { StackScreenProps } from "@react-navigation/stack";
 
 
-const Dashboard = ({ navigation }) => {
+type DashboardProps = StackScreenProps<RootStackParamList, "Dashboard">;
+
+const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -81,8 +86,11 @@ const Dashboard = ({ navigation }) => {
                 See how you stack up against other athletes. Compete for the top
                 spot.
               </Text>
-              <TouchableOpacity style={styles.secondaryBtn}>
-//
+              <TouchableOpacity
+                style={styles.secondaryBtn}
+                onPress={() => navigation.navigate("Leaderboard")}
+              >
+                <MaterialIcons name="emoji-events" size={18} color="#fff" />
                 <Text style={styles.secondaryBtnText}>View Leaderboard</Text>
               </TouchableOpacity>
             </View>
@@ -98,24 +106,7 @@ const Dashboard = ({ navigation }) => {
       </ScrollView>
 
       {/* Footer Navigation */}
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerItem}>
-          <MaterialIcons name="home" size={22} color="#fff" />
-          <Text style={styles.footerTextActive}>Dashboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerItem}>
-          <MaterialIcons name="videocam" size={22} color="#b09eb7" />
-          <Text style={styles.footerText}>Record</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerItem}>
-          <MaterialIcons name="emoji-events" size={22} color="#b09eb7" />
-          <Text style={styles.footerText}>Leaderboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerItem}>
-          <MaterialIcons name="person" size={22} color="#b09eb7" />
-          <Text style={styles.footerText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <FooterNav navigation={navigation} active="Dashboard" />
     </View>
   );
 };
@@ -181,17 +172,6 @@ const styles = StyleSheet.create({
   secondaryBtnText: { color: "#fff", marginLeft: 6, fontSize: 13 },
   image: { width: "100%", height: 180 },
   imageSmall: { flex: 1, height: 160 },
-  footer: {
-    flexDirection: "row",
-    borderTopWidth: 1,
-    borderTopColor: "#332938",
-    backgroundColor: "rgba(35,28,38,0.9)",
-    paddingVertical: 8,
-    justifyContent: "space-around",
-  },
-  footerItem: { alignItems: "center" },
-  footerText: { color: "#b09eb7", fontSize: 12 },
-  footerTextActive: { color: "#fff", fontSize: 12, fontWeight: "600" },
 });
 
 export default Dashboard;
