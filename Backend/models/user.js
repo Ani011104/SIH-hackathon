@@ -30,6 +30,7 @@ const UserSchema = new mongoose.Schema({
     gender: {
         type: String,
         required: false,
+        lowercase: true,
     },
     age: {
         type: Number,
@@ -48,7 +49,7 @@ const UserSchema = new mongoose.Schema({
         default: 'user',
     },
 
-})
+} , {timestamps: true})
 
 const User = mongoose.model('User', UserSchema)
 module.exports = User
