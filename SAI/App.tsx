@@ -7,6 +7,7 @@ import OtpVerify from "./src/pages/OtpVerify";
 import AthleteDetailsForm from "./src/pages/AthleteDetailsForm";
 import Dashboard from "./src/pages/Dashboard";
 import Leaderboard from "./src/pages/Leaderboard";
+import Profile from "./src/pages/Profile";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -14,7 +15,9 @@ export type RootStackParamList = {
   AthleteDetails: undefined;
   Dashboard: undefined;
   Leaderboard: undefined;
+  Profile: undefined; // 👈 add this
 };
+
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -27,6 +30,7 @@ export default function App() {
         <Stack.Screen name="AthleteDetails" component={AthleteDetailsForm} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
