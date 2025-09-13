@@ -30,11 +30,11 @@ const UserSchema = new mongoose.Schema({
     gender: {
         type: String,
         required: false,
-        lowercase: true,
     },
-    age: {
-        type: Number,
+    Dob: {
+        type: Date,
         required: false,
+        
     },
     isPhoneVerified: {
         type: Boolean,
@@ -49,7 +49,7 @@ const UserSchema = new mongoose.Schema({
         default: 'user',
     },
 
-} , {timestamps: true})
+}, { timestamps: true })
 
 const User = mongoose.model('User', UserSchema)
 module.exports = User
