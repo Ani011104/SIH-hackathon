@@ -1,0 +1,29 @@
+# Core pose estimation and video analysis
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+flask>=2.3.0
+pillow>=9.5.0
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Face verification and analysis
+deepface==0.0.90
+mtcnn==0.1.1
+facenet-pytorch==2.5.3
+#retinaface==1.1.1
+
+
+# ML/anomaly detection and utilities
+scikit-learn>=1.3.0
+joblib>=1.3.2
+pyod>=1.1.0
+scipy>=1.11.3
+pandas>=2.1.1
+
+# Video and image IO
+imageio>=2.31.3
+moviepy>=1.0.3
+
+# Logging etc.
+# (logging, statistics, pathlib, collections are Python stdlib, do not require installation)

@@ -1,0 +1,206 @@
+{
+  "mobile_summary": {
+    "final_validity": "invalid",
+    "authenticity_confidence": 29.6,
+    "performance_detected": true,
+    "recommendation": "\u274c Video rejected - Cheating detected",
+    "processing_speed": "mobile_optimized",
+    "real_time_counting": true
+  },
+  "performance_results": {
+    "exercise_type": "vertical_jump",
+    "rep_count": 0,
+    "jump_count": 6,
+    "exercise_results": {
+      "jump_count": 6,
+      "individual_jumps": [
+        {
+          "jump_number": 1,
+          "jump_height_cm": 15.4,
+          "horizontal_distance_cm": 4.3,
+          "flight_time_seconds": 0.311
+        },
+        {
+          "jump_number": 2,
+          "jump_height_cm": 15.4,
+          "horizontal_distance_cm": 0.9,
+          "flight_time_seconds": 0.311
+        },
+        {
+          "jump_number": 3,
+          "jump_height_cm": 19.1,
+          "horizontal_distance_cm": 3.0,
+          "flight_time_seconds": 0.346
+        },
+        {
+          "jump_number": 4,
+          "jump_height_cm": 15.4,
+          "horizontal_distance_cm": 0.5,
+          "flight_time_seconds": 0.311
+        },
+        {
+          "jump_number": 5,
+          "jump_height_cm": 9.3,
+          "horizontal_distance_cm": 4.0,
+          "flight_time_seconds": 0.242
+        },
+        {
+          "jump_number": 6,
+          "jump_height_cm": 12.2,
+          "horizontal_distance_cm": 4.4,
+          "flight_time_seconds": 0.277
+        }
+      ],
+      "average_height_cm": 14.5,
+      "total_height_cm": 87.0,
+      "mobile_optimized": true,
+      "jump_detected": true,
+      "frames_analyzed": 172
+    },
+    "output_video": "mobile_analysis_vertical_jump_1757869852.mp4",
+    "video_properties": {
+      "fps": 28.913,
+      "total_frames": 343,
+      "duration": 11.863175734098848,
+      "resolution": "854x480",
+      "mobile_optimized": true,
+      "frames_processed": 172
+    },
+    "mobile_performance": {
+      "optimization_level": "high",
+      "frame_processing_ratio": 1.0,
+      "real_time_counting": true
+    }
+  },
+  "security_results": {
+    "authenticity_status": "highly_suspicious",
+    "risk_level": "critical",
+    "risk_score": 70.4,
+    "confidence_score": 29.6,
+    "face_verification": {
+      "verified": false,
+      "confidence": 24.04,
+      "verification_rate": 25.0,
+      "avg_similarity": 80.13,
+      "max_similarity": 86.49,
+      "successful_verifications": 8,
+      "total_verifications": 32,
+      "frames_processed": 4,
+      "models_used": [
+        "VGG-Face",
+        "Facenet"
+      ],
+      "enhanced_verification": true,
+      "detailed_results": [
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.7244,
+          "threshold": 0.35,
+          "similarity": 27.56,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "euclidean",
+          "distance": 1.2037,
+          "threshold": 0.55,
+          "similarity": 0.0,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "Facenet",
+          "metric": "cosine",
+          "distance": 0.5976,
+          "threshold": 0.27999999999999997,
+          "similarity": 40.24,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "Facenet",
+          "metric": "euclidean",
+          "distance": 6.365,
+          "threshold": 8.0,
+          "similarity": 36.35,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.5067,
+          "threshold": 0.35,
+          "similarity": 49.33,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "euclidean",
+          "distance": 1.0066,
+          "threshold": 0.55,
+          "similarity": 0.0,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "Facenet",
+          "metric": "cosine",
+          "distance": 0.1729,
+          "threshold": 0.27999999999999997,
+          "similarity": 82.71,
+          "verified": true
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "Facenet",
+          "metric": "euclidean",
+          "distance": 2.577,
+          "threshold": 8.0,
+          "similarity": 74.23,
+          "verified": true
+        }
+      ]
+    },
+    "flag_analysis": {
+      "total_flags": 0,
+      "flag_categories": {}
+    },
+    "recommendations": [
+      "\ud83d\udea8 CRITICAL: Face verification FAILED - Different person detected",
+      "\u274c REJECT: This is NOT the authorized person"
+    ]
+  },
+  "mobile_technical": {
+    "cheat_detection_time": 43.219321727752686,
+    "sports_analysis_time": 17.31318712234497,
+    "optimization_level": "smartphone",
+    "models_used": [
+      "YOLO11n-nano",
+      "DeepFace-mobile",
+      "Mobile-Cheat-Detection"
+    ],
+    "mobile_features": [
+      "real_time_counting",
+      "frame_skipping",
+      "resolution_optimization",
+      "memory_efficient",
+      "fast_inference"
+    ],
+    "analysis_timestamp": "2025-09-14T22:40:53.667230",
+    "version": "mobile_v1.0"
+  },
+  "total_processing_time": 60.5330376625061
+}
