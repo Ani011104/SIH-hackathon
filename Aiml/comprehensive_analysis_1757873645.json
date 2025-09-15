@@ -1,0 +1,293 @@
+{
+  "analysis_metadata": {
+    "total_assessments": 5,
+    "analysis_timestamp": "2025-09-14T23:44:05.840586",
+    "analysis_version": "comprehensive_v1.0"
+  },
+  "overall_summary": {
+    "total_assessments": 5,
+    "validity_distribution": {
+      "low_confidence": 1,
+      "invalid": 3,
+      "valid": 1
+    },
+    "validity_rates": {
+      "valid_percentage": 20.0,
+      "invalid_percentage": 60.0,
+      "questionable_percentage": 20.0
+    },
+    "authenticity_stats": {
+      "average_confidence": 43.18,
+      "min_confidence": 21.6,
+      "max_confidence": 79.18,
+      "median_confidence": 29.6
+    },
+    "exercise_distribution": {
+      "long_jump": 1,
+      "pushups": 1,
+      "situps": 1,
+      "squats": 1,
+      "vertical_jump": 1
+    },
+    "overall_pass_rate": 20.0
+  },
+  "performance_insights": {
+    "performance_statistics": {
+      "pushups": {
+        "rep_statistics": {
+          "average_reps": 10,
+          "max_reps": 10,
+          "min_reps": 10,
+          "total_reps": 10,
+          "sessions": 1
+        }
+      },
+      "situps": {
+        "rep_statistics": {
+          "average_reps": 3,
+          "max_reps": 3,
+          "min_reps": 3,
+          "total_reps": 3,
+          "sessions": 1
+        }
+      },
+      "squats": {
+        "rep_statistics": {
+          "average_reps": 15,
+          "max_reps": 15,
+          "min_reps": 15,
+          "total_reps": 15,
+          "sessions": 1
+        }
+      },
+      "vertical_jump_height": {
+        "average": 14.5,
+        "max": 19.1,
+        "min": 9.3,
+        "total_attempts": 6
+      },
+      "vertical_jump_distance": {
+        "average": 2.9,
+        "max": 4.4,
+        "min": 0.5,
+        "total_attempts": 6
+      }
+    },
+    "form_analysis": {
+      "average_form_score": 85,
+      "form_score_range": [
+        85,
+        85
+      ],
+      "sessions_with_form_data": 3
+    },
+    "exercise_completion_rates": {
+      "long_jump": {
+        "completed": 0,
+        "total": 1,
+        "completion_percentage": 0.0
+      },
+      "pushups": {
+        "completed": 1,
+        "total": 1,
+        "completion_percentage": 100.0
+      },
+      "situps": {
+        "completed": 1,
+        "total": 1,
+        "completion_percentage": 100.0
+      },
+      "squats": {
+        "completed": 1,
+        "total": 1,
+        "completion_percentage": 100.0
+      },
+      "vertical_jump": {
+        "completed": 0,
+        "total": 1,
+        "completion_percentage": 0.0
+      }
+    },
+    "performance_trends": {}
+  },
+  "security_analysis": {
+    "risk_assessment": {
+      "average_risk_score": 56.82,
+      "high_risk_sessions": 3,
+      "low_risk_sessions": 1,
+      "risk_score_distribution": {
+        "critical": 0,
+        "high": 3,
+        "medium": 1,
+        "low": 1
+      }
+    },
+    "face_verification_analysis": {
+      "overall_verification_rate": 40.0,
+      "average_face_confidence": 38.3,
+      "verification_reliability": "inconsistent",
+      "failed_verifications": 3
+    },
+    "threat_analysis": {
+      "authenticity_status_distribution": {
+        "likely_authentic": 1,
+        "highly_suspicious": 3,
+        "authentic": 1
+      },
+      "common_flags": {
+        "velocity_outlier": 68,
+        "low_confidence": 25
+      },
+      "security_incidents": 3
+    },
+    "security_recommendations": [
+      "CRITICAL: Majority of sessions flagged as high risk - Review system settings",
+      "WARNING: High face verification failure rate - Check reference image quality"
+    ]
+  },
+  "user_insights": {
+    "usage_patterns": {
+      "favorite_exercises": {
+        "long_jump": 1,
+        "pushups": 1,
+        "situps": 1,
+        "squats": 1,
+        "vertical_jump": 1
+      },
+      "average_session_duration": 23.99,
+      "session_duration_range": [
+        10.844155555555556,
+        46.2855
+      ],
+      "total_exercise_time": 119.95
+    },
+    "engagement_metrics": {
+      "total_sessions": 5,
+      "average_processing_time": 295.04,
+      "system_efficiency": 20.0,
+      "user_consistency": "moderately_consistent"
+    },
+    "behavioral_insights": [
+      "Most performed exercise: long_jump (1 sessions)",
+      "Maintains moderate workout session lengths"
+    ]
+  },
+  "system_performance": {
+    "performance_metrics": {
+      "average_total_processing_time": 295.04,
+      "average_cheat_detection_time": 52.36,
+      "average_sports_analysis_time": 242.68,
+      "processing_time_consistency": 485.06,
+      "fastest_analysis": 60.53,
+      "slowest_analysis": 1162.18
+    },
+    "efficiency_analysis": {
+      "average_frame_processing_ratio": 0.982,
+      "system_optimization_level": "mobile_optimized",
+      "models_performance": {
+        "face_verification_accuracy": 40.0,
+        "pose_detection_reliability": "needs_improvement",
+        "overall_model_performance": "satisfactory"
+      },
+      "bottleneck_analysis": [
+        "sports_analysis"
+      ]
+    },
+    "reliability_metrics": {
+      "success_rate": 100.0,
+      "error_rate": 0.0,
+      "reliability_status": "high"
+    }
+  },
+  "recommendations": {
+    "security_recommendations": [
+      "\ud83d\udea8 HIGH ALERT: Over 50% of assessments flagged as invalid - Review reference images and verification thresholds"
+    ],
+    "performance_recommendations": [
+      "\u2705 GOOD: Consistent exercise performance"
+    ],
+    "system_recommendations": [
+      "\u26a1 OPTIMIZATION: Consider reducing video resolution or frame rate for faster processing"
+    ],
+    "user_recommendations": [
+      "\ud83c\udf1f EXCELLENT: Great exercise variety!"
+    ]
+  },
+  "detailed_assessment_breakdown": [
+    {
+      "assessment_number": 1,
+      "source_file": "mobile_complete_long_jump_1757872408.json",
+      "exercise_type": "long_jump",
+      "final_validity": "low_confidence",
+      "authenticity_confidence": 55.91,
+      "performance_detected": false,
+      "risk_score": 44.09,
+      "face_verified": true,
+      "processing_time": 105.22487926483154,
+      "key_recommendations": [
+        "\u2705 VERIFIED: Face verification passed",
+        "\ud83d\udd12 LEGITIMATE: Person identity confirmed"
+      ]
+    },
+    {
+      "assessment_number": 2,
+      "source_file": "mobile_complete_pushups_1757869729.json",
+      "exercise_type": "pushups",
+      "final_validity": "invalid",
+      "authenticity_confidence": 21.6,
+      "performance_detected": true,
+      "risk_score": 78.4,
+      "face_verified": false,
+      "processing_time": 82.55183339118958,
+      "key_recommendations": [
+        "\ud83d\udea8 CRITICAL: Face verification FAILED - Different person detected",
+        "\u274c REJECT: This is NOT the authorized person"
+      ]
+    },
+    {
+      "assessment_number": 3,
+      "source_file": "mobile_complete_situps_1757869249.json",
+      "exercise_type": "situps",
+      "final_validity": "invalid",
+      "authenticity_confidence": 29.6,
+      "performance_detected": true,
+      "risk_score": 70.4,
+      "face_verified": false,
+      "processing_time": 64.73490333557129,
+      "key_recommendations": [
+        "\ud83d\udea8 CRITICAL: Face verification FAILED - Different person detected",
+        "\u274c REJECT: This is NOT the authorized person"
+      ]
+    },
+    {
+      "assessment_number": 4,
+      "source_file": "mobile_complete_squats_1757872267.json",
+      "exercise_type": "squats",
+      "final_validity": "valid",
+      "authenticity_confidence": 79.18,
+      "performance_detected": true,
+      "risk_score": 20.82,
+      "face_verified": true,
+      "processing_time": 1162.1752223968506,
+      "key_recommendations": [
+        "\u2705 VERIFIED: Face verification passed",
+        "\ud83d\udd12 LEGITIMATE: Person identity confirmed"
+      ]
+    },
+    {
+      "assessment_number": 5,
+      "source_file": "mobile_complete_vertical_jump_1757869853.json",
+      "exercise_type": "vertical_jump",
+      "final_validity": "invalid",
+      "authenticity_confidence": 29.6,
+      "performance_detected": true,
+      "risk_score": 70.4,
+      "face_verified": false,
+      "processing_time": 60.5330376625061,
+      "key_recommendations": [
+        "\ud83d\udea8 CRITICAL: Face verification FAILED - Different person detected",
+        "\u274c REJECT: This is NOT the authorized person"
+      ]
+    }
+  ]
+}

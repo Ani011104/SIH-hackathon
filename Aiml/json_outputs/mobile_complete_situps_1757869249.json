@@ -1,0 +1,184 @@
+{
+  "mobile_summary": {
+    "final_validity": "invalid",
+    "authenticity_confidence": 29.6,
+    "performance_detected": true,
+    "recommendation": "\u274c Video rejected - Cheating detected",
+    "processing_speed": "mobile_optimized",
+    "real_time_counting": true
+  },
+  "performance_results": {
+    "exercise_type": "situps",
+    "rep_count": 3,
+    "jump_count": 0,
+    "exercise_results": {
+      "rep_count": 3,
+      "form_analysis": {
+        "form_score": 85,
+        "mobile_optimized": true,
+        "rep_timestamps": [
+          2.335664273504274,
+          5.505494358974359,
+          8.425074700854701
+        ]
+      },
+      "keypoints_used": [
+        5,
+        11,
+        13
+      ],
+      "joint_names": [
+        "shoulder",
+        "hip",
+        "knee"
+      ],
+      "exercise_completed": true,
+      "mobile_optimized": true
+    },
+    "output_video": "mobile_analysis_situps_1757869248.mp4",
+    "video_properties": {
+      "fps": 23.97604854227674,
+      "total_frames": 260,
+      "duration": 10.844155555555556,
+      "resolution": "640x338",
+      "mobile_optimized": true,
+      "frames_processed": 260
+    },
+    "mobile_performance": {
+      "optimization_level": "high",
+      "frame_processing_ratio": 1.0,
+      "real_time_counting": true
+    }
+  },
+  "security_results": {
+    "authenticity_status": "highly_suspicious",
+    "risk_level": "critical",
+    "risk_score": 70.4,
+    "confidence_score": 29.6,
+    "face_verification": {
+      "verified": false,
+      "confidence": 22.25,
+      "verification_rate": 18.8,
+      "avg_similarity": 74.16,
+      "max_similarity": 77.47,
+      "successful_verifications": 6,
+      "total_verifications": 32,
+      "frames_processed": 4,
+      "models_used": [
+        "VGG-Face",
+        "Facenet"
+      ],
+      "enhanced_verification": true,
+      "detailed_results": [
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.8062,
+          "threshold": 0.35,
+          "similarity": 19.38,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "euclidean",
+          "distance": 1.2698,
+          "threshold": 0.55,
+          "similarity": 0.0,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "Facenet",
+          "metric": "cosine",
+          "distance": 0.7488,
+          "threshold": 0.27999999999999997,
+          "similarity": 25.12,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "Facenet",
+          "metric": "euclidean",
+          "distance": 6.9856,
+          "threshold": 8.0,
+          "similarity": 30.14,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.5858,
+          "threshold": 0.35,
+          "similarity": 41.42,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "euclidean",
+          "distance": 1.0824,
+          "threshold": 0.55,
+          "similarity": 0.0,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "Facenet",
+          "metric": "cosine",
+          "distance": 0.256,
+          "threshold": 0.27999999999999997,
+          "similarity": 74.4,
+          "verified": true
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "Facenet",
+          "metric": "euclidean",
+          "distance": 3.0839,
+          "threshold": 8.0,
+          "similarity": 69.16,
+          "verified": false
+        }
+      ]
+    },
+    "flag_analysis": {
+      "total_flags": 0,
+      "flag_categories": {}
+    },
+    "recommendations": [
+      "\ud83d\udea8 CRITICAL: Face verification FAILED - Different person detected",
+      "\u274c REJECT: This is NOT the authorized person"
+    ]
+  },
+  "mobile_technical": {
+    "cheat_detection_time": 41.87563633918762,
+    "sports_analysis_time": 22.858707189559937,
+    "optimization_level": "smartphone",
+    "models_used": [
+      "YOLO11n-nano",
+      "DeepFace-mobile",
+      "Mobile-Cheat-Detection"
+    ],
+    "mobile_features": [
+      "real_time_counting",
+      "frame_skipping",
+      "resolution_optimization",
+      "memory_efficient",
+      "fast_inference"
+    ],
+    "analysis_timestamp": "2025-09-14T22:30:49.166185",
+    "version": "mobile_v1.0"
+  },
+  "total_processing_time": 64.73490333557129
+}

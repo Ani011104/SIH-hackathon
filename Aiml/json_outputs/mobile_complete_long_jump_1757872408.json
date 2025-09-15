@@ -1,0 +1,269 @@
+{
+  "mobile_summary": {
+    "final_validity": "low_confidence",
+    "authenticity_confidence": 55.91,
+    "performance_detected": false,
+    "recommendation": "\u26a0\ufe0f Minor concerns detected",
+    "processing_speed": "mobile_optimized",
+    "real_time_counting": true
+  },
+  "performance_results": {
+    "exercise_type": "long_jump",
+    "rep_count": 0,
+    "jump_count": 0,
+    "exercise_results": {
+      "jump_detected": false,
+      "jump_count": 0,
+      "frames_analyzed": 448,
+      "mobile_optimized": true
+    },
+    "output_video": "mobile_analysis_long_jump_1757872404.mp4",
+    "video_properties": {
+      "fps": 30.0,
+      "total_frames": 985,
+      "duration": 32.833333333333336,
+      "resolution": "640x360",
+      "mobile_optimized": true,
+      "frames_processed": 493
+    },
+    "mobile_performance": {
+      "optimization_level": "high",
+      "frame_processing_ratio": 0.9087221095334685,
+      "real_time_counting": true
+    }
+  },
+  "security_results": {
+    "authenticity_status": "likely_authentic",
+    "risk_level": "low",
+    "risk_score": 44.09,
+    "confidence_score": 55.91,
+    "face_verification": {
+      "verified": true,
+      "confidence": 52.01,
+      "verification_rate": 5.6,
+      "avg_similarity": 50.9,
+      "max_similarity": 50.9,
+      "successful_verifications": 1,
+      "total_verifications": 18,
+      "frames_processed": 6,
+      "models_used": [
+        "VGG-Face"
+      ],
+      "balanced_verification": true,
+      "detailed_results": [
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.7119,
+          "threshold": 0.5,
+          "similarity": 28.81,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6197,
+          "threshold": 0.5,
+          "similarity": 38.03,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6237,
+          "threshold": 0.5,
+          "similarity": 37.63,
+          "verified": false
+        },
+        {
+          "frame": 2,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.7944,
+          "threshold": 0.5,
+          "similarity": 20.56,
+          "verified": false
+        },
+        {
+          "frame": 2,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6586,
+          "threshold": 0.5,
+          "similarity": 34.14,
+          "verified": false
+        },
+        {
+          "frame": 2,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.5657,
+          "threshold": 0.5,
+          "similarity": 43.43,
+          "verified": false
+        },
+        {
+          "frame": 3,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.7915,
+          "threshold": 0.5,
+          "similarity": 20.85,
+          "verified": false
+        },
+        {
+          "frame": 3,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.491,
+          "threshold": 0.5,
+          "similarity": 50.9,
+          "verified": true
+        },
+        {
+          "frame": 3,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.5761,
+          "threshold": 0.5,
+          "similarity": 42.39,
+          "verified": false
+        },
+        {
+          "frame": 4,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.7718,
+          "threshold": 0.5,
+          "similarity": 22.82,
+          "verified": false
+        },
+        {
+          "frame": 4,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6401,
+          "threshold": 0.5,
+          "similarity": 35.99,
+          "verified": false
+        },
+        {
+          "frame": 4,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.5992,
+          "threshold": 0.5,
+          "similarity": 40.08,
+          "verified": false
+        },
+        {
+          "frame": 5,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.7123,
+          "threshold": 0.5,
+          "similarity": 28.77,
+          "verified": false
+        },
+        {
+          "frame": 5,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6159,
+          "threshold": 0.5,
+          "similarity": 38.41,
+          "verified": false
+        },
+        {
+          "frame": 5,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6428,
+          "threshold": 0.5,
+          "similarity": 35.72,
+          "verified": false
+        },
+        {
+          "frame": 6,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.8596,
+          "threshold": 0.5,
+          "similarity": 14.04,
+          "verified": false
+        },
+        {
+          "frame": 6,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.5707,
+          "threshold": 0.5,
+          "similarity": 42.93,
+          "verified": false
+        },
+        {
+          "frame": 6,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6062,
+          "threshold": 0.5,
+          "similarity": 39.38,
+          "verified": false
+        }
+      ]
+    },
+    "flag_analysis": {
+      "total_flags": 51,
+      "flag_categories": {
+        "low_confidence": 25,
+        "velocity_outlier": 26
+      }
+    },
+    "recommendations": [
+      "\u2705 VERIFIED: Face verification passed",
+      "\ud83d\udd12 LEGITIMATE: Person identity confirmed",
+      "\u26a0\ufe0f MOTION: Unusual movements detected"
+    ]
+  },
+  "mobile_technical": {
+    "cheat_detection_time": 43.16044592857361,
+    "sports_analysis_time": 62.06362962722778,
+    "optimization_level": "smartphone",
+    "models_used": [
+      "YOLO11n-nano",
+      "DeepFace-mobile",
+      "Mobile-Cheat-Detection"
+    ],
+    "mobile_features": [
+      "real_time_counting",
+      "frame_skipping",
+      "resolution_optimization",
+      "memory_efficient",
+      "fast_inference"
+    ],
+    "analysis_timestamp": "2025-09-14T23:23:28.441419",
+    "version": "mobile_v1.0"
+  },
+  "total_processing_time": 105.22487926483154
+}
