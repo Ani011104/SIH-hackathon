@@ -6,25 +6,25 @@ import { Users, AlertTriangle, Trophy, MapPin, Download, Check, X } from "lucide
 const stats = [
   {
     title: "Total Athletes",
-    value: "2,847",
+    value: "10",
     icon: Users,
-    change: "+12% from last month"
+    change: "+5% from last month"
   },
   {
     title: "Pending Reviews",
-    value: "146",
+    value: "4",
     icon: AlertTriangle,
-    change: "23 flagged for review"
+    change: "3 flagged for review"
   },
   {
     title: "Top Performers",
-    value: "89",
+    value: "2",
     icon: Trophy,
     change: "Above 90th percentile"
   },
   {
     title: "Active Regions",
-    value: "15",
+    value: "8",
     icon: MapPin,
     change: "Across 8 states"
   }
@@ -33,23 +33,23 @@ const stats = [
 const recentActions = [
   {
     id: 1,
-    athlete: "Sarah Johnson",
+    athlete: "Amrutha",
     test: "Vertical Jump",
-    score: "68cm",
+    score: "50cm",
     status: "flagged",
     timestamp: "2 mins ago"
   },
   {
     id: 2,
-    athlete: "Mike Chen",
-    test: "Shuttle Run",
-    score: "9.2s",
+    athlete: "Sumadhwa",
+    test: "Squats",
+    score: "30 reps",
     status: "verified",
     timestamp: "15 mins ago"
   },
   {
     id: 3,
-    athlete: "Emma Davis",
+    athlete: "Anirudh",
     test: "Sit-ups",
     score: "45 reps",
     status: "pending",
@@ -127,38 +127,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Performance Summary */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Performance Summary</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">Average Scores</span>
-                <span className="text-2xl font-bold text-primary">87.5%</span>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span>Vertical Jump</span>
-                  <span className="font-medium">92%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Sit-ups</span>
-                  <span className="font-medium">85%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Shuttle Run</span>
-                  <span className="font-medium">88%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Push-ups</span>
-                  <span className="font-medium">84%</span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        
       </div>
     </div>
   );

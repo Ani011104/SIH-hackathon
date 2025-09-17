@@ -3,20 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle,CardDescription } from "@/components/ui/card";
 import { Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Login() {
   const [loginData, setLoginData] = useState({
     phone: "",
-    otp: "",
+    otp: ""
   });
   const [showOtp, setShowOtp] = useState(false);
   const navigate = useNavigate();
@@ -37,9 +31,7 @@ export default function Login() {
           <div className="mx-auto w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
             <Shield className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl font-bold">
-            Sports Assessment Portal
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold">Sports Assessment Portal</CardTitle>
           <CardDescription>
             Secure access for officials and evaluators
           </CardDescription>
@@ -49,7 +41,7 @@ export default function Login() {
             <TabsList className="grid w-full grid-cols-1">
               <TabsTrigger value="login">Login</TabsTrigger>
             </TabsList>
-
+            
             <TabsContent value="login" className="space-y-4">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
@@ -59,12 +51,7 @@ export default function Login() {
                     type="tel"
                     placeholder="+1 (555) 123-4567"
                     value={loginData.phone}
-                    onChange={(e) =>
-                      setLoginData((prev) => ({
-                        ...prev,
-                        phone: e.target.value,
-                      }))
-                    }
+                    onChange={(e) => setLoginData(prev => ({ ...prev, phone: e.target.value }))}
                     required
                   />
                 </div>
@@ -77,12 +64,7 @@ export default function Login() {
                       type="text"
                       placeholder="Enter 6-digit code"
                       value={loginData.otp}
-                      onChange={(e) =>
-                        setLoginData((prev) => ({
-                          ...prev,
-                          otp: e.target.value,
-                        }))
-                      }
+                      onChange={(e) => setLoginData(prev => ({ ...prev, otp: e.target.value }))}
                       required
                     />
                     <p className="text-xs text-muted-foreground">
