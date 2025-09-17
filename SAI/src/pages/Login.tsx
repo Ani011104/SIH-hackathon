@@ -14,41 +14,37 @@ import { savePhone } from "../services/storage";
 
 type Props = StackScreenProps<RootStackParamList, "Login">;
 
-// Mock toggle
-const MOCK_MODE = true;
+// // Mock toggle
+// const MOCK_MODE = true;
+
+const API_BASE = "http://10.237.136.179:5000";
+
 
 export default function Login({ navigation }: Props) {
   const [phone, setPhone] = useState("");
 
   const handleSendOtp = async () => {
-    if (phone.length !== 10) {
-      alert("Please enter a valid 10-digit mobile number");
-      return;
-    }
+  if (phone.length !== 10) {
+    alert("Please enter a valid 10-digit mobile number");
+    return;
+  }
 
-    if (MOCK_MODE) {
-      // save phone locally
-      await savePhone(phone);
-      navigation.navigate("OtpVerify", { phone });
-      return;
-    }
+  try {
+    const res = await fetch(`${API_BASE}/auth/signup/sendotp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone }),
+    });
 
-    // 🔹 Backend API (replace later)
-    try {
-      const res = await fetch("https://your-api.com/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to send OTP");
 
-      await savePhone(phone);
-      navigation.navigate("OtpVerify", { phone });
-    } catch (err: any) {
-      alert(err.message);
-    }
-  };
+    await savePhone(phone);
+    navigation.navigate("OtpVerify", { phone });
+  } catch (err: any) {
+    alert(err.message || "Network error or server unavailable");
+  }
+};
 
   return (
     <View style={{ flex: 1, backgroundColor: "#0D0D0D" }}>

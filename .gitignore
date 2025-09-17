@@ -16,3 +16,6 @@ __pycache__/
 *.tflite
 *.pth
 *.pt
+# Dependencies
+node_modules/
+*/node_modules/

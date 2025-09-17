@@ -1,0 +1,19 @@
+{
+  "name": "sih-hackathon",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd Backend && nodemon server.js",
+    "dev:frontend": "cd SAI && npm start",
+    "android": "concurrently \"npm run dev:backend\" \"npm run android:frontend\"",
+    "android:frontend": "cd SAI && npx react-native run-android"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "mongoose": "^8.18.1"
+  }
+}

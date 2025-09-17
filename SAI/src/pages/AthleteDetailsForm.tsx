@@ -15,7 +15,9 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "react-native-image-picker";
-import { saveAthleteProfile } from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const API_BASE = "http://10.237.136.179:5000";
 
 const AthleteDetailsForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState("");
@@ -23,17 +25,77 @@ const AthleteDetailsForm = ({ navigation }: any) => {
   const [gender, setGender] = useState("Male");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [profilePic, setProfilePic] = useState<any>(null); // Store full image object
 
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const pickImage = async () => {
-    ImagePicker.launchImageLibrary({ mediaType: "photo" }, (response) => {
-      if (response.assets && response.assets[0].uri) {
-        setProfilePic(response.assets[0].uri);
+    const options = {
+      mediaType: "photo" as const,
+      quality: 0.8,
+    };
+
+    ImagePicker.launchImageLibrary(options, (response) => {
+      if (response.assets && response.assets[0]) {
+        const asset = response.assets[0];
+        setProfilePic(asset); // Store the full asset object
       }
     });
+  };
+
+  // Update user profile function
+  const updateUser = async (userData: any) => {
+    const token = await AsyncStorage.getItem("authToken");
+    
+    const response = await fetch(`${API_BASE}/user/updateuser`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update user");
+    }
+
+    return await response.json();
+  };
+
+  // Upload media function
+  const uploadMedia = async (imageAsset: any) => {
+    const token = await AsyncStorage.getItem("authToken");
+    
+    const formData = new FormData();
+    
+    // Create the file object correctly
+    const fileObj = {
+      uri: imageAsset.uri,
+      type: imageAsset.type || "image/jpeg",
+      name: imageAsset.fileName || `profile_${Date.now()}.jpg`,
+    };
+    
+    formData.append("media", fileObj as any);
+
+    const response = await fetch(`${API_BASE}/media/upload`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        // Don't set Content-Type header when using FormData
+        // React Native will set it automatically with boundary
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to upload media");
+    }
+
+    return await response.json();
   };
 
   const submitProfile = async () => {
@@ -42,23 +104,45 @@ const AthleteDetailsForm = ({ navigation }: any) => {
       return;
     }
 
-    const profile = {
-      fullName,
-      dob: dob.toISOString(),
-      gender,
-      height,
-      weight,
-      profilePic,
-    };
-
     setLoading(true);
+
     try {
-      await saveAthleteProfile(profile); // ✅ API mock/ready
+      // Get saved phone + token
+      const phone = await AsyncStorage.getItem("userPhone");
+      const token = await AsyncStorage.getItem("authToken");
+
+      if (!phone || !token) {
+        throw new Error("User not logged in properly");
+      }
+
+      // Update user profile first
+      const userData = {
+        username: fullName,
+        phone,
+        height: Number(height),
+        weight: Number(weight),
+        gender,
+        Dob: dob.toISOString(),
+        email: "test@gmail.com", // You might want to make this optional or get from user input
+      };
+
+      await updateUser(userData);
+
+      // Upload profile pic if selected
+      if (profilePic) {
+        await uploadMedia(profilePic);
+      }
+
       setLoading(false);
-      Alert.alert("Success", "Profile saved successfully");
-      navigation.replace("Dashboard");
+      Alert.alert("Success", "Profile saved successfully", [
+        {
+          text: "OK",
+          onPress: () => navigation.replace("Dashboard"),
+        },
+      ]);
     } catch (error: any) {
       setLoading(false);
+      console.error("Profile submission error:", error);
       Alert.alert("Error", error.message || "Failed to save profile");
     }
   };
@@ -76,7 +160,7 @@ const AthleteDetailsForm = ({ navigation }: any) => {
     >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text style={styles.backBtn}>←</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Athlete Profile</Text>
@@ -89,7 +173,7 @@ const AthleteDetailsForm = ({ navigation }: any) => {
           <Image
             source={{
               uri:
-                profilePic ||
+                profilePic?.uri ||
                 "https://via.placeholder.com/120x120.png?text=Upload",
             }}
             style={styles.avatar}
@@ -222,6 +306,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     padding: 12,
     borderRadius: 8,
+    justifyContent: "center",
   },
   pickerWrapper: {
     backgroundColor: "#322938",

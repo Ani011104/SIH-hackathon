@@ -9,10 +9,14 @@ import {
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const API_BASE = "http://10.237.136.179:5000";
+
 
 type Props = StackScreenProps<RootStackParamList, "OtpVerify">;
 
-const MOCK_MODE = true;
+// const MOCK_MODE = true;
 
 export default function OtpVerify({ route, navigation }: Props) {
   const { phone } = route.params;
@@ -38,34 +42,44 @@ export default function OtpVerify({ route, navigation }: Props) {
     Alert.alert("OTP Resent", `New OTP sent to +91 ${phone}`);
   };
 
-  const handleVerify = async () => {
-    const enteredOtp = otp.join("");
-    if (enteredOtp.length !== 6) {
-      Alert.alert("Error", "Please enter the complete 6-digit OTP");
-      return;
+
+const handleVerify = async () => {
+  const enteredOtp = otp.join("");
+  if (enteredOtp.length !== 6) {
+    Alert.alert("Error", "Please enter the complete 6-digit OTP");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/signup/verifyotp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone, otp: enteredOtp }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "OTP verification failed");
+
+    // ✅ Save token
+    if (data.token) {
+      await AsyncStorage.setItem("authToken", data.token);
     }
 
-    if (MOCK_MODE) {
-      Alert.alert("OTP Verified", `OTP ${enteredOtp} verified for ${phone}`);
+    // ✅ Save phone number
+    if (phone) {
+      await AsyncStorage.setItem("userPhone", phone);
+    }
+
+    // ✅ Navigation
+    if (data.profileCompleted) {
+      navigation.replace("Dashboard");
+    } else {
       navigation.replace("AthleteDetails");
-      return;
     }
-
-    try {
-      const res = await fetch("https://your-api.com/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp: enteredOtp }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "OTP verification failed");
-
-      if (data.profileCompleted) navigation.replace("Dashboard");
-      else navigation.replace("AthleteDetails");
-    } catch (err: any) {
-      Alert.alert("Error", err.message);
-    }
-  };
+  } catch (err: any) {
+    Alert.alert("Error", err.message || "Network error or server unavailable");
+  }
+};
 
   return (
     <View style={styles.container}>
