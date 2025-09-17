@@ -5,6 +5,7 @@ const AuthRouter = require('./routes/auth')
 const AddressRouter = require('./routes/address')
 const UserRouter = require('./routes/user')
 const MediaRouter = require('./routes/media')
+const AssessmentRouter = require('./routes/assessment')
 
 const app = express()
 app.use(express.json())
@@ -18,6 +19,7 @@ app.use('/auth', AuthRouter);
 app.use('/address', AddressRouter)
 app.use('/user', UserRouter)
 app.use('/media', MediaRouter)
+app.use('/assessment', AssessmentRouter)
 
 
 
