@@ -9,10 +9,10 @@ import { Check, X, AlertTriangle, Play, Calendar, MapPin } from "lucide-react";
 
 const athleteData = {
   id: 1,
-  name: "Sarah Johnson",
-  age: 16,
-  gender: "Female",
-  location: "Los Angeles, California",
+  name: "Dhushyanth",
+  age: 19,
+  gender: "Male",
+  location: "Bengalore",
   photo: "/placeholder-avatar.jpg",
   status: "Flagged",
   totalTests: 12,
@@ -27,7 +27,7 @@ const testHistory = [
     test: "Vertical Jump",
     score: "68cm",
     benchmark: "65cm",
-    date: "2024-01-15",
+    date: "2025-01-15",
     status: "Flagged",
     video: true,
     notes: "Suspicious technique detected"
@@ -37,17 +37,17 @@ const testHistory = [
     test: "Sit-ups",
     score: "45 reps",
     benchmark: "40 reps",
-    date: "2024-01-10",
+    date: "2025-01-10",
     status: "Verified",
     video: true,
     notes: ""
   },
   {
     id: 3,
-    test: "Shuttle Run",
+    test: "Squats",
     score: "9.8s",
     benchmark: "10.2s",
-    date: "2024-01-05",
+    date: "2025-01-05",
     status: "Verified",
     video: true,
     notes: "Excellent form"
