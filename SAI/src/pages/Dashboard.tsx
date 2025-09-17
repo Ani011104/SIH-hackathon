@@ -1,4 +1,3 @@
-// src/pages/Dashboard.tsx
 import React from "react";
 import {
   View,
@@ -6,13 +5,12 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ImageBackground,
 } from "react-native";
-import { RootStackParamList } from "../../App";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
-
+import { RootStackParamList } from "../../App";
+import { exercises } from "../config/exercises";
 
 type DashboardProps = StackScreenProps<RootStackParamList, "Dashboard">;
 
@@ -21,87 +19,75 @@ const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <View style={{ width: 48 }} />
         <Text style={styles.headerTitle}>Dashboard</Text>
         <TouchableOpacity style={styles.iconBtn}>
-          <MaterialIcons name="settings" size={24} color="#fff" />
+          <MaterialIcons name="settings" size={26} color="#fff" />
         </TouchableOpacity>
       </View>
 
-      {/* Main Content */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Fitness Assessment */}
-        <View>
-          <Text style={styles.sectionTitle}>Fitness Assessment</Text>
+        {/* Quick Actions */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Quick Actions</Text>
+          <View style={styles.quickActions}>
+            <TouchableOpacity
+              style={[styles.quickBtn, { backgroundColor: "#7817a1" }]}
+              onPress={() =>
+                navigation.navigate("Record", {
+                  exerciseId: exercises[0].id,
+                  exerciseName: exercises[0].key,
+                })
+              }
+            >
+              <MaterialIcons name="videocam" size={28} color="#fff" />
+              <Text style={styles.quickBtnText}>Record Test</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.quickBtn, { backgroundColor: "#1E1E1E" }]}
+              onPress={() => navigation.navigate("Leaderboard")}
+            >
+              <MaterialIcons name="leaderboard" size={28} color="#fff" />
+              <Text style={styles.quickBtnText}>Leaderboard</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Personal Score */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Personal Score</Text>
           <View style={styles.card}>
-            <ImageBackground
-              source={{
-                uri: "https://lh3.googleusercontent.com/aida-public/AB6AXuAzGVLQCJQhq3af7j7Wjs3wqPokJqJFFUyASlNvBJIuUkF_8GUmqxZa-pvS6BJ9iMtTkhFGkbgXgrGeS5tM1y_fWyUR74PWBHciePTQ8VhRWfS1Azv-ZdzbvUdeFBaCJj1UL953VGy3q0R5gMUIQvlO_PA7puaIXaySZYh__Bddem4dnkV6hdKYYPHdp9tFkmYUaOj8OScr8fn7am2wkFcc7aDn4LUJI-Zg8sLavfQExlknXwcLG4l4rPl1xyOoyEhEy0tqm_4XJ6o",
-              }}
-              style={styles.image}
-            />
-            <View style={styles.cardBody}>
-              <Text style={styles.cardTitle}>Record Your Assessment</Text>
-              <Text style={styles.cardText}>
-                Start your fitness journey by recording your assessment. Follow
-                the instructions carefully and give your best performance.
+            <View style={{ flex: 1 }}>
+              <Text style={styles.muted}>Overall Score</Text>
+              <Text style={styles.score}>85</Text>
+              <Text style={styles.muted}>
+                Based on your last assessment
               </Text>
-              <TouchableOpacity style={styles.primaryBtn}>
-                <Text style={styles.primaryBtnText}>Start Recording</Text>
-              </TouchableOpacity>
             </View>
+            <View style={styles.scoreAvatar} />
           </View>
+          <TouchableOpacity style={styles.detailsBtn}>
+            <Text style={styles.detailsText}>View Details</Text>
+            <MaterialIcons name="arrow-forward" size={18} color="#fff" />
+          </TouchableOpacity>
         </View>
 
-        {/* Performance Analysis */}
-        <View>
-          <Text style={styles.sectionTitle}>Performance Analysis</Text>
-          <View style={styles.row}>
-            <View style={styles.cardSmall}>
-              <Text style={styles.cardTitle}>View Your Scores</Text>
-              <Text style={styles.cardText}>
-                Track your progress and analyze your performance over time.
-              </Text>
-              <TouchableOpacity style={styles.secondaryBtn}>
-                <MaterialIcons name="analytics" size={18} color="#fff" />
-                <Text style={styles.secondaryBtnText}>View Scores</Text>
-              </TouchableOpacity>
+        {/* Recent Activity */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Recent Activity</Text>
+          {exercises.slice(0, 3).map((ex) => (
+            <View key={ex.id} style={styles.activityCard}>
+              <View style={styles.activityIcon}>
+                <MaterialIcons name="fitness-center" size={22} color="#fff" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.activityTitle}>{ex.title}</Text>
+                <Text style={styles.activityDate}>2024-01-15</Text>
+              </View>
+              <MaterialIcons name="chevron-right" size={22} color="#aaa" />
             </View>
-            <ImageBackground
-              source={{
-                uri: "https://lh3.googleusercontent.com/aida-public/AB6AXuCOWUJThiLgjUvqA0wNPM8S6H3a6r2xjDlSDxZAcxHtYsTVp6RlsiSMKoZ5ZH5-bX-wrucGoqZclntQMeL7qSMq4-dqXO3tjMkxP9HKQTzwPMQZ1daFFX74psO31ybYYJ0ikIJqfZiTJuow-bmcLoEe2rgnc9fE0g5Uvl7kqCqjssiL7YOzntNlJuzor7EpCajV-jzbhkFJIfGR74L84PIjNqiqnSdQ1Cf5uBIxasKrwCEQP1aww2r15lL23L2IVW1lDzf8FFlKIlI",
-              }}
-              style={styles.imageSmall}
-              imageStyle={{ borderRadius: 16 }}
-            />
-          </View>
-        </View>
-
-        {/* Leaderboard */}
-        <View>
-          <Text style={styles.sectionTitle}>Leaderboard</Text>
-          <View style={styles.row}>
-            <View style={styles.cardSmall}>
-              <Text style={styles.cardTitle}>Check Your Ranking</Text>
-              <Text style={styles.cardText}>
-                See how you stack up against other athletes. Compete for the top
-                spot.
-              </Text>
-              <TouchableOpacity
-                style={styles.secondaryBtn}
-                onPress={() => navigation.navigate("Leaderboard")}
-              >
-                <MaterialIcons name="emoji-events" size={18} color="#fff" />
-                <Text style={styles.secondaryBtnText}>View Leaderboard</Text>
-              </TouchableOpacity>
-            </View>
-            <ImageBackground
-              source={{
-                uri: "https://lh3.googleusercontent.com/aida-public/AB6AXuDerhUgUpXa2iq7UELBIc1Ev2r53xqu43Ynzz0zJ6EnV7m4GQnktSA7-fr9Y2rXVER2Y9K-NjVPtdLCbfeSM753wUm8KyHZ4ahmuCWRp3fLyQDcGrMM2WqX_WvyfdLlKYrb6btUsafj7_7wIvlcFU0mK_AiieYfsoohwAYD__byfCnN5BKDhklDL8Gdh_bal147py0Pr55KCyuVth8dV2CliIgu-ryU9WuD6s_4Je1tJEoiBCZvWrRJgQLMOVTN_EgbIGepABNErPE",
-              }}
-              style={styles.imageSmall}
-              imageStyle={{ borderRadius: 16 }}
-            />
-          </View>
+          ))}
         </View>
       </ScrollView>
 
@@ -112,69 +98,78 @@ const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#161117" },
+  container: { flex: 1, backgroundColor: "#121212" },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    height: 70,
     justifyContent: "space-between",
-    backgroundColor: "rgba(22,17,23,0.9)",
+    padding: 16,
   },
-  headerTitle: { color: "#fff", fontSize: 20, fontWeight: "bold", marginTop: 12 },
-  iconBtn: {
-    width: 25,
-    height: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  },
+  headerTitle: { color: "#fff", fontSize: 20, fontWeight: "bold" },
+  iconBtn: { width: 48, height: 48, alignItems: "center", justifyContent: "center" },
   scrollContent: { padding: 16, paddingBottom: 100 },
-  sectionTitle: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 12,
-    marginLeft: 8,
-  },
-  card: {
-    backgroundColor: "#231C26",
-    borderRadius: 16,
-    overflow: "hidden",
-    marginBottom: 24,
-  },
-  cardBody: { padding: 16 },
-  cardTitle: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  cardText: { color: "#b09eb7", fontSize: 13, marginVertical: 6 },
-  primaryBtn: {
-    backgroundColor: "#7817a1",
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  primaryBtnText: { color: "#fff", fontWeight: "bold" },
-  row: { flexDirection: "row", gap: 12, marginBottom: 24 },
-  cardSmall: {
+
+  section: { marginBottom: 24 },
+  sectionTitle: { color: "#fff", fontSize: 20, fontWeight: "bold", marginBottom: 12 },
+
+  quickActions: { flexDirection: "row", gap: 12 },
+  quickBtn: {
     flex: 1,
-    backgroundColor: "#231C26",
+    alignItems: "center",
+    paddingVertical: 16,
+    borderRadius: 16,
+    gap: 6,
+  },
+  quickBtnText: { color: "#fff", fontWeight: "600" },
+
+  card: {
+    backgroundColor: "#1E1E1E",
     borderRadius: 16,
     padding: 16,
-    justifyContent: "space-between",
-  },
-  secondaryBtn: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#332938",
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    marginTop: 8,
+    marginBottom: 12,
   },
-  secondaryBtnText: { color: "#fff", marginLeft: 6, fontSize: 13 },
-  image: { width: "100%", height: 180 },
-  imageSmall: { flex: 1, height: 160 },
+  muted: { color: "#bbb", fontSize: 12 },
+  score: { color: "#fff", fontSize: 36, fontWeight: "bold" },
+  scoreAvatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 4,
+    borderColor: "#7817a1",
+    backgroundColor: "#333",
+  },
+  detailsBtn: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "#333",
+    borderRadius: 12,
+    padding: 10,
+  },
+  detailsText: { color: "#fff", fontSize: 14 },
+
+  activityCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1E1E1E",
+    padding: 14,
+    borderRadius: 16,
+    marginBottom: 10,
+  },
+  activityIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#333",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  activityTitle: { color: "#fff", fontWeight: "600" },
+  activityDate: { color: "#bbb", fontSize: 12 },
 });
 
 export default Dashboard;
