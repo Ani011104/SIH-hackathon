@@ -1,0 +1,16 @@
+venv/
+*/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+*.db
+*.sqlite3
+*.jpg
+*.jpeg
+*.png
+*.zip
+.vscode/
+.idea/
