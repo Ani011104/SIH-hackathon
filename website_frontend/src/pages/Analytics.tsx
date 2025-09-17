@@ -38,7 +38,7 @@ export default function Analytics() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,847</div>
+            <div className="text-2xl font-bold">20</div>
             <p className="text-xs text-muted-foreground">
               <span className="text-green-500">+12.5%</span> from last month
             </p>

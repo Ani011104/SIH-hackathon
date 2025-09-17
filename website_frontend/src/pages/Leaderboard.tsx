@@ -221,7 +221,7 @@ export default function Leaderboard() {
           <Tabs defaultValue="vertical-jump" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="vertical-jump">Vertical Jump</TabsTrigger>
-              <TabsTrigger value="shuttle-run">Shuttle Run</TabsTrigger>
+              <TabsTrigger value="push-ups">push-ups</TabsTrigger>
               <TabsTrigger value="sit-ups">Sit-ups</TabsTrigger>
             </TabsList>
             
