@@ -1,3 +1,4 @@
+// src/pages/AthleteDetailsForm.tsx
 import React, { useState } from "react";
 import {
   View,
@@ -12,31 +13,50 @@ import {
   Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import * as ImagePicker from "react-native-image-picker";
+import { saveAthleteProfile } from "../services/api";
 
-const AthleteDetailsForm = ({ navigation }) => {
+const AthleteDetailsForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState("");
   const [dob, setDob] = useState<Date | null>(null);
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
+  const [gender, setGender] = useState("Male");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [profilePic, setProfilePic] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const pickImage = async () => {
+    ImagePicker.launchImageLibrary({ mediaType: "photo" }, (response) => {
+      if (response.assets && response.assets[0].uri) {
+        setProfilePic(response.assets[0].uri);
+      }
+    });
+  };
+
   const submitProfile = async () => {
-    if (!fullName || !dob || !state || !city || !height || !weight) {
+    if (!fullName || !dob || !gender || !height || !weight) {
       Alert.alert("Error", "Please fill all fields");
       return;
     }
 
+    const profile = {
+      fullName,
+      dob: dob.toISOString(),
+      gender,
+      height,
+      weight,
+      profilePic,
+    };
+
     setLoading(true);
     try {
-      // 🔹 Replace with your backend API call
-      setTimeout(() => {
-        setLoading(false);
-        Alert.alert("Success", "Profile saved successfully");
-        navigation.replace("Dashboard");
-      }, 1500);
+      await saveAthleteProfile(profile); // ✅ API mock/ready
+      setLoading(false);
+      Alert.alert("Success", "Profile saved successfully");
+      navigation.replace("Dashboard");
     } catch (error: any) {
       setLoading(false);
       Alert.alert("Error", error.message || "Failed to save profile");
@@ -63,17 +83,19 @@ const AthleteDetailsForm = ({ navigation }) => {
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Avatar */}
+      {/* Profile Photo */}
       <View style={styles.avatarContainer}>
-        <Image
-          source={{
-            uri: "https://via.placeholder.com/96x96.png?text=Avatar",
-          }}
-          style={styles.avatar}
-        />
-        <TouchableOpacity style={styles.cameraBtn}>
-          <Text style={styles.cameraIcon}>📷</Text>
+        <TouchableOpacity onPress={pickImage}>
+          <Image
+            source={{
+              uri:
+                profilePic ||
+                "https://via.placeholder.com/120x120.png?text=Upload",
+            }}
+            style={styles.avatar}
+          />
         </TouchableOpacity>
+        <Text style={styles.uploadText}>Tap to upload photo</Text>
       </View>
 
       {/* Form */}
@@ -112,27 +134,20 @@ const AthleteDetailsForm = ({ navigation }) => {
         )}
       </View>
 
-      <View style={styles.row}>
-        <View style={[styles.formGroup, { flex: 1 }]}>
-          <Text style={styles.label}>State</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter State"
-            placeholderTextColor="#ae9eb7"
-            value={state}
-            onChangeText={setState}
-          />
-        </View>
-        <View style={{ width: 12 }} />
-        <View style={[styles.formGroup, { flex: 1 }]}>
-          <Text style={styles.label}>City</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter City"
-            placeholderTextColor="#ae9eb7"
-            value={city}
-            onChangeText={setCity}
-          />
+      {/* Gender Picker */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Gender</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={gender}
+            dropdownIconColor="#fff"
+            style={styles.picker}
+            onValueChange={(value) => setGender(value)}
+          >
+            <Picker.Item label="Male" value="Male" />
+            <Picker.Item label="Female" value="Female" />
+            <Picker.Item label="Other" value="Other" />
+          </Picker>
         </View>
       </View>
 
@@ -179,10 +194,7 @@ const AthleteDetailsForm = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#151117",
-  },
+  container: { flex: 1, backgroundColor: "#151117" },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -190,62 +202,33 @@ const styles = StyleSheet.create({
     marginTop: 22,
     justifyContent: "space-between",
   },
-  backBtn: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "bold",
-  },
+  backBtn: { color: "#fff", fontSize: 22, fontWeight: "bold" },
   title: {
     flex: 1,
     textAlign: "center",
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
-    marginRight: 24, // keeps it centered even with back button
+    marginRight: 24,
   },
-  avatarContainer: {
-    alignItems: "center",
-    marginBottom: 20,
-    position: "relative",
-  },
-  avatar: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-  },
-  cameraBtn: {
-    position: "absolute",
-    bottom: 0,
-    right: "35%",
-    backgroundColor: "#702186",
-    borderRadius: 20,
-    padding: 8,
-    borderWidth: 2,
-    borderColor: "#fff",
-  },
-  cameraIcon: {
-    fontSize: 18,
-    color: "#fff",
-  },
-  formGroup: {
-    marginBottom: 12,
-  },
-  label: {
-    color: "#ae9eb7",
-    fontSize: 14,
-    marginBottom: 4,
-  },
+  avatarContainer: { alignItems: "center", marginBottom: 20 },
+  avatar: { width: 120, height: 120, borderRadius: 60, borderWidth: 2, borderColor: "#fff" },
+  uploadText: { color: "#ae9eb7", marginTop: 6, fontSize: 12 },
+
+  formGroup: { marginBottom: 12 },
+  label: { color: "#ae9eb7", fontSize: 14, marginBottom: 4 },
   input: {
     backgroundColor: "#322938",
     color: "#fff",
     padding: 12,
     borderRadius: 8,
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 12,
+  pickerWrapper: {
+    backgroundColor: "#322938",
+    borderRadius: 8,
   },
+  picker: { color: "#fff", height: 50, width: "100%" },
+  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
   submitBtn: {
     marginTop: 20,
     backgroundColor: "#7b19b3",
@@ -253,11 +236,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
   },
-  submitText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+  submitText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
 });
 
 export default AthleteDetailsForm;

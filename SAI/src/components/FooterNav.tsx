@@ -2,88 +2,42 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { RootStackParamList } from "../../App";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type FooterNavProps = {
-  navigation: any;
+  navigation: StackNavigationProp<RootStackParamList>;
   active: "Dashboard" | "Record" | "Leaderboard" | "Profile";
 };
 
-const FooterNav = ({ navigation, active }: FooterNavProps) => {
+const FooterNav: React.FC<FooterNavProps> = ({ navigation, active }) => {
   return (
     <View style={styles.footer}>
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => navigation.navigate("Dashboard")}
-      >
-        <MaterialIcons
-          name="home"
-          size={22}
-          color={active === "Dashboard" ? "#fff" : "#b09eb7"}
-        />
-        <Text
-          style={
-            active === "Dashboard" ? styles.footerTextActive : styles.footerText
-          }
+      {[
+        { key: "Dashboard", icon: "home" },
+        { key: "Record", icon: "videocam" },
+        { key: "Leaderboard", icon: "emoji-events" },
+        { key: "Profile", icon: "person" },
+      ].map((tab) => (
+        <TouchableOpacity
+          key={tab.key}
+          style={styles.footerItem}
+          onPress={() => navigation.navigate(tab.key as any)}
         >
-          Dashboard
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => navigation.navigate("Record")}
-      >
-        <MaterialIcons
-          name="videocam"
-          size={22}
-          color={active === "Record" ? "#fff" : "#b09eb7"}
-        />
-        <Text
-          style={
-            active === "Record" ? styles.footerTextActive : styles.footerText
-          }
-        >
-          Record
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => navigation.navigate("Leaderboard")}
-      >
-        <MaterialIcons
-          name="emoji-events"
-          size={22}
-          color={active === "Leaderboard" ? "#fff" : "#b09eb7"}
-        />
-        <Text
-          style={
-            active === "Leaderboard"
-              ? styles.footerTextActive
-              : styles.footerText
-          }
-        >
-          Leaderboard
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.footerItem}
-        onPress={() => navigation.navigate("Profile")}
-      >
-        <MaterialIcons
-          name="person"
-          size={22}
-          color={active === "Profile" ? "#fff" : "#b09eb7"}
-        />
-        <Text
-          style={
-            active === "Profile" ? styles.footerTextActive : styles.footerText
-          }
-        >
-          Profile
-        </Text>
-      </TouchableOpacity>
+          <MaterialIcons
+            name={tab.icon as any}
+            size={22}
+            color={active === tab.key ? "#fff" : "#b09eb7"}
+          />
+          <Text
+            style={
+              active === tab.key ? styles.footerTextActive : styles.footerText
+            }
+          >
+            {tab.key}
+          </Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
