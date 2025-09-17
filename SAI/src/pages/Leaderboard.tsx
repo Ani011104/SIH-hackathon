@@ -1,4 +1,3 @@
-// src/pages/Leaderboard.tsx
 import React from "react";
 import {
   View,
@@ -12,6 +11,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
+import { currentUser } from "../config/user";
 
 type LeaderboardProps = StackScreenProps<RootStackParamList, "Leaderboard">;
 
@@ -28,32 +28,28 @@ const players = [
   { rank: 10, name: "Kavya Iyer", score: 72 },
 ];
 
-// 🔹 Replace with logged-in user
-const currentUser = "Kavya Iyer";
-
 const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
-  // Check if current user is in top 10
-  const isInTop10 = players.some((p) => p.name === currentUser);
+  const isInTop10 = players.some((p) => p.name === currentUser.name);
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialIcons name="arrow-back-ios" size={22} color="#fff" marginTop={12} />
+          <MaterialIcons name="arrow-back-ios" size={22} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Leaderboard</Text>
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Podium Top 3 */}
+      {/* Podium */}
       <View style={styles.podiumContainer}>
-        {players.slice(0, 3).map((p, i) => (
+        {players.slice(0, 3).map((p) => (
           <View
-            key={i}
+            key={p.rank}
             style={[
               styles.podiumItem,
-              p.name === currentUser && {
+              p.name === currentUser.name && {
                 borderColor: "#ed6037",
                 borderWidth: 3,
               },
@@ -61,7 +57,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
           >
             <Text style={styles.medal}>{p.medal}</Text>
             <ImageBackground
-              source={{ uri: "https://placehold.co/100x100" }}
+              source={{ uri: currentUser.avatar }}
               style={[
                 styles.avatar,
                 {
@@ -86,21 +82,21 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
         ))}
       </View>
 
-      {/* Rest of Leaderboard */}
+      {/* Leaderboard List */}
       <ScrollView style={styles.list}>
         {players.slice(3).map((p) => (
           <View
             key={p.rank}
             style={[
               styles.row,
-              p.name === currentUser && {
+              p.name === currentUser.name && {
                 backgroundColor: "rgba(112,33,134,0.6)",
               },
             ]}
           >
             <Text style={styles.rank}>{p.rank}</Text>
             <ImageBackground
-              source={{ uri: "https://placehold.co/80x80" }}
+              source={{ uri: currentUser.avatar }}
               style={styles.rowAvatar}
               imageStyle={{ borderRadius: 25 }}
             />
@@ -109,24 +105,21 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
           </View>
         ))}
 
-        {/* User not in top 10 */}
+        {/* If user not in top 10 */}
         {!isInTop10 && (
-          <View
-            style={[styles.row, { backgroundColor: "rgba(112,33,134,0.6)" }]}
-          >
+          <View style={[styles.row, { backgroundColor: "rgba(112,33,134,0.6)" }]}>
             <Text style={styles.rank}>15</Text>
             <ImageBackground
-              source={{ uri: "https://placehold.co/80x80" }}
+              source={{ uri: currentUser.avatar }}
               style={styles.rowAvatar}
               imageStyle={{ borderRadius: 25 }}
             />
-            <Text style={styles.rowName}>{currentUser}</Text>
-            <Text style={styles.rowScore}>65</Text>
+            <Text style={styles.rowName}>{currentUser.name}</Text>
+            <Text style={styles.rowScore}>{currentUser.score}</Text>
           </View>
         )}
       </ScrollView>
 
-      {/* Footer Navigation */}
       <FooterNav navigation={navigation} active="Leaderboard" />
     </View>
   );
@@ -140,7 +133,7 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "space-between",
   },
-  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold",marginTop: 12 },
+  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
   podiumContainer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -149,12 +142,7 @@ const styles = StyleSheet.create({
   },
   podiumItem: { alignItems: "center" },
   medal: { fontSize: 28, marginBottom: 6 },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 50,
-    borderWidth: 2,
-  },
+  avatar: { width: 60, height: 60, borderRadius: 50 },
   podiumLabel: {
     marginTop: 6,
     padding: 6,
