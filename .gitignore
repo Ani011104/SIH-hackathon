@@ -1,2 +1,18 @@
-# This file is used to ignore files and folders that are too large , unnecessary or contain sensitive information
-node_modules/
+venv/
+.env/
+__pycache__/
+*.pyc
+*.pyo
+*.dll
+*.lib
+*.exe
+*.pyd
+*.mp4
+*.avi
+*.zip
+*.npy
+*.h5
+*.onnx
+*.tflite
+*.pth
+*.pt
