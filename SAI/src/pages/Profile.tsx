@@ -1,34 +1,70 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+// src/pages/Profile.tsx
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
+import { getUserProfile, clearStorage } from "../services/storage";
 
 type ProfileProps = StackScreenProps<RootStackParamList, "Profile">;
 
 const Profile: React.FC<ProfileProps> = ({ navigation }) => {
-  // Later, replace these with values fetched from API
-  const user = {
-    name: "Arjun Sharma",
-    role: "Athlete",
-    id: "123456789",
-    dob: "15th August 2002",
-    gender: "Male",
-    sport: "Badminton",
-    contact: "+91 9876543210",
-    assessments: 12,
-    submissions: 5,
-    pending: 3,
-    avatar:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCS9lrriXWTRU8Jo5pmyPT5fEHjefNr11pDgBNgw8FY01uwcH8XZLurX1IGJPmbYEoM6ccGTlOt1zL3bM1MbDxONYoVlxwzL2T61neBQp_K-jTKwBKyQIyLKdaELZSAF-c7_Pb4e1ZtiwKW9r-rExhzm9Xyv4-A_GmLFhXFcDUjnjT-kPZJrnv7JrACxGZ6wiGOedT-Gmx7KgYPrO395aS1OZV5nODP451q3KYWvNwQqrQJEXrq367RouI0T6H9bjqtuSC60F8_zpY",
-  };
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const data = await getUserProfile();
+      setUser(data);
+      setLoading(false);
+    };
+    const unsubscribe = navigation.addListener("focus", loadProfile);
+    return unsubscribe;
+  }, [navigation]);
+
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#702186" />
+        <Text style={{ color: "#fff", marginTop: 10 }}>Loading profile...</Text>
+      </View>
+    );
+  }
+
+  if (!user) {
+    return (
+      <View style={styles.loading}>
+        <Text style={{ color: "#fff" }}>No profile found. Please login.</Text>
+        <TouchableOpacity
+          style={styles.logoutBtn}
+          onPress={async () => {
+            await clearStorage();
+            navigation.replace("Login");
+          }}
+        >
+          <Text style={styles.logoutText}>Go to Login</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
             <Text style={styles.backText}>←</Text>
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Profile</Text>
@@ -38,7 +74,14 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
         {/* Profile Info */}
         <View style={styles.profileSection}>
           <View style={styles.avatarWrapper}>
-            <Image source={{ uri: user.avatar }} style={styles.avatar} />
+            <Image
+              source={{
+                uri:
+                  user.avatar ||
+                  "https://via.placeholder.com/100x100.png?text=Avatar",
+              }}
+              style={styles.avatar}
+            />
             <TouchableOpacity style={styles.editButton}>
               <Text style={{ color: "#fff", fontSize: 12 }}>✎</Text>
             </TouchableOpacity>
@@ -51,15 +94,15 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
         {/* Stats */}
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>{user.assessments}</Text>
+            <Text style={styles.statValue}>{user.assessments || 0}</Text>
             <Text style={styles.statLabel}>Assessments</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>{user.submissions}</Text>
+            <Text style={styles.statValue}>{user.submissions || 0}</Text>
             <Text style={styles.statLabel}>Submissions</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>{user.pending}</Text>
+            <Text style={styles.statValue}>{user.pending || 0}</Text>
             <Text style={styles.statLabel}>Pending</Text>
           </View>
         </View>
@@ -79,12 +122,42 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
             <Text style={styles.infoLabel}>Sport</Text>
             <Text style={styles.infoValue}>{user.sport}</Text>
           </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Contact</Text>
-            <Text style={styles.infoValue}>{user.contact}</Text>
-          </View>
+        </View>
+
+        {/* 🔹 Complete Profile Section */}
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Complete Your Profile</Text>
+
+          <TouchableOpacity
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate("AddressForm")}
+          >
+            <Text style={styles.actionBtnText}>
+              {user.address ? "Edit Address" : "Add Address"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate("MediaForm")}
+          >
+            <Text style={styles.actionBtnText}>
+              {user.media ? "Update Photos" : "Upload Photos"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Logout Button */}
+      <TouchableOpacity
+        style={styles.logoutBtn}
+        onPress={async () => {
+          await clearStorage();
+          navigation.replace("Login");
+        }}
+      >
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
 
       {/* Footer Nav */}
       <FooterNav navigation={navigation} active="Profile" />
@@ -96,11 +169,17 @@ export default Profile;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#0d0d0d" },
-  scrollContainer: { padding: 16, paddingBottom: 80 },
+  scrollContainer: { padding: 16, paddingBottom: 120 },
   header: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
   backButton: { width: 24 },
   backText: { fontSize: 20, color: "#fff" },
-  headerTitle: { flex: 1, textAlign: "center", fontSize: 20, fontWeight: "bold", color: "#fff" },
+  headerTitle: {
+    flex: 1,
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+  },
 
   profileSection: { alignItems: "center", marginBottom: 20 },
   avatarWrapper: { position: "relative" },
@@ -117,7 +196,11 @@ const styles = StyleSheet.create({
   role: { fontSize: 16, color: "#aaa" },
   userId: { fontSize: 12, color: "#666" },
 
-  statsContainer: { flexDirection: "row", justifyContent: "space-between", marginVertical: 20 },
+  statsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 20,
+  },
   statCard: {
     flex: 1,
     marginHorizontal: 4,
@@ -129,9 +212,43 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 20, fontWeight: "bold", color: "#ed6037" },
   statLabel: { fontSize: 12, color: "#aaa" },
 
-  infoSection: { backgroundColor: "#1e1e1e", borderRadius: 12, padding: 16 },
+  infoSection: {
+    backgroundColor: "#1e1e1e",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+  },
   sectionTitle: { fontSize: 18, fontWeight: "bold", color: "#fff", marginBottom: 10 },
-  infoRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 8 },
+  infoRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
   infoLabel: { color: "#aaa" },
   infoValue: { color: "#fff" },
+
+  actionBtn: {
+    backgroundColor: "#702186",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginTop: 10,
+  },
+  actionBtnText: { color: "#fff", textAlign: "center", fontWeight: "bold" },
+
+  logoutBtn: {
+    backgroundColor: "#ed6037",
+    borderRadius: 8,
+    padding: 14,
+    alignItems: "center",
+    margin: 16,
+  },
+  logoutText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+
+  loading: {
+    flex: 1,
+    backgroundColor: "#0d0d0d",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

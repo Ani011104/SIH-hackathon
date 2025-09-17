@@ -12,6 +12,8 @@ import { RootStackParamList } from "../../App";
 
 type Props = StackScreenProps<RootStackParamList, "OtpVerify">;
 
+const MOCK_MODE = true;
+
 export default function OtpVerify({ route, navigation }: Props) {
   const { phone } = route.params;
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
@@ -21,10 +23,7 @@ export default function OtpVerify({ route, navigation }: Props) {
     const newOtp = [...otp];
     newOtp[index] = text;
     setOtp(newOtp);
-
-    if (text && index < 5) {
-      inputs.current[index + 1]?.focus();
-    }
+    if (text && index < 5) inputs.current[index + 1]?.focus();
   };
 
   const handleKeyPress = (e: any, index: number) => {
@@ -33,27 +32,9 @@ export default function OtpVerify({ route, navigation }: Props) {
     }
   };
 
-  const handleResend = async () => {
-    // Clear OTP fields
+  const handleResend = () => {
     setOtp(["", "", "", "", "", ""]);
     inputs.current[0]?.focus();
-
-    // 🔹 Later replace with backend call
-    // Example:
-    /*
-    try {
-      const res = await fetch("https://your-api.com/resend-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to resend OTP");
-      Alert.alert("Success", "OTP resent successfully");
-    } catch (err: any) {
-      Alert.alert("Error", err.message);
-    }
-    */
     Alert.alert("OTP Resent", `New OTP sent to +91 ${phone}`);
   };
 
@@ -64,8 +45,12 @@ export default function OtpVerify({ route, navigation }: Props) {
       return;
     }
 
-    // 🔹 Replace this with backend API call
-    /*
+    if (MOCK_MODE) {
+      Alert.alert("OTP Verified", `OTP ${enteredOtp} verified for ${phone}`);
+      navigation.replace("AthleteDetails");
+      return;
+    }
+
     try {
       const res = await fetch("https://your-api.com/verify-otp", {
         method: "POST",
@@ -75,31 +60,19 @@ export default function OtpVerify({ route, navigation }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "OTP verification failed");
 
-      // Check if profile already exists
-      if (data.profileCompleted) {
-        navigation.replace("Home");
-      } else {
-        navigation.replace("AthleteDetails");
-      }
+      if (data.profileCompleted) navigation.replace("Dashboard");
+      else navigation.replace("AthleteDetails");
     } catch (err: any) {
       Alert.alert("Error", err.message);
     }
-    */
-
-    // ✅ Temporary success flow
-    Alert.alert("OTP Verified", `OTP ${enteredOtp} verified for ${phone}`);
-    navigation.replace("AthleteDetails");
   };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Verification</Text>
-        <View style={{ width: 24 }} />
       </View>
 
-      {/* Content */}
       <View style={styles.content}>
         <Text style={styles.title}>Enter OTP</Text>
         <Text style={styles.subtitle}>
@@ -108,16 +81,19 @@ export default function OtpVerify({ route, navigation }: Props) {
         </Text>
 
         <View style={styles.otpContainer}>
-          {otp.map((digit, index) => (
+          {otp.map((digit, i) => (
             <TextInput
-              key={index}
+              key={i}
               style={styles.otpInput}
               keyboardType="numeric"
               maxLength={1}
               value={digit}
-              onChangeText={(text) => handleChange(text, index)}
-              onKeyPress={(e) => handleKeyPress(e, index)}
-              ref={(el) => (inputs.current[index] = el!)}
+              onChangeText={(text) => handleChange(text, i)}
+              onKeyPress={(e) => handleKeyPress(e, i)}
+              ref={(el) => {
+                if (el) inputs.current[i] = el;
+              }}
+              
             />
           ))}
         </View>
@@ -128,18 +104,8 @@ export default function OtpVerify({ route, navigation }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* Footer */}
       <View style={styles.footer}>
-        <TouchableOpacity
-          style={[styles.footerBtn, styles.prevBtn]}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.footerBtnText}>Previous</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.footerBtn, styles.verifyBtn]}
-          onPress={handleVerify}
-        >
+        <TouchableOpacity style={[styles.footerBtn, styles.verifyBtn]} onPress={handleVerify}>
           <Text style={styles.footerBtnText}>Verify</Text>
         </TouchableOpacity>
       </View>
@@ -149,57 +115,20 @@ export default function OtpVerify({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#0D0D0D", paddingTop: 40 },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 18,
-    color: "#fff",
-  },
+  header: { alignItems: "center", paddingHorizontal: 16 },
+  headerTitle: { fontWeight: "bold", fontSize: 18, color: "#fff" },
   content: { flex: 1, paddingHorizontal: 24, paddingTop: 24 },
   title: { fontSize: 28, fontWeight: "bold", color: "#fff" },
   subtitle: { fontSize: 14, color: "#E5E5E5", marginTop: 8 },
-  otpContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginVertical: 32,
-    gap: 12,
-  },
+  otpContainer: { flexDirection: "row", justifyContent: "center", marginVertical: 32, gap: 12 },
   otpInput: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#E5E5E5",
-    textAlign: "center",
-    fontSize: 14,
-    color: "#fff",
+    width: 40, height: 40, borderRadius: 8, borderWidth: 1, borderColor: "#E5E5E5",
+    textAlign: "center", fontSize: 14, color: "#fff",
   },
   resendText: { textAlign: "center", color: "#E5E5E5" },
-  resendBtn: {
-    textAlign: "center",
-    color: "#ed6037",
-    fontWeight: "600",
-    marginTop: 4,
-  },
-  footer: {
-    flexDirection: "row",
-    gap: 16,
-    paddingHorizontal: 24,
-    paddingBottom: 24,
-  },
-  footerBtn: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  prevBtn: { backgroundColor: "rgba(229,229,229,0.2)" },
+  resendBtn: { textAlign: "center", color: "#ed6037", fontWeight: "600", marginTop: 4 },
+  footer: { flexDirection: "row", justifyContent: "center", padding: 24 },
+  footerBtn: { flex: 1, paddingVertical: 14, borderRadius: 8, alignItems: "center" },
   verifyBtn: { backgroundColor: "#702186" },
   footerBtnText: { color: "#fff", fontWeight: "bold" },
 });
