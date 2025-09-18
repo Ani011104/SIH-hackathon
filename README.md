@@ -72,7 +72,7 @@ Typical flow:
 
 ## Flow diagram
 1. video analysis + cheat detection
-   ![Alt text](images/Agent & WebSocket Real-time Communication.jpg)
+   ![Alt text](images/Agent&WebSocket_Real-time-Communication.jpg)
 3. Regular api and Data persistence
    ![Alt text](images/aiml-analysis.jpg)
 5. Agent and Web socet communication
