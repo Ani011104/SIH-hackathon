@@ -1,8 +1,9 @@
 # mobile_integration_system.py  (unified server)
-import json, statistics, datetime, os, time, shutil
+import json, statistics, os, time, shutil
 from collections import Counter
 from flask import Flask, request, jsonify
 import logging
+from datetime import datetime, timezone
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -103,7 +104,7 @@ class MobileIntegrationSystem:
             return final_results
         except Exception as e:
             logger.error(f"❌ Mobile analysis failed: {e}")
-            return {'error': str(e), 'timestamp': datetime.utcnow().isoformat(), 'mobile_optimized': True}
+            return {'error': str(e), 'timestamp': datetime.now(timezone.utc).isoformat(), 'mobile_optimized': True}
 
     def _create_mobile_results(self, cheat_results, sports_results, cheat_time, sports_time):
         # (same as your previous code — unchanged)
@@ -172,7 +173,7 @@ class MobileIntegrationSystem:
                     'memory_efficient',
                     'fast_inference'
                 ],
-                'analysis_timestamp': datetime.datetime.utcnow().isoformat(),
+                'analysis_timestamp': datetime.now(timezone.utc).isoformat(),
                 'version': 'mobile_v1.0'
             }
         }
