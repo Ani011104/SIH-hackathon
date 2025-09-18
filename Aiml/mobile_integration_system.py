@@ -1,96 +1,103 @@
-# mobile_integration_system.py
-
-import json
-import time
+# mobile_integration_system.py  (unified server)
+import json, statistics, os, time, shutil
+from collections import Counter
+from flask import Flask, request, jsonify
 import logging
-from datetime import datetime  # ✅ FIXED: Added missing import
-from mobile_cheat_detection_engine import MobileCheatDetectionEngine
-from mobile_sports_assessment_engine import MobileSportsAssessmentEngine
+from datetime import datetime, timezone
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+# ---------- mobile engines ----------
+try:
+    from mobile_cheat_detection_engine import MobileCheatDetectionEngine
+    from mobile_sports_assessment_engine import MobileSportsAssessmentEngine
+except ImportError as e:
+    logger.warning(f"Mobile engines not found: {e} — stubbing for now")
+    MobileCheatDetectionEngine = None
+    MobileSportsAssessmentEngine = None
+
+# ---------- helpers ----------
+def safe_get(data, path, default=0):
+    for key in path:
+        if isinstance(data, dict):
+            data = data.get(key, default)
+        elif isinstance(data, list) and isinstance(key, int):
+            data = data[key] if key < len(data) else default
+        else:
+            return default
+    return data if data is not None else default
+
+# ---------- benchmark ----------
+BENCHMARKS = {
+    "pushups":     {"target": 30, "unit": "reps", "max_points": 20},
+    "situps":      {"target": 35, "unit": "reps", "max_points": 20},
+    "squats":      {"target": 45, "unit": "reps", "max_points": 20},
+    "vertical_jump": {"target": 25, "unit": "cm", "max_points": 20},
+    "long_jump":   {"target": 150, "unit": "cm", "max_points": 20},
+}
+
+def calc_points(exercise, value):
+    if value <= 0:
+        return 0
+    cfg = BENCHMARKS[exercise]
+    pts = (value / cfg["target"]) * cfg["max_points"]
+    return min(cfg["max_points"], max(0, round(pts, 1)))
+
+def benchmark_check(exercise, value):
+    return "✅ benchmark passed" if value >= BENCHMARKS[exercise]["target"] else \
+           f"📈 needs improvement ({value} < {BENCHMARKS[exercise]['target']} {BENCHMARKS[exercise]['unit']})"
+
+# ---------- mobile integration class ----------
 class MobileIntegrationSystem:
-    """
-    Mobile-optimized integration system for smartphones
-    """
-    
     def __init__(self, reference_images_folder=None):
         logger.info("🚀 Initializing Mobile Integration System...")
-        
-        # Initialize mobile engines
-        self.cheat_detector = MobileCheatDetectionEngine(
-            reference_images_folder=reference_images_folder
-        )
-        self.sports_analyzer = MobileSportsAssessmentEngine()
-        
-        logger.info("✅ Mobile Integration System ready for smartphones!")
-    
-    def analyze_video_mobile_complete(self, video_path, exercise_type, user_height_cm=170, 
+        self.cheat_detector = MobileCheatDetectionEngine(reference_images_folder=reference_images_folder) \
+            if MobileCheatDetectionEngine else None
+        self.sports_analyzer = MobileSportsAssessmentEngine() \
+            if MobileSportsAssessmentEngine else None
+        logger.info("✅ Mobile Integration System ready!")
+
+    # original mobile-complete analyser (unchanged)
+    def analyze_video_mobile_complete(self, video_path, exercise_type, user_height_cm=170,
                                     reference_images_folder=None, generate_video=True, save_json=True):
-        """
-        🔹 MOBILE-COMPLETE: Full analysis optimized for smartphones
-        """
         logger.info(f"📱 Starting mobile analysis: {video_path}")
-        start_time = time.time()
-        
-        # Update reference folder if provided
-        if reference_images_folder:
-            self.cheat_detector.reference_images_folder = reference_images_folder
-            self.cheat_detector.reference_images = self.cheat_detector._load_reference_images()
-        
+        start = time.time()
         try:
-            # STEP 1: Mobile Cheat Detection (optimized)
-            logger.info("🔍 STEP 1: Mobile cheat detection...")
+            if reference_images_folder:
+                self.cheat_detector.reference_images_folder = reference_images_folder
+                self.cheat_detector.reference_images = self.cheat_detector._load_reference_images()
+
             cheat_start = time.time()
             cheat_results = self.cheat_detector.analyze_video_mobile(video_path, exercise_type)
             cheat_time = time.time() - cheat_start
-            
-            # STEP 2: Mobile Sports Analysis (with real-time counting)
-            logger.info("🏃 STEP 2: Mobile sports analysis with real-time counting...")
+
             sports_start = time.time()
             sports_results = self.sports_analyzer.analyze_video_mobile(
-                video_path, exercise_type, user_height_cm, generate_video, save_json=False
-            )
+                video_path, exercise_type, user_height_cm, generate_video, save_json=False)
             sports_time = time.time() - sports_start
-            
-            # STEP 3: Mobile Results Integration
-            logger.info("📊 STEP 3: Finalizing mobile results...")
+
             final_results = self._create_mobile_results(cheat_results, sports_results, cheat_time, sports_time)
-            
-            total_processing_time = time.time() - start_time
-            final_results['total_processing_time'] = float(total_processing_time)
-            
-            # Save mobile-optimized JSON
+            final_results['total_processing_time'] = float(time.time() - start)
+
             if save_json:
                 json_filename = f"mobile_complete_{exercise_type}_{int(time.time())}.json"
                 with open(json_filename, 'w') as f:
                     json.dump(final_results, f, indent=2)
                 final_results['saved_json'] = json_filename
                 logger.info(f"📄 Mobile results saved: {json_filename}")
-            
-            logger.info(f"✅ Mobile analysis complete in {total_processing_time:.2f}s")
             return final_results
-        
         except Exception as e:
             logger.error(f"❌ Mobile analysis failed: {e}")
-            return {
-                'error': f'Mobile analysis failed: {str(e)}',
-                'timestamp': datetime.now().isoformat(),  # ✅ FIXED: Using proper datetime
-                'mobile_optimized': True
-            }
-    
+            return {'error': str(e), 'timestamp': datetime.now(timezone.utc).isoformat(), 'mobile_optimized': True}
+
     def _create_mobile_results(self, cheat_results, sports_results, cheat_time, sports_time):
-        """Create mobile-optimized final results"""
-        
-        # Mobile-simplified authenticity assessment
+        # (same as your previous code — unchanged)
         cheat_detection = cheat_results.get('cheat_detection_results', {})
         authenticity_status = cheat_detection.get('authenticity_status', 'unknown')
         overall_risk_score = cheat_detection.get('overall_risk_score', 0)
-        
-        # Mobile validity determination
         face_verified = cheat_results.get('face_verification', {}).get('verified', False)
-        
+
         if authenticity_status in ['highly_suspicious'] or overall_risk_score >= 75:
             final_validity = 'invalid'
             recommendation = "❌ Video rejected - Cheating detected"
@@ -106,15 +113,13 @@ class MobileIntegrationSystem:
         else:
             final_validity = 'valid'
             recommendation = "✅ Analysis complete - Video verified"
-        
-        # Get performance metrics
+
         exercise_results = sports_results.get('exercise_results', {})
         rep_count = exercise_results.get('rep_count', 0)
         jump_detected = exercise_results.get('jump_detected', False)
         jump_count = exercise_results.get('jump_count', 0)
-        
+
         return {
-            # Mobile Summary
             'mobile_summary': {
                 'final_validity': final_validity,
                 'authenticity_confidence': round(100 - overall_risk_score, 2),
@@ -123,8 +128,6 @@ class MobileIntegrationSystem:
                 'processing_speed': 'mobile_optimized',
                 'real_time_counting': True
             },
-            
-            # Performance Results
             'performance_results': {
                 'exercise_type': sports_results.get('exercise_type', 'unknown'),
                 'rep_count': rep_count,
@@ -134,8 +137,6 @@ class MobileIntegrationSystem:
                 'video_properties': sports_results.get('video_properties', {}),
                 'mobile_performance': sports_results.get('mobile_performance', {})
             },
-            
-            # Security Results
             'security_results': {
                 'authenticity_status': authenticity_status,
                 'risk_level': cheat_detection.get('overall_risk_level', 'unknown'),
@@ -145,8 +146,6 @@ class MobileIntegrationSystem:
                 'flag_analysis': cheat_results.get('flag_analysis', {}),
                 'recommendations': cheat_results.get('recommendations', [])
             },
-            
-            # Mobile Technical Details
             'mobile_technical': {
                 'cheat_detection_time': float(cheat_time),
                 'sports_analysis_time': float(sports_time),
@@ -155,96 +154,183 @@ class MobileIntegrationSystem:
                 'mobile_features': [
                     'real_time_counting',
                     'frame_skipping',
-                    'resolution_optimization', 
+                    'resolution_optimization',
                     'memory_efficient',
                     'fast_inference'
                 ],
-                'analysis_timestamp': datetime.now().isoformat(),  # ✅ FIXED: Using proper datetime
+                'analysis_timestamp': datetime.now(timezone.utc).isoformat(),
                 'version': 'mobile_v1.0'
             }
         }
 
-# Mobile Flask API
-from flask import Flask, request, jsonify
-import os
+# ---------- NEW unified comprehensive analyser ----------
+def analyse_comprehensive(assessments):
+    """Identical logic to former v3comprehensive_analysis.py"""
+    confidences = [a["mobile_summary"]["authenticity_confidence"] for a in assessments]
+    exercise_distribution = Counter(a["performance_results"]["exercise_type"] for a in assessments)
 
+    authenticity_stats = {
+        "average_confidence": round(statistics.mean(confidences), 2),
+        "min_confidence": round(min(confidences), 2),
+        "max_confidence": round(max(confidences), 2),
+        "median_confidence": round(statistics.median(confidences), 2)
+    }
+
+    perf_stats = {}
+    benchmark_breakdown = {}
+    for a in assessments:
+        ex_type = a["performance_results"]["exercise_type"]
+        res = a["performance_results"]["exercise_results"]
+
+        if ex_type in ("pushups", "situps", "squats"):
+            reps = safe_get(res, ["rep_count"])
+            pts = calc_points(ex_type, reps)
+            benchmark_breakdown[ex_type] = pts
+            perf_stats[ex_type] = {
+                "rep_statistics": {
+                    "average_reps": reps,
+                    "max_reps": reps,
+                    "min_reps": reps,
+                    "total_reps": reps,
+                    "sessions": 1,
+                    "benchmark": benchmark_check(ex_type, reps),
+                    "benchmark_points": pts
+                }
+            }
+        elif ex_type == "vertical_jump":
+            jumps = safe_get(res, ["individual_jumps"], [])
+            heights = [j["jump_height_cm"] for j in jumps if "jump_height_cm" in j]
+            if heights:
+                avg_h = statistics.mean(heights)
+                pts = calc_points("vertical_jump", avg_h)
+                benchmark_breakdown["vertical_jump"] = pts
+                perf_stats["vertical_jump_height"] = {
+                    "average": round(avg_h, 1),
+                    "max": max(heights),
+                    "min": min(heights),
+                    "total_attempts": len(heights),
+                    "benchmark": benchmark_check("vertical_jump", avg_h),
+                    "benchmark_points": pts
+                }
+            distances = [j["horizontal_distance_cm"] for j in jumps if "horizontal_distance_cm" in j]
+            if distances:
+                perf_stats["vertical_jump_distance"] = {
+                    "average": round(statistics.mean(distances), 1),
+                    "max": max(distances),
+                    "min": min(distances),
+                    "total_attempts": len(distances)
+                }
+        elif ex_type == "long_jump":
+            dist_cm = safe_get(res, ["distance_cm"])
+            if dist_cm:
+                pts = calc_points("long_jump", dist_cm)
+                benchmark_breakdown["long_jump"] = pts
+                perf_stats["long_jump_distance"] = {
+                    "distance_cm": dist_cm,
+                    "benchmark": benchmark_check("long_jump", dist_cm),
+                    "benchmark_points": pts
+                }
+
+    total_benchmark_score = round(sum(benchmark_breakdown.values()), 1)
+
+    fv_stats = [a["security_results"]["face_verification"] for a in assessments]
+    verified_cnt = sum(1 for fv in fv_stats if fv.get("verified"))
+    face_confidences = [fv.get("confidence", 0) for fv in fv_stats]
+    face_verification_analysis = {
+        "overall_verification_rate": round((verified_cnt / len(fv_stats)) * 100, 1),
+        "average_face_confidence": round(statistics.mean(face_confidences), 1),
+        "verification_reliability": "inconsistent" if statistics.stdev(face_confidences) > 20 else "consistent",
+        "failed_verifications": len(fv_stats) - verified_cnt
+    }
+
+    security_recommendations = []
+    if face_verification_analysis["failed_verifications"] >= 3:
+        security_recommendations.append("WARNING: High face verification failure rate - Check reference image quality")
+
+    durations = [a["performance_results"]["video_properties"]["duration"] for a in assessments]
+    usage_patterns = {
+        "average_session_duration": round(statistics.mean(durations), 2),
+        "session_duration_range": [round(min(durations), 3), round(max(durations), 3)],
+        "total_exercise_time": round(sum(durations), 2)
+    }
+
+    return {
+        "analysis_metadata": {
+            "total_assessments": len(assessments),
+            "analysis_timestamp": datetime.datetime.utcnow().isoformat(),
+            "analysis_version": "comprehensive_v1.0"
+        },
+        "authenticity_stats": authenticity_stats,
+        "exercise_distribution": dict(exercise_distribution),
+        "performance_insights": {"performance_statistics": perf_stats},
+        "face_verification_analysis": face_verification_analysis,
+        "security_recommendations": security_recommendations,
+        "usage_patterns": usage_patterns,
+        "benchmark_breakdown": benchmark_breakdown,
+        "total_benchmark_score": total_benchmark_score
+    }
+
+# ---------- flask routes ----------
 app = Flask(__name__)
 
 try:
-    mobile_system = MobileIntegrationSystem(reference_images_folder="reference_faces")
+    mobile_system = MobileIntegrationSystem(reference_images_folder=None)
     logger.info("✅ Mobile Integration System API ready!")
 except Exception as e:
     logger.error(f"❌ Failed to initialize mobile system: {e}")
     mobile_system = None
 
+# original mobile video-analysis route
 @app.route('/analyze_mobile', methods=['POST'])
 def analyze_mobile():
-    """🔹 MOBILE API: Smartphone-optimized analysis"""
     if mobile_system is None:
         return jsonify({'error': 'Mobile system not initialized'}), 500
-    
     try:
         if 'video' not in request.files:
             return jsonify({'error': 'No video file provided'}), 400
-        
         video_file = request.files['video']
         if video_file.filename == '':
             return jsonify({'error': 'No video file selected'}), 400
-        
-        # Mobile parameters
+
         exercise_type = request.form.get('exercise_type', 'pushups')
         user_height = int(request.form.get('user_height', 170))
         generate_video = request.form.get('generate_video', 'true').lower() == 'true'
         save_json = request.form.get('save_json', 'true').lower() == 'true'
-        
-        # Validate exercise type
+
         valid_exercises = ['pushups', 'situps', 'squats', 'vertical_jump', 'long_jump']
         if exercise_type not in valid_exercises:
-            return jsonify({
-                'error': f'Invalid exercise type. Supported: {valid_exercises}'
-            }), 400
-        
-        # Handle reference images (mobile-limited)
+            return jsonify({'error': f'Invalid exercise type. Supported: {valid_exercises}'}), 400
+
         reference_folder = None
         if 'reference_images' in request.files:
             reference_folder = f"temp_mobile_refs_{int(time.time())}"
             os.makedirs(reference_folder, exist_ok=True)
-            
-            reference_files = request.files.getlist('reference_images')[:2]  # Limit for mobile
-            for ref_file in reference_files:
+            for ref_file in request.files.getlist('reference_images'):
                 if ref_file.filename:
                     ref_path = os.path.join(reference_folder, ref_file.filename)
                     ref_file.save(ref_path)
-        
-        # Save video temporarily
+
         temp_path = f"temp_mobile_{int(time.time())}_{video_file.filename}"
         video_file.save(temp_path)
-        
-        logger.info(f"📱 Processing mobile: {temp_path} for {exercise_type}")
-        
-        # 🚀 RUN MOBILE ANALYSIS
+
         results = mobile_system.analyze_video_mobile_complete(
             temp_path, exercise_type, user_height, reference_folder, generate_video, save_json
         )
-        
-        # Mobile cleanup
+
         try:
             os.remove(temp_path)
             if reference_folder and os.path.exists(reference_folder):
-                import shutil
                 shutil.rmtree(reference_folder)
         except:
             pass
-        
         return jsonify(results)
-        
     except Exception as e:
         logger.error(f"❌ Mobile API error: {e}")
         return jsonify({'error': f'Mobile analysis failed: {str(e)}'}), 500
 
+# health-check route
 @app.route('/mobile_health', methods=['GET'])
 def mobile_health():
-    """Mobile health check"""
     return jsonify({
         'status': 'healthy' if mobile_system else 'error',
         'system_loaded': mobile_system is not None,
@@ -270,7 +356,33 @@ def mobile_health():
         ]
     })
 
+# NEW comprehensive route (replaces v3comprehensive_analysis.py)
+@app.route('/comprehensiveAnalysis', methods=['POST'])
+def comprehensive_analysis():
+    """Analyse exactly 5 JSON assessments and return benchmark report."""
+    if not request.files:
+        return jsonify({"error": "Send exactly 5 JSON files as multipart/form-data"}), 400
+
+    files = list(request.files.values())  # ignore field names
+    if len(files) != 5:
+        return jsonify({"error": "Exactly 5 JSON files required"}), 400
+
+    assessments = []
+    for f in files:
+        try:
+            assessments.append(json.load(f))
+        except Exception as e:
+            return jsonify({"error": f"Invalid JSON in {f.filename}: {e}"}), 400
+
+    try:
+        report = analyse_comprehensive(assessments)
+        return jsonify(report), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ---------- runner ----------
 if __name__ == '__main__':
-    logger.info("📱 Starting Mobile Integration System API...")
+    logger.info("📱 Starting Unified Mobile Integration System API...")
     logger.info("🎯 Optimized for: Smartphones, Real-time counting, Fast processing")
+    logger.info("🆕 Added /comprehensiveAnalysis endpoint (benchmark scoring)")
     app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)

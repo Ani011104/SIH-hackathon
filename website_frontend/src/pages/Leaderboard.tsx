@@ -8,37 +8,36 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Leaderboard() {
   const topPerformers = [
-    { rank: 1, name: "Alex Rodriguez", age: 22, region: "North", score: 98.5, tests: 8, avatar: "/avatars/01.png" },
-    { rank: 2, name: "Sarah Chen", age: 19, region: "West", score: 97.8, tests: 8, avatar: "/avatars/02.png" },
-    { rank: 3, name: "Marcus Johnson", age: 24, region: "East", score: 96.9, tests: 7, avatar: "/avatars/03.png" },
-    { rank: 4, name: "Emily Davis", age: 20, region: "South", score: 96.2, tests: 8, avatar: "/avatars/04.png" },
-    { rank: 5, name: "David Kim", age: 23, region: "Central", score: 95.8, tests: 6, avatar: "/avatars/05.png" },
+    { rank: 1, name: "Dhushyanth", age: 22, region: "North", score: 98.5, tests: 8, avatar: "/avatars/01.png" },
+    { rank: 2, name: "Anirudh", age: 19, region: "West", score: 97.8, tests: 8, avatar: "/avatars/02.png" },
+    { rank: 3, name: "Amrutha", age: 24, region: "East", score: 96.9, tests: 7, avatar: "/avatars/03.png" },
+    { rank: 4, name: "Sumadhwa", age: 20, region: "South", score: 96.2, tests: 8, avatar: "/avatars/04.png" },
   ];
 
   const testLeaderboards = {
     "vertical-jump": [
-      { rank: 1, name: "Alex Rodriguez", score: 99.2, measurement: "28.5 inches" },
-      { rank: 2, name: "Marcus Johnson", score: 98.8, measurement: "28.2 inches" },
-      { rank: 3, name: "Tyler Brooks", score: 98.1, measurement: "27.9 inches" },
+      { rank: 1, name: "Dhushyanth", score: 99.2, measurement: "28.5 inches" },
+      { rank: 2, name: "Disha", score: 98.8, measurement: "28.2 inches" },
+      { rank: 3, name: "Sumadhwa", score: 98.1, measurement: "27.9 inches" },
     ],
-    "shuttle-run": [
-      { rank: 1, name: "Sarah Chen", score: 99.5, measurement: "9.2 seconds" },
-      { rank: 2, name: "Emily Davis", score: 98.9, measurement: "9.4 seconds" },
-      { rank: 3, name: "Lisa Wang", score: 98.3, measurement: "9.6 seconds" },
+    "push-ups": [
+      { rank: 1, name: "Dhushyanth", score: 99.5, measurement: "9.2 seconds" },
+      { rank: 2, name: "Anirudh", score: 98.9, measurement: "9.4 seconds" },
+      { rank: 3, name: "Amrutha", score: 98.3, measurement: "9.6 seconds" },
     ],
     "sit-ups": [
-      { rank: 1, name: "David Kim", score: 97.8, measurement: "62 reps" },
-      { rank: 2, name: "Alex Rodriguez", score: 97.2, measurement: "61 reps" },
-      { rank: 3, name: "Jake Miller", score: 96.8, measurement: "60 reps" },
+      { rank: 1, name: "Sumadhwa", score: 97.8, measurement: "62 reps" },
+      { rank: 2, name: "Disha", score: 97.2, measurement: "61 reps" },
+      { rank: 3, name: "Amrutha", score: 96.8, measurement: "60 reps" },
     ]
   };
 
   const regionalRankings = [
-    { region: "North Region", athletes: 892, avgScore: 81.2, topAthlete: "Alex Rodriguez", improvement: "+2.3%" },
-    { region: "West Region", athletes: 743, avgScore: 80.8, topAthlete: "Sarah Chen", improvement: "+1.8%" },
-    { region: "East Region", athletes: 634, avgScore: 78.9, topAthlete: "Marcus Johnson", improvement: "+3.1%" },
-    { region: "South Region", athletes: 578, avgScore: 78.1, topAthlete: "Emily Davis", improvement: "+1.2%" },
-    { region: "Central Region", athletes: 456, avgScore: 76.4, topAthlete: "David Kim", improvement: "+2.7%" },
+    { region: "North Region", athletes: 10, avgScore: 81.2, topAthlete: "Alex Rodriguez", improvement: "+2.3%" },
+    { region: "West Region", athletes: 7, avgScore: 80.8, topAthlete: "Sarah Chen", improvement: "+1.8%" },
+    { region: "East Region", athletes: 5, avgScore: 78.9, topAthlete: "Marcus Johnson", improvement: "+3.1%" },
+    { region: "South Region", athletes: 8, avgScore: 78.1, topAthlete: "Emily Davis", improvement: "+1.2%" },
+    
   ];
 
   const getRankIcon = (rank: number) => {
@@ -92,7 +91,7 @@ export default function Leaderboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">98.5</div>
-            <p className="text-xs text-muted-foreground">Alex Rodriguez</p>
+            <p className="text-xs text-muted-foreground">Dhushyanth</p>
           </CardContent>
         </Card>
 
@@ -102,7 +101,7 @@ export default function Leaderboard() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,847</div>
+            <div className="text-2xl font-bold">10</div>
             <p className="text-xs text-muted-foreground">
               <span className="text-green-500">+12.5%</span> this month
             </p>
@@ -128,7 +127,7 @@ export default function Leaderboard() {
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">127</div>
+            <div className="text-2xl font-bold">15</div>
             <p className="text-xs text-muted-foreground">This year</p>
           </CardContent>
         </Card>
@@ -222,7 +221,7 @@ export default function Leaderboard() {
           <Tabs defaultValue="vertical-jump" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="vertical-jump">Vertical Jump</TabsTrigger>
-              <TabsTrigger value="shuttle-run">Shuttle Run</TabsTrigger>
+              <TabsTrigger value="push-ups">push-ups</TabsTrigger>
               <TabsTrigger value="sit-ups">Sit-ups</TabsTrigger>
             </TabsList>
             

@@ -38,7 +38,7 @@ export default function Analytics() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,847</div>
+            <div className="text-2xl font-bold">20</div>
             <p className="text-xs text-muted-foreground">
               <span className="text-green-500">+12.5%</span> from last month
             </p>
@@ -86,33 +86,7 @@ export default function Analytics() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Score Distribution by Age Group</CardTitle>
-            <CardDescription>Performance breakdown across different age categories</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                { age: "Under 18", count: 1247, avg: 82.1, color: "bg-blue-500" },
-                { age: "18-25", count: 986, avg: 78.9, color: "bg-green-500" },
-                { age: "26-35", count: 543, avg: 75.3, color: "bg-yellow-500" },
-                { age: "Over 35", count: 71, avg: 71.8, color: "bg-red-500" },
-              ].map((group) => (
-                <div key={group.age} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded ${group.color}`} />
-                    <span className="font-medium">{group.age}</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-medium">{group.count} athletes</div>
-                    <div className="text-sm text-muted-foreground">Avg: {group.avg}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+       
 
         <Card>
           <CardHeader>
@@ -122,10 +96,10 @@ export default function Analytics() {
           <CardContent>
             <div className="space-y-4">
               {[
-                { test: "Vertical Jump", participants: 2534, avgScore: 84.2, trend: "up" },
-                { test: "Shuttle Run", participants: 2398, avgScore: 79.8, trend: "up" },
-                { test: "Sit-ups (1 min)", participants: 2156, avgScore: 76.5, trend: "down" },
-                { test: "Push-ups", participants: 1987, avgScore: 81.3, trend: "up" },
+                { test: "Vertical Jump", participants: 4, avgScore: 84.2, trend: "up" },
+                { test: "Squats", participants: 5, avgScore: 79.8, trend: "up" },
+                { test: "Sit-ups (1 min)", participants: 7, avgScore: 76.5, trend: "down" },
+                { test: "Push-ups", participants: 8, avgScore: 81.3, trend: "up" },
               ].map((test) => (
                 <div key={test.test} className="flex items-center justify-between">
                   <div>
@@ -155,12 +129,11 @@ export default function Analytics() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { region: "North Region", athletes: 892, avgScore: 81.2, status: "high" },
-              { region: "South Region", athletes: 743, avgScore: 78.9, status: "medium" },
-              { region: "East Region", athletes: 634, avgScore: 76.4, status: "medium" },
-              { region: "West Region", athletes: 578, avgScore: 82.8, status: "high" },
-              { region: "Central Region", athletes: 456, avgScore: 74.1, status: "low" },
-              { region: "Northeast", athletes: 298, avgScore: 79.6, status: "medium" },
+              { region: "North Region", athletes: 10, avgScore: 81.2, status: "high" },
+              { region: "South Region", athletes: 5, avgScore: 78.9, status: "medium" },
+              { region: "East Region", athletes: 3, avgScore: 76.4, status: "medium" },
+              { region: "West Region", athletes: 5, avgScore: 82.8, status: "high" },
+              
             ].map((region) => (
               <Card key={region.region} className="p-4">
                 <div className="flex items-center justify-between mb-2">

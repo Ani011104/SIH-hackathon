@@ -1,3 +1,4 @@
+// src/pages/AthleteDetailsForm.tsx
 import React, { useState } from "react";
 import {
   View,
@@ -12,33 +13,136 @@ import {
   Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import * as ImagePicker from "react-native-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const AthleteDetailsForm = ({ navigation }) => {
+const API_BASE = "http://10.237.136.179:5000";
+
+const AthleteDetailsForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState("");
   const [dob, setDob] = useState<Date | null>(null);
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
+  const [gender, setGender] = useState("Male");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [profilePic, setProfilePic] = useState<any>(null); // Store full image object
+
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const pickImage = async () => {
+    const options = {
+      mediaType: "photo" as const,
+      quality: 0.8,
+    };
+
+    ImagePicker.launchImageLibrary(options, (response) => {
+      if (response.assets && response.assets[0]) {
+        const asset = response.assets[0];
+        setProfilePic(asset); // Store the full asset object
+      }
+    });
+  };
+
+  // Update user profile function
+  const updateUser = async (userData: any) => {
+    const token = await AsyncStorage.getItem("authToken");
+    
+    const response = await fetch(`${API_BASE}/user/updateuser`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update user");
+    }
+
+    return await response.json();
+  };
+
+  // Upload media function
+  const uploadMedia = async (imageAsset: any) => {
+    const token = await AsyncStorage.getItem("authToken");
+    
+    const formData = new FormData();
+    
+    // Create the file object correctly
+    const fileObj = {
+      uri: imageAsset.uri,
+      type: imageAsset.type || "image/jpeg",
+      name: imageAsset.fileName || `profile_${Date.now()}.jpg`,
+    };
+    
+    formData.append("media", fileObj as any);
+
+    const response = await fetch(`${API_BASE}/media/upload`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        // Don't set Content-Type header when using FormData
+        // React Native will set it automatically with boundary
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to upload media");
+    }
+
+    return await response.json();
+  };
+
   const submitProfile = async () => {
-    if (!fullName || !dob || !state || !city || !height || !weight) {
+    if (!fullName || !dob || !gender || !height || !weight) {
       Alert.alert("Error", "Please fill all fields");
       return;
     }
 
     setLoading(true);
+
     try {
-      // 🔹 Replace with your backend API call
-      setTimeout(() => {
-        setLoading(false);
-        Alert.alert("Success", "Profile saved successfully");
-        navigation.replace("Dashboard");
-      }, 1500);
+      // Get saved phone + token
+      const phone = await AsyncStorage.getItem("userPhone");
+      const token = await AsyncStorage.getItem("authToken");
+
+      if (!phone || !token) {
+        throw new Error("User not logged in properly");
+      }
+
+      // Update user profile first
+      const userData = {
+        username: fullName,
+        phone,
+        height: Number(height),
+        weight: Number(weight),
+        gender,
+        Dob: dob.toISOString(),
+        email: "test@gmail.com", // You might want to make this optional or get from user input
+      };
+
+      await updateUser(userData);
+
+      // Upload profile pic if selected
+      if (profilePic) {
+        await uploadMedia(profilePic);
+      }
+
+      setLoading(false);
+      Alert.alert("Success", "Profile saved successfully", [
+        {
+          text: "OK",
+          onPress: () => navigation.replace("Dashboard"),
+        },
+      ]);
     } catch (error: any) {
       setLoading(false);
+      console.error("Profile submission error:", error);
       Alert.alert("Error", error.message || "Failed to save profile");
     }
   };
@@ -56,24 +160,26 @@ const AthleteDetailsForm = ({ navigation }) => {
     >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text style={styles.backBtn}>←</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Athlete Profile</Text>
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Avatar */}
+      {/* Profile Photo */}
       <View style={styles.avatarContainer}>
-        <Image
-          source={{
-            uri: "https://via.placeholder.com/96x96.png?text=Avatar",
-          }}
-          style={styles.avatar}
-        />
-        <TouchableOpacity style={styles.cameraBtn}>
-          <Text style={styles.cameraIcon}>📷</Text>
+        <TouchableOpacity onPress={pickImage}>
+          <Image
+            source={{
+              uri:
+                profilePic?.uri ||
+                "https://via.placeholder.com/120x120.png?text=Upload",
+            }}
+            style={styles.avatar}
+          />
         </TouchableOpacity>
+        <Text style={styles.uploadText}>Tap to upload photo</Text>
       </View>
 
       {/* Form */}
@@ -112,27 +218,20 @@ const AthleteDetailsForm = ({ navigation }) => {
         )}
       </View>
 
-      <View style={styles.row}>
-        <View style={[styles.formGroup, { flex: 1 }]}>
-          <Text style={styles.label}>State</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter State"
-            placeholderTextColor="#ae9eb7"
-            value={state}
-            onChangeText={setState}
-          />
-        </View>
-        <View style={{ width: 12 }} />
-        <View style={[styles.formGroup, { flex: 1 }]}>
-          <Text style={styles.label}>City</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter City"
-            placeholderTextColor="#ae9eb7"
-            value={city}
-            onChangeText={setCity}
-          />
+      {/* Gender Picker */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Gender</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={gender}
+            dropdownIconColor="#fff"
+            style={styles.picker}
+            onValueChange={(value) => setGender(value)}
+          >
+            <Picker.Item label="Male" value="Male" />
+            <Picker.Item label="Female" value="Female" />
+            <Picker.Item label="Other" value="Other" />
+          </Picker>
         </View>
       </View>
 
@@ -179,10 +278,7 @@ const AthleteDetailsForm = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#151117",
-  },
+  container: { flex: 1, backgroundColor: "#151117" },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -190,62 +286,34 @@ const styles = StyleSheet.create({
     marginTop: 22,
     justifyContent: "space-between",
   },
-  backBtn: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "bold",
-  },
+  backBtn: { color: "#fff", fontSize: 22, fontWeight: "bold" },
   title: {
     flex: 1,
     textAlign: "center",
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
-    marginRight: 24, // keeps it centered even with back button
+    marginRight: 24,
   },
-  avatarContainer: {
-    alignItems: "center",
-    marginBottom: 20,
-    position: "relative",
-  },
-  avatar: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-  },
-  cameraBtn: {
-    position: "absolute",
-    bottom: 0,
-    right: "35%",
-    backgroundColor: "#702186",
-    borderRadius: 20,
-    padding: 8,
-    borderWidth: 2,
-    borderColor: "#fff",
-  },
-  cameraIcon: {
-    fontSize: 18,
-    color: "#fff",
-  },
-  formGroup: {
-    marginBottom: 12,
-  },
-  label: {
-    color: "#ae9eb7",
-    fontSize: 14,
-    marginBottom: 4,
-  },
+  avatarContainer: { alignItems: "center", marginBottom: 20 },
+  avatar: { width: 120, height: 120, borderRadius: 60, borderWidth: 2, borderColor: "#fff" },
+  uploadText: { color: "#ae9eb7", marginTop: 6, fontSize: 12 },
+
+  formGroup: { marginBottom: 12 },
+  label: { color: "#ae9eb7", fontSize: 14, marginBottom: 4 },
   input: {
     backgroundColor: "#322938",
     color: "#fff",
     padding: 12,
     borderRadius: 8,
+    justifyContent: "center",
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 12,
+  pickerWrapper: {
+    backgroundColor: "#322938",
+    borderRadius: 8,
   },
+  picker: { color: "#fff", height: 50, width: "100%" },
+  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
   submitBtn: {
     marginTop: 20,
     backgroundColor: "#7b19b3",
@@ -253,11 +321,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
   },
-  submitText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+  submitText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
 });
 
 export default AthleteDetailsForm;

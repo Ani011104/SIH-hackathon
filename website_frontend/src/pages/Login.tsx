@@ -3,21 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle,CardDescription } from "@/components/ui/card";
 import { Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Login() {
   const [loginData, setLoginData] = useState({
-    usernameEmail: "",
-    password: ""
+    phone: "",
+    otp: ""
   });
+  const [showOtp, setShowOtp] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate login success (replace with actual authentication logic)
-    navigate("/dashboard");
+    if (!showOtp) {
+      setShowOtp(true);
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   return (
@@ -41,31 +45,36 @@ export default function Login() {
             <TabsContent value="login" className="space-y-4">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="usernameEmail">Username or Email</Label>
+                  <Label htmlFor="phone">Phone Number</Label>
                   <Input
-                    id="usernameEmail"
-                    type="text"
-                    placeholder="Enter username or email"
-                    value={loginData.usernameEmail}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, usernameEmail: e.target.value }))}
+                    id="phone"
+                    type="tel"
+                    placeholder="+1 (555) 123-4567"
+                    value={loginData.phone}
+                    onChange={(e) => setLoginData(prev => ({ ...prev, phone: e.target.value }))}
                     required
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter password"
-                    value={loginData.password}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
-                    required
-                  />
-                </div>
+                {showOtp && (
+                  <div className="space-y-2">
+                    <Label htmlFor="otp">OTP Code</Label>
+                    <Input
+                      id="otp"
+                      type="text"
+                      placeholder="Enter 6-digit code"
+                      value={loginData.otp}
+                      onChange={(e) => setLoginData(prev => ({ ...prev, otp: e.target.value }))}
+                      required
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Code sent to {loginData.phone}
+                    </p>
+                  </div>
+                )}
 
                 <Button type="submit" className="w-full">
-                  Login
+                  {showOtp ? "Verify & Login" : "Send OTP"}
                 </Button>
 
                 <div className="text-center">

@@ -1,2 +1,4 @@
-# This file is used to ignore files and folders that are too large , unnecessary or contain sensitive information
+
+# Dependencies
 node_modules/
+*/node_modules/
