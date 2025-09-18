@@ -1,6 +1,6 @@
 # AI-Powered Mobile Platform for Democratizing Sports Talent Assessment
 
-One-line: A lightweight, mobile-first platform that lets athletes on entry-level smartphones record standard fitness tests, performs on-device and server-side AI/ML verification & cheat detection, and securely submits verified results for official evaluation.
+A lightweight, mobile-first platform that lets athletes on entry-level smartphones record standard fitness tests, performs on-device and server-side AI/ML verification & cheat detection, and securely submits verified results for official evaluation.
 
 ---
 
