@@ -95,6 +95,7 @@ Paths below assume repository root: d:\sih2\SIH-hackathon
   python -m venv .venv
   .venv\Scripts\Activate.ps1   # PowerShell
   # or .venv\Scripts\activate.bat  # cmd.exe
+  # source venv\Scripts\activate  # git bash
   ```
 - Install Python dependencies:
   ```powershell
