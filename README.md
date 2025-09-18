@@ -4,7 +4,7 @@ A lightweight, mobile-first platform that lets athletes on entry-level smartphon
 
 ---
 # Demo Video of the Project
-[Watch the demo of the app and website]([https://www.youtube.com/watch?v=YOUR_VIDEO_ID](https://youtu.be/h7DEwsRT4p4?si=G91_AOog7z-tsJNi))
+![Watch the demo of the app and website]([https://www.youtube.com/watch?v=YOUR_VIDEO_ID](https://youtu.be/h7DEwsRT4p4?si=G91_AOog7z-tsJNi))
 
 ## Table of contents
 - Project overview
