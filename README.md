@@ -28,8 +28,8 @@ Goal: Democratize talent discovery by making assessment low-cost, mobile-first, 
 ---
 
 ## High-level architecture
-- Mobile frontend (React Native) — record videos, show immediate feedback, optionally run lightweight on-device inference, upload to backend.
-- Backend bridge (Node.js) — receives uploads from applications, validates/authenticates, forwards video + reference images to the Aiml Flask service, stores results and exposes a dashboard API.
+- Mobile frontend (React Native) — record videos, sends videos to backend, optionally run lightweight on-device inference.
+- Backend bridge (Node.js) — receives uploads from applications, validates/authenticates, forwards video + reference images to the Aiml Flask service, stores results, send the result to frontend and exposes a dashboard API.
 - Aiml service (Python / Flask) — heavy AI modules, pose extraction, rep counting, cheat detection, face verification, per-exercise analyzers and comprehensive multi-session analytics.
 
 Typical flow:
@@ -37,7 +37,8 @@ Typical flow:
 2. App sends video + optional reference images to Node bridge.
 3. Node bridge forwards files to Flask Aiml endpoint /analyze_mobile.
 4. Aiml performs analysis, returns JSON. Node persists results and forwards to dashboard or SAI ingestion pipeline.
-5. Officials can call /comprehensiveAnalysis with exactly 5 JSON assessment files for multi-session benchmarking.
+5. Officials can call /comprehensiveAnalysis with exactly assessment files for multi-session benchmarking.
+6. Send a report to SAI authority for further evaluation
 
 ---
 
@@ -47,7 +48,7 @@ Typical flow:
 - Face verification for identity validation.
 - Comprehensive multi-session analysis and benchmark scoring.
 - Low-bandwidth friendly: option to run preliminary analysis on-device and upload only results.
-- Lightweight model for mobile (pose model included under Aiml/).
+- Gamified user interface with benchmarking capabilities.
 
 ---
 
@@ -62,7 +63,6 @@ Typical flow:
   - yolo11n-pose.pt — mobile pose model (nano).
 - Backend/
   - controllers/assessmentcontrollers.js — example file that uploads to the Flask service.
-  - package.json — Node project manifest.
 - website_frontend/ (React Native)
   - src/ — app code, screens, camera integration, upload logic.
   - package.json
