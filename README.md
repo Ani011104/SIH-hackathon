@@ -76,7 +76,7 @@ Typical flow:
 3. Regular api and Data persistence
    ![Alt text](images/aiml-analysis.jpg)
 5. Agent and Web socet communication
-   ![Alt text](images/Api and data persistence.jpg)
+   ![Alt text](images/Api-and-data_persistence.jpg)
 
 
 ## Quick start — Windows (precise steps)
@@ -156,48 +156,6 @@ A. POST /analyze_mobile (Flask Aiml) — analyze a single recorded test
   - user_height (cm)
   - generate_video (true|false)
   - save_json (true|false)
-
-Windows curl example (send video + reference images):
-```powershell
-curl -X POST http://localhost:5000/analyze_mobile ^
--F "video=@C:\path\to\video.mp4" ^
--F "reference_images=@C:\path\to\ref1.jpg" ^
--F "reference_images=@C:\path\to\ref2.jpg" ^
--F "user_id=test_user" ^
--F "exercise_type=pushups" ^
--F "user_height=170" ^
--F "generate_video=true" ^
--F "save_json=true" -o result.json
-```
-Notes:
-- Do NOT set Content-Type: multipart/form-data manually; curl sets it when using -F.
-
-B. POST /comprehensiveAnalysis (Flask Aiml) — analyze exactly 5 JSON assessment files and return benchmark report
-- The Flask endpoint requires exactly 5 JSON files uploaded as multipart/form-data. Field names can be arbitrary but use meaningful names (pushups, situps, squats, vertical_jump, long_jump).
-- Correct Windows curl example:
-```powershell
-curl -X POST http://localhost:5000/comprehensiveAnalysis ^
--F "pushups=@C:\path\to\json_outputs\mobile_complete_pushups_1757869729.json" ^
--F "squats=@C:\path\to\json_outputs\mobile_complete_squats_1757872267.json" ^
--F "situps=@C:\path\to\json_outputs\mobile_complete_situps_1757869249.json" ^
--F "vertical_jump=@C:\path\to\json_outputs\mobile_complete_vertical_jump_1757869853.json" ^
--F "long_jump=@C:\path\to\json_outputs\mobile_complete_long_jump_1757872408.json" ^
--o result.json
-```
-- If you receive: {"error":"Send exactly 5 JSON files as multipart/form-data"}:
-  - Ensure that you used -F for each file and that the server is receiving files (no `Content-Type: application/json` header).
-  - Confirm files exist and are valid JSON.
-
-cURL (Linux/macOS):
-```bash
-curl -X POST http://localhost:5000/comprehensiveAnalysis \
-  -F "pushups=@./json_outputs/....json" \
-  -F "squats=@./json_outputs/....json" \
-  -F "situps=@./json_outputs/....json" \
-  -F "vertical_jump=@./json_outputs/....json" \
-  -F "long_jump=@./json_outputs/....json" \
-  -o result.json
-```
 
 ---
 
