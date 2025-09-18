@@ -9,6 +9,6 @@ const { getFinalResult } = require('../controllers/assessmentcontrollers');
 
 router.post("/perform_one", verifytoken, upload.array('file'), performOne )
 
-// router.post("/get_final_result", verifytoken, getFinalResult)
+router.post("/get_final_result", verifytoken, getFinalResult)
 
 module.exports = router;

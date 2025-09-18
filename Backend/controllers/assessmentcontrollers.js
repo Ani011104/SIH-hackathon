@@ -37,6 +37,7 @@ exports.performOne = async (req, res) => {
     form.append('user_height_cm', userheight);
     form.append('generate_video', 'true');
     form.append('save_json', 'true');
+    form.append("user_id", userId);
 
     // Send to Flask
     const response = await axios.post(
@@ -57,7 +58,18 @@ exports.performOne = async (req, res) => {
 
 exports.getFinalResult = async (req , res) => {
     try{
-
+      const userId = req.user.id;
+      const form = new FormData();
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      form.append("user_id", userId);
+      const flaskresponse = await axios.post('http://127.0.0.1:5000/comprehensiveAnalysis',
+        form, 
+        { headers: form.getHeaders() }
+      );
+      res.json(flaskresponse.data);
     }
     catch(err)
     {
