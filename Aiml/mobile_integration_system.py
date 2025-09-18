@@ -58,13 +58,13 @@ class MobileIntegrationSystem:
         logger.info("✅ Mobile Integration System ready!")
 
     # original mobile-complete analyser (unchanged)
-    def analyze_video_mobile_complete(self, video_path, exercise_type, user_height_cm=170,
-                                    reference_images_folder=None, generate_video=True, save_json=True):
+    def analyze_video_mobile_complete(self, video_path, exercise_type, user_id, user_base_dir, ref_dir=None,
+                                    generate_video=True, save_json=True):
         logger.info(f"📱 Starting mobile analysis: {video_path}")
         start = time.time()
         try:
-            if reference_images_folder:
-                self.cheat_detector.reference_images_folder = reference_images_folder
+            if ref_dir:
+                self.cheat_detector.reference_images_folder = ref_dir
                 self.cheat_detector.reference_images = self.cheat_detector._load_reference_images()
 
             cheat_start = time.time()
@@ -73,18 +73,33 @@ class MobileIntegrationSystem:
 
             sports_start = time.time()
             sports_results = self.sports_analyzer.analyze_video_mobile(
-                video_path, exercise_type, user_height_cm, generate_video, save_json=False)
+                video_path, exercise_type, user_height_cm=170, generate_video=generate_video, save_json=False)
             sports_time = time.time() - sports_start
 
             final_results = self._create_mobile_results(cheat_results, sports_results, cheat_time, sports_time)
             final_results['total_processing_time'] = float(time.time() - start)
 
             if save_json:
+                json_dir = os.path.join(user_base_dir, "json_result")
+                os.makedirs(json_dir, exist_ok=True)
                 json_filename = f"mobile_complete_{exercise_type}_{int(time.time())}.json"
-                with open(json_filename, 'w') as f:
+                json_path = os.path.join(json_dir, json_filename)
+                with open(json_path, 'w') as f:
                     json.dump(final_results, f, indent=2)
-                final_results['saved_json'] = json_filename
-                logger.info(f"📄 Mobile results saved: {json_filename}")
+                final_results['saved_json'] = json_filename  # relative path
+                logger.info(f"📄 Mobile results saved: {json_path}")
+
+            # Handle generated video
+            if generate_video and 'output_video' in sports_results:
+                gen_video_dir = os.path.join(user_base_dir, "generated_video")
+                os.makedirs(gen_video_dir, exist_ok=True)
+                orig_video_path = sports_results['output_video']
+                gen_filename = f"analyzed_{exercise_type}_{int(time.time())}.mp4"
+                gen_path = os.path.join(gen_video_dir, gen_filename)
+                shutil.move(orig_video_path, gen_path)
+                final_results['generated_video'] = gen_filename  # relative
+                logger.info(f"🎥 Generated video saved: {gen_path}")
+
             return final_results
         except Exception as e:
             logger.error(f"❌ Mobile analysis failed: {e}")
@@ -285,6 +300,13 @@ def analyze_mobile():
     if mobile_system is None:
         return jsonify({'error': 'Mobile system not initialized'}), 500
     try:
+        user_id = request.form.get('user_id')
+        if not user_id:
+            return jsonify({'error': 'user_id is required'}), 400
+
+        base_dir = f"user_data/{user_id}"
+        os.makedirs(base_dir, exist_ok=True)
+
         if 'video' not in request.files:
             return jsonify({'error': 'No video file provided'}), 400
         video_file = request.files['video']
@@ -300,28 +322,26 @@ def analyze_mobile():
         if exercise_type not in valid_exercises:
             return jsonify({'error': f'Invalid exercise type. Supported: {valid_exercises}'}), 400
 
-        reference_folder = None
+        # Reference images
+        ref_dir = os.path.join(base_dir, "reference_faces")
+        os.makedirs(ref_dir, exist_ok=True)
         if 'reference_images' in request.files:
-            reference_folder = f"temp_mobile_refs_{int(time.time())}"
-            os.makedirs(reference_folder, exist_ok=True)
             for ref_file in request.files.getlist('reference_images'):
                 if ref_file.filename:
-                    ref_path = os.path.join(reference_folder, ref_file.filename)
+                    ref_path = os.path.join(ref_dir, ref_file.filename)
                     ref_file.save(ref_path)
 
-        temp_path = f"temp_mobile_{int(time.time())}_{video_file.filename}"
+        # Video
+        videos_dir = os.path.join(base_dir, "videos")
+        os.makedirs(videos_dir, exist_ok=True)
+        video_filename = video_file.filename
+        temp_path = os.path.join(videos_dir, video_filename)
         video_file.save(temp_path)
 
         results = mobile_system.analyze_video_mobile_complete(
-            temp_path, exercise_type, user_height, reference_folder, generate_video, save_json
+            temp_path, exercise_type, user_id, base_dir, ref_dir, generate_video, save_json
         )
 
-        try:
-            os.remove(temp_path)
-            if reference_folder and os.path.exists(reference_folder):
-                shutil.rmtree(reference_folder)
-        except:
-            pass
         return jsonify(results)
     except Exception as e:
         logger.error(f"❌ Mobile API error: {e}")
@@ -359,19 +379,35 @@ def mobile_health():
 @app.route('/comprehensiveAnalysis', methods=['POST'])
 def comprehensive_analysis():
     """Analyse exactly 5 JSON assessments and return benchmark report."""
-    if not request.files:
-        return jsonify({"error": "Send exactly 5 JSON files as multipart/form-data"}), 400
-
-    files = list(request.files.values())  # ignore field names
-    if len(files) != 5:
-        return jsonify({"error": "Exactly 5 JSON files required"}), 400
-
-    assessments = []
-    for f in files:
-        try:
-            assessments.append(json.load(f))
-        except Exception as e:
-            return jsonify({"error": f"Invalid JSON in {f.filename}: {e}"}), 400
+    user_id = request.form.get('user_id')
+    if user_id:
+        # Load from user folder
+        json_dir = f"user_data/{user_id}/json_result"
+        if not os.path.exists(json_dir):
+            return jsonify({"error": f"User folder {json_dir} not found"}), 400
+        json_files = [f for f in os.listdir(json_dir) if f.endswith('.json')]
+        if len(json_files) != 5:
+            return jsonify({"error": f"Exactly 5 JSON files required in {json_dir}, found {len(json_files)}"}), 400
+        assessments = []
+        for jf in json_files:
+            try:
+                with open(os.path.join(json_dir, jf), 'r') as f:
+                    assessments.append(json.load(f))
+            except Exception as e:
+                return jsonify({"error": f"Invalid JSON in {jf}: {e}"}), 400
+    else:
+        # Fallback to files
+        if not request.files:
+            return jsonify({"error": "Send exactly 5 JSON files as multipart/form-data or provide user_id"}), 400
+        files = list(request.files.values())  # ignore field names
+        if len(files) != 5:
+            return jsonify({"error": "Exactly 5 JSON files required"}), 400
+        assessments = []
+        for f in files:
+            try:
+                assessments.append(json.load(f))
+            except Exception as e:
+                return jsonify({"error": f"Invalid JSON in {f.filename}: {e}"}), 400
 
     try:
         report = analyse_comprehensive(assessments)
