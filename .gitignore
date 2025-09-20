@@ -1,5 +1,21 @@
-
 # Dependencies
 node_modules/
 */node_modules/
+
+# Env files
 .env
+*.env
+Backend/.env
+SAI/.env
+Aiml/.env
+
+# Logs
+*.log
+logs/
+debug.log
+
+# Build outputs
+build/
+dist/
+android/app/build/
+ios/build/

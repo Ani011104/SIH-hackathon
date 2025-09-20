@@ -1,7 +1,7 @@
 {
   "mobile_summary": {
     "final_validity": "valid",
-    "authenticity_confidence": 79.18,
+    "authenticity_confidence": 81.85,
     "performance_detected": true,
     "recommendation": "\u2705 Analysis complete - Video verified",
     "processing_speed": "mobile_optimized",
@@ -17,21 +17,21 @@
         "form_score": 85,
         "mobile_optimized": true,
         "rep_timestamps": [
-          4.3652991360691145,
-          5.698214902807775,
-          7.031130669546436,
-          8.397369330453564,
-          9.630316414686824,
-          10.82994060475162,
-          12.062887688984882,
-          13.262511879049676,
-          14.46213606911447,
-          15.628437365010798,
-          16.79473866090713,
-          17.961039956803454,
-          19.027372570194384,
-          20.127028077753778,
-          21.260006479481643
+          4.363187574514039,
+          5.695458589632829,
+          7.027729604751619,
+          8.39330739524838,
+          9.625658084233262,
+          10.824701997840172,
+          12.057052686825054,
+          13.256096600431965,
+          14.455140514038877,
+          15.620877652267819,
+          16.78661479049676,
+          17.91904515334773,
+          18.984861965442764,
+          20.117292328293736,
+          21.249722691144708
         ]
       },
       "keypoints_used": [
@@ -47,12 +47,12 @@
       "exercise_completed": true,
       "mobile_optimized": true
     },
-    "output_video": "mobile_analysis_squats_1758181147.mp4",
+    "output_video": "mobile_analysis_squats_1758380708.mp4",
     "video_properties": {
-      "fps": 30.009398191658295,
+      "fps": 30.023921218787038,
       "total_frames": 1389,
-      "duration": 46.2855,
-      "resolution": "1080x1920",
+      "duration": 46.263111,
+      "resolution": "202x360",
       "mobile_optimized": true,
       "frames_processed": 695
     },
@@ -65,15 +65,15 @@
   "security_results": {
     "authenticity_status": "authentic",
     "risk_level": "very_low",
-    "risk_score": 20.82,
-    "confidence_score": 79.17,
+    "risk_score": 18.15,
+    "confidence_score": 81.85,
     "face_verification": {
       "verified": true,
-      "confidence": 70.25,
-      "verification_rate": 22.2,
-      "avg_similarity": 65.8,
-      "max_similarity": 67.29,
-      "successful_verifications": 2,
+      "confidence": 74.07,
+      "verification_rate": 33.3,
+      "avg_similarity": 67.4,
+      "max_similarity": 70.9,
+      "successful_verifications": 3,
       "total_verifications": 9,
       "frames_processed": 3,
       "models_used": [
@@ -86,9 +86,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.7799,
+          "distance": 0.7778,
           "threshold": 0.5,
-          "similarity": 22.01,
+          "similarity": 22.22,
           "verified": false
         },
         {
@@ -96,9 +96,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.6955,
+          "distance": 0.6952,
           "threshold": 0.5,
-          "similarity": 30.45,
+          "similarity": 30.48,
           "verified": false
         },
         {
@@ -106,9 +106,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.3568,
+          "distance": 0.3474,
           "threshold": 0.5,
-          "similarity": 64.32,
+          "similarity": 65.26,
           "verified": true
         },
         {
@@ -116,9 +116,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.7381,
+          "distance": 0.7418,
           "threshold": 0.5,
-          "similarity": 26.19,
+          "similarity": 25.82,
           "verified": false
         },
         {
@@ -126,9 +126,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.6754,
+          "distance": 0.6804,
           "threshold": 0.5,
-          "similarity": 32.46,
+          "similarity": 31.96,
           "verified": false
         },
         {
@@ -136,9 +136,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.3271,
+          "distance": 0.3396,
           "threshold": 0.5,
-          "similarity": 67.29,
+          "similarity": 66.04,
           "verified": true
         },
         {
@@ -146,9 +146,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.5311,
+          "distance": 0.731,
           "threshold": 0.5,
-          "similarity": 46.89,
+          "similarity": 26.9,
           "verified": false
         },
         {
@@ -156,9 +156,9 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.6569,
+          "distance": 0.6839,
           "threshold": 0.5,
-          "similarity": 34.31,
+          "similarity": 31.61,
           "verified": false
         },
         {
@@ -166,10 +166,10 @@
           "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
           "model": "VGG-Face",
           "metric": "cosine",
-          "distance": 0.6906,
+          "distance": 0.291,
           "threshold": 0.5,
-          "similarity": 30.94,
-          "verified": false
+          "similarity": 70.9,
+          "verified": true
         }
       ]
     },
@@ -183,8 +183,8 @@
     ]
   },
   "mobile_technical": {
-    "cheat_detection_time": 96.27000784873962,
-    "sports_analysis_time": 167.17459201812744,
+    "cheat_detection_time": 57.32156419754028,
+    "sports_analysis_time": 72.61383080482483,
     "optimization_level": "smartphone",
     "models_used": [
       "YOLO11n-nano",
@@ -198,8 +198,8 @@
       "memory_efficient",
       "fast_inference"
     ],
-    "analysis_timestamp": "2025-09-18T07:40:03.410310+00:00",
+    "analysis_timestamp": "2025-09-20T15:05:09.835531+00:00",
     "version": "mobile_v1.0"
   },
-  "total_processing_time": 275.44441080093384
+  "total_processing_time": 131.62973618507385
 }

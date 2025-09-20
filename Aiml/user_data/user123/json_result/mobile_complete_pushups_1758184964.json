@@ -1,0 +1,173 @@
+{
+  "mobile_summary": {
+    "final_validity": "invalid",
+    "authenticity_confidence": 43.0,
+    "performance_detected": true,
+    "recommendation": "\u274c Video rejected - Cheating detected",
+    "processing_speed": "mobile_optimized",
+    "real_time_counting": true
+  },
+  "performance_results": {
+    "exercise_type": "pushups",
+    "rep_count": 10,
+    "jump_count": 0,
+    "exercise_results": {
+      "rep_count": 10,
+      "form_analysis": {
+        "form_score": 85,
+        "mobile_optimized": true,
+        "rep_timestamps": [
+          1.141207901234568,
+          1.8125066666666667,
+          2.5173703703703705,
+          3.188669135802469,
+          3.792838024691358,
+          5.538214814814815,
+          6.2430785185185185,
+          7.082201975308641,
+          7.787065679012345,
+          8.391234567901234
+        ]
+      },
+      "keypoints_used": [
+        5,
+        7,
+        9
+      ],
+      "joint_names": [
+        "shoulder",
+        "elbow",
+        "wrist"
+      ],
+      "exercise_completed": true,
+      "mobile_optimized": true
+    },
+    "output_video": "mobile_analysis_pushups_1758184960.mp4",
+    "video_properties": {
+      "fps": 29.792993864850153,
+      "total_frames": 540,
+      "duration": 18.125066666666665,
+      "resolution": "848x478",
+      "mobile_optimized": true,
+      "frames_processed": 270
+    },
+    "mobile_performance": {
+      "optimization_level": "high",
+      "frame_processing_ratio": 1.0,
+      "real_time_counting": true
+    }
+  },
+  "security_results": {
+    "authenticity_status": "highly_suspicious",
+    "risk_level": "critical",
+    "risk_score": 57.0,
+    "confidence_score": 43.0,
+    "face_verification": {
+      "verified": false,
+      "confidence": 5.0,
+      "verification_rate": 0.0,
+      "avg_similarity": 0.0,
+      "max_similarity": 0.0,
+      "successful_verifications": 0,
+      "total_verifications": 6,
+      "frames_processed": 2,
+      "models_used": [
+        "VGG-Face"
+      ],
+      "optimized_verification": true,
+      "detailed_results": [
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.7199,
+          "threshold": 0.5,
+          "similarity": 28.01,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6569,
+          "threshold": 0.5,
+          "similarity": 34.31,
+          "verified": false
+        },
+        {
+          "frame": 1,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6132,
+          "threshold": 0.5,
+          "similarity": 38.68,
+          "verified": false
+        },
+        {
+          "frame": 2,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.43_d0024db4.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6955,
+          "threshold": 0.5,
+          "similarity": 30.45,
+          "verified": false
+        },
+        {
+          "frame": 2,
+          "reference": "WhatsApp Image 2025-09-13 at 15.54.57_65ff91ab.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6459,
+          "threshold": 0.5,
+          "similarity": 35.41,
+          "verified": false
+        },
+        {
+          "frame": 2,
+          "reference": "WhatsApp Image 2025-09-13 at 15.55.14_99ebe1ad.jpg",
+          "model": "VGG-Face",
+          "metric": "cosine",
+          "distance": 0.6437,
+          "threshold": 0.5,
+          "similarity": 35.63,
+          "verified": false
+        }
+      ]
+    },
+    "flag_analysis": {
+      "total_flags": 3,
+      "flag_categories": {
+        "velocity_outlier": 3
+      }
+    },
+    "recommendations": [
+      "\ud83d\udea8 CRITICAL: Face verification completely failed",
+      "\u274c STRONG REJECT: No similarity to reference images",
+      "\u26a0\ufe0f MOTION: Unusual movements detected"
+    ]
+  },
+  "mobile_technical": {
+    "cheat_detection_time": 4.976374626159668,
+    "sports_analysis_time": 29.6211040019989,
+    "optimization_level": "smartphone",
+    "models_used": [
+      "YOLO11n-nano",
+      "DeepFace-mobile",
+      "Mobile-Cheat-Detection"
+    ],
+    "mobile_features": [
+      "real_time_counting",
+      "frame_skipping",
+      "resolution_optimization",
+      "memory_efficient",
+      "fast_inference"
+    ],
+    "analysis_timestamp": "2025-09-18T08:42:44.529302",
+    "version": "mobile_v1.0"
+  },
+  "total_processing_time": 34.59855103492737
+}

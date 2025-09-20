@@ -2,6 +2,8 @@ const Assessment = require('../models/assessment');
 const axios = require('axios');
 const FormData = require('form-data');
 const User = require('../models/user');
+const Media = require('../models/media');
+const cloudinary = require('../utils/cloudinary');
 
 
 
@@ -45,9 +47,54 @@ exports.performOne = async (req, res) => {
       form,
       { headers: form.getHeaders() }
     );
+    console.log(response)
+    // ========== NEW CODE STARTS HERE ==========
+    // Extract data from Flask response
+    const { generated_video_base64, saved_json_content } = response.data;
+    const { rep_count } = saved_json_content.performance_results;
 
-    res.json(response.data);
-    console.log(response.data);
+    // Step 1: Upload video to Cloudinary
+    const videoUploadResult = await cloudinary.uploader.upload(
+      `data:video/mp4;base64,${generated_video_base64}`,
+      {
+        folder: 'SIH',
+        resource_type: 'video',
+        type: 'upload'
+      }
+    );
+
+    // Step 2: Save to Media model
+    const newMedia = new Media({
+      userId: userId,
+      media: [{
+        title: `Assessment-${exercise_type}-${Date.now()}`,
+        type: 'video',
+        url: videoUploadResult.secure_url,
+        public_id: videoUploadResult.public_id
+      }]
+    });
+    const savedMedia = await newMedia.save();
+    const mediaId = savedMedia._id;
+
+    // Step 3: Create Assessment record
+    const newAssessment = new Assessment({
+      userId: userId,
+      assessmentName: exercise_type,
+      assessmentVerification:"verified",
+      mediaId: mediaId,
+      RepCount: rep_count || 0
+    });
+    const savedAssessment = await newAssessment.save();
+
+    // Step 4: Send response
+    res.json({
+      success: true,
+      assessment: savedAssessment,
+      media: savedMedia,
+      
+    });
+    // ========== NEW CODE ENDS HERE ==========
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error', error: err.message });
