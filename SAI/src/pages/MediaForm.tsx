@@ -8,16 +8,18 @@ import {
   Image,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "react-native-image-picker";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
-import { saveMedia } from "../services/api";
+import { uploadMedia } from "../services/api";
+import { setProfileCompleted } from "../services/storage";
 
 type Props = StackScreenProps<RootStackParamList, "MediaForm">;
 
 const MediaForm: React.FC<Props> = ({ navigation }) => {
-  const [photos, setPhotos] = useState<(string | null)[]>([null, null, null, null]);
+  const [photos, setPhotos] = useState<(any | null)[]>([null, null, null, null]);
   const [loading, setLoading] = useState(false);
 
   const pickImage = (index: number) => {
@@ -29,10 +31,10 @@ const MediaForm: React.FC<Props> = ({ navigation }) => {
           Alert.alert("Error", response.errorMessage || "Image picker error");
           return;
         }
-        const uri = response.assets?.[0]?.uri;
-        if (uri) {
+        const asset = response.assets?.[0];
+        if (asset) {
           const updated = [...photos];
-          updated[index] = uri;
+          updated[index] = asset;
           setPhotos(updated);
         }
       }
@@ -46,14 +48,23 @@ const MediaForm: React.FC<Props> = ({ navigation }) => {
     }
 
     setLoading(true);
-    const res = await saveMedia(photos as string[]);
-    setLoading(false);
+    try {
+      // 🟣 Upload all 4 images to backend
+      const res = await uploadMedia(photos as any[]);
+      if (res.media || res.success) {
+        // 🟣 Mark profile as complete
+        await setProfileCompleted(true);
 
-    if (res.success) {
-      Alert.alert("Success", "Photos uploaded successfully!");
-      navigation.goBack();
-    } else {
-      Alert.alert("Error", res.message || "Failed to upload photos");
+        Alert.alert("Success", "Photos uploaded successfully!", [
+          { text: "OK", onPress: () => navigation.replace("Dashboard") },
+        ]);
+      } else {
+        Alert.alert("Error", res.message || "Failed to upload photos");
+      }
+    } catch (err: any) {
+      Alert.alert("Error", err.message || "Network error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,7 +87,7 @@ const MediaForm: React.FC<Props> = ({ navigation }) => {
             onPress={() => pickImage(i)}
           >
             {p ? (
-              <Image source={{ uri: p }} style={styles.photo} />
+              <Image source={{ uri: p.uri }} style={styles.photo} />
             ) : (
               <Text style={styles.addText}>📷</Text>
             )}
@@ -89,9 +100,11 @@ const MediaForm: React.FC<Props> = ({ navigation }) => {
         onPress={handleSubmit}
         disabled={loading}
       >
-        <Text style={styles.submitText}>
-          {loading ? "Uploading..." : "Submit"}
-        </Text>
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.submitText}>Submit</Text>
+        )}
       </TouchableOpacity>
     </ScrollView>
   );

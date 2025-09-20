@@ -13,7 +13,7 @@ import { RootStackParamList } from "../../App";
 import LinearGradient from "react-native-linear-gradient";
 
 // storage helpers
-import { getPhone, isProfileCompleted } from "../services/storage";
+import { getToken } from "../services/storage";
 
 type SplashScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -47,16 +47,11 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
 
     // 🔑 Navigation logic
     const checkLogin = async () => {
-      const phone = await getPhone();
-      const profileCompleted = await isProfileCompleted();
+      const token = await getToken();
 
       setTimeout(() => {
-        if (phone) {
-          if (profileCompleted) {
-            navigation.replace("Dashboard");
-          } else {
-            navigation.replace("AthleteDetails");
-          }
+        if (token) {
+          navigation.replace("Dashboard");
         } else {
           navigation.replace("Login");
         }
@@ -77,7 +72,7 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.centerContent}>
         <Image
           source={{
-            uri: "https://lh3.googleusercontent.com/aida-public/AB6AXuAYe9flQtxULWoGabOsgZOZhYC44PzzVTUyImDCCRNQJl_QyAHS3uXAXi4LCRm0S1ANmd1f26cSmiP8vfn0_FkWt8dS75g9wcZav4L-gvFR92LkLYQhLsbrssO_Z5cHm8iq6IapHLJr3cU3h6ILVPOc8mHOzJPY5o9d_y6EtFLDCTY5iUzSN1r-H0lMvTQnCUaAty436AlQ3scMFNpkvc3Ca6YcNnRcGQ1HQm_Yoy-pPlfXNbjyVbn69vKggABZtzKwkzRcCBsU5sE",
+            uri: "https://via.placeholder.com/150x150.png?text=SAI",
           }}
           style={styles.logo}
         />

@@ -15,9 +15,14 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "react-native-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// OLD
+// import { updateUser, uploadMedia } from "../services/api";
 
-const API_BASE = "http://10.237.136.179:5000";
+// NEW
+import { updateUser, uploadMedia } from "../services";
+
+
+const MOCK_MODE = true; // ✅ Toggle ON for testing without backend
 
 const AthleteDetailsForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState("");
@@ -25,131 +30,65 @@ const AthleteDetailsForm = ({ navigation }: any) => {
   const [gender, setGender] = useState("Male");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [profilePic, setProfilePic] = useState<any>(null); // Store full image object
-
+  const [profilePic, setProfilePic] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const pickImage = async () => {
-    const options = {
-      mediaType: "photo" as const,
-      quality: 0.8,
-    };
-
-    ImagePicker.launchImageLibrary(options, (response) => {
-      if (response.assets && response.assets[0]) {
-        const asset = response.assets[0];
-        setProfilePic(asset); // Store the full asset object
+  const pickImage = () => {
+    ImagePicker.launchImageLibrary({ mediaType: "photo", quality: 0.8 }, (res) => {
+      if (res.assets && res.assets[0]) {
+        setProfilePic(res.assets[0]);
       }
     });
-  };
-
-  // Update user profile function
-  const updateUser = async (userData: any) => {
-    const token = await AsyncStorage.getItem("authToken");
-    
-    const response = await fetch(`${API_BASE}/user/updateuser`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update user");
-    }
-
-    return await response.json();
-  };
-
-  // Upload media function
-  const uploadMedia = async (imageAsset: any) => {
-    const token = await AsyncStorage.getItem("authToken");
-    
-    const formData = new FormData();
-    
-    // Create the file object correctly
-    const fileObj = {
-      uri: imageAsset.uri,
-      type: imageAsset.type || "image/jpeg",
-      name: imageAsset.fileName || `profile_${Date.now()}.jpg`,
-    };
-    
-    formData.append("media", fileObj as any);
-
-    const response = await fetch(`${API_BASE}/media/upload`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        // Don't set Content-Type header when using FormData
-        // React Native will set it automatically with boundary
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to upload media");
-    }
-
-    return await response.json();
-  };
-
-  const submitProfile = async () => {
-    if (!fullName || !dob || !gender || !height || !weight) {
-      Alert.alert("Error", "Please fill all fields");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      // Get saved phone + token
-      const phone = await AsyncStorage.getItem("userPhone");
-      const token = await AsyncStorage.getItem("authToken");
-
-      if (!phone || !token) {
-        throw new Error("User not logged in properly");
-      }
-
-      // Update user profile first
-      const userData = {
-        username: fullName,
-        phone,
-        height: Number(height),
-        weight: Number(weight),
-        gender,
-        Dob: dob.toISOString(),
-        email: "test@gmail.com", // You might want to make this optional or get from user input
-      };
-
-      await updateUser(userData);
-
-      // Upload profile pic if selected
-      if (profilePic) {
-        await uploadMedia(profilePic);
-      }
-
-      setLoading(false);
-      Alert.alert("Success", "Profile saved successfully", [
-        {
-          text: "OK",
-          onPress: () => navigation.replace("Dashboard"),
-        },
-      ]);
-    } catch (error: any) {
-      setLoading(false);
-      console.error("Profile submission error:", error);
-      Alert.alert("Error", error.message || "Failed to save profile");
-    }
   };
 
   const formatDate = (date: Date | null) => {
     if (!date) return "";
     return date.toISOString().split("T")[0]; // YYYY-MM-DD
+  };
+
+  const submitProfile = async () => {
+    if (!fullName || !dob || !height || !weight) {
+      Alert.alert("Error", "Please fill all fields");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (MOCK_MODE) {
+        console.log("✅ MOCK: Saving profile...");
+        console.log({ fullName, dob, gender, height, weight, profilePic });
+        setTimeout(() => {
+          setLoading(false);
+          Alert.alert("Success", " profile saved", [
+            { text: "OK", onPress: () => navigation.replace("Dashboard") },
+          ]);
+        }, 1000);
+        return;
+      }
+
+      // 🟣 Update user profile
+      await updateUser({
+        username: fullName,
+        height: Number(height),
+        weight: Number(weight),
+        gender,
+        Dob: dob.toISOString(),
+      });
+
+      // 🟣 Upload profile picture
+      if (profilePic) {
+        await uploadMedia([profilePic]);
+      }
+
+      Alert.alert("Success", "Profile saved successfully", [
+        { text: "OK", onPress: () => navigation.replace("Dashboard") },
+      ]);
+    } catch (err: any) {
+      Alert.alert("Error", err.message || "Failed to save profile");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -235,6 +174,7 @@ const AthleteDetailsForm = ({ navigation }: any) => {
         </View>
       </View>
 
+      {/* Height & Weight */}
       <View style={styles.row}>
         <View style={[styles.formGroup, { flex: 1 }]}>
           <Text style={styles.label}>Height (cm)</Text>
@@ -263,7 +203,7 @@ const AthleteDetailsForm = ({ navigation }: any) => {
 
       {/* Submit */}
       <TouchableOpacity
-        style={styles.submitBtn}
+        style={[styles.submitBtn, loading && { opacity: 0.6 }]}
         onPress={submitProfile}
         disabled={loading}
       >
@@ -276,6 +216,8 @@ const AthleteDetailsForm = ({ navigation }: any) => {
     </ScrollView>
   );
 };
+
+export default AthleteDetailsForm;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#151117" },
@@ -308,10 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
   },
-  pickerWrapper: {
-    backgroundColor: "#322938",
-    borderRadius: 8,
-  },
+  pickerWrapper: { backgroundColor: "#322938", borderRadius: 8 },
   picker: { color: "#fff", height: 50, width: "100%" },
   row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
   submitBtn: {
@@ -323,5 +262,3 @@ const styles = StyleSheet.create({
   },
   submitText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
 });
-
-export default AthleteDetailsForm;

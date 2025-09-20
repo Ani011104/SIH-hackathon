@@ -1,10 +1,13 @@
-import React from "react";
+// src/pages/Dashboard.tsx
+
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FooterNav from "../components/FooterNav";
@@ -12,9 +15,56 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import { exercises } from "../config/exercises";
 
+// ✅ Import local storage score
+import { getOverallScore } from "../services/storage";
+import { getFinalResult } from "../services";
+
 type DashboardProps = StackScreenProps<RootStackParamList, "Dashboard">;
 
+const MOCK_MODE = true; // ✅ Toggle ON for offline testing
+
 const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
+  const [loading, setLoading] = useState(true);
+  const [overallScore, setOverallScore] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchScore = async () => {
+      try {
+        if (MOCK_MODE) {
+          console.log("✅ MOCK: Fetching dashboard score...");
+
+          // ✅ Try getting saved score from storage first
+          const saved = await getOverallScore();
+          setTimeout(() => {
+            setOverallScore(saved ?? 85); // fallback to 85 if no saved score
+            setLoading(false);
+          }, 800);
+          return;
+        }
+
+        // ✅ Real backend fetch
+        const res = await getFinalResult();
+        console.log("Dashboard result:", res);
+
+        if (res && res.total_score) {
+          setOverallScore(res.total_score);
+        } else if (typeof res === "number") {
+          setOverallScore(res);
+        } else {
+          setOverallScore(0);
+        }
+      } catch (err) {
+        console.error(err);
+        setOverallScore(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const unsubscribe = navigation.addListener("focus", fetchScore);
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -58,13 +108,19 @@ const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Personal Score</Text>
           <View style={styles.card}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.muted}>Overall Score</Text>
-              <Text style={styles.score}>85</Text>
-              <Text style={styles.muted}>
-                Based on your last assessment
-              </Text>
-            </View>
+            {loading ? (
+              <ActivityIndicator color="#7817a1" size="large" />
+            ) : (
+              <View style={{ flex: 1 }}>
+                <Text style={styles.muted}>Overall Score</Text>
+                <Text style={styles.score}>
+                  {overallScore ? `${overallScore}` : "No score yet"}
+                </Text>
+                <Text style={styles.muted}>
+                  Based on your last assessment
+                </Text>
+              </View>
+            )}
             <View style={styles.scoreAvatar} />
           </View>
           <TouchableOpacity style={styles.detailsBtn}>
@@ -83,7 +139,7 @@ const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.activityTitle}>{ex.title}</Text>
-                <Text style={styles.activityDate}>2024-01-15</Text>
+                <Text style={styles.activityDate}>2025-09-18</Text>
               </View>
               <MaterialIcons name="chevron-right" size={22} color="#aaa" />
             </View>
@@ -96,6 +152,8 @@ const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
     </View>
   );
 };
+
+export default Dashboard;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#121212" },
@@ -171,5 +229,3 @@ const styles = StyleSheet.create({
   activityTitle: { color: "#fff", fontWeight: "600" },
   activityDate: { color: "#bbb", fontSize: 12 },
 });
-
-export default Dashboard;
