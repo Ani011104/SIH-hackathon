@@ -4,162 +4,163 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   ScrollView,
+  TouchableOpacity,
+  ImageBackground,
   ActivityIndicator,
+  Alert,
 } from "react-native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
-import { getUserProfile, clearStorage } from "../services/storage";
+import { getUserProfile } from "../services";
+import { clearStorage } from "../services/storage";
 
-type ProfileProps = StackScreenProps<RootStackParamList, "Profile">;
+type Props = StackScreenProps<RootStackParamList, "Profile">;
 
-const Profile: React.FC<ProfileProps> = ({ navigation }) => {
-  const [user, setUser] = useState<any>(null);
+const MOCK_MODE = true; // ✅ Toggle ON for offline testing
+
+const Profile: React.FC<Props> = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+
+  const loadProfile = async () => {
+    setLoading(true);
+    try {
+      if (MOCK_MODE) {
+        setTimeout(() => {
+          setProfile({
+            name: "Chinmai SD",
+            role: "Athlete",
+            location: "Bangalore, India",
+            dob: "17 october 2005",
+            height: "180 cm",
+            weight: "63 kg",
+          });
+          setLoading(false);
+        }, 800);
+        return;
+      }
+
+      const res = await getUserProfile();
+      if (res?.user) {
+        setProfile(res.user);
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert("Error", "Unable to load profile");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadProfile = async () => {
-      const data = await getUserProfile();
-      setUser(data);
-      setLoading(false);
-    };
     const unsubscribe = navigation.addListener("focus", loadProfile);
     return unsubscribe;
   }, [navigation]);
 
+  const handleLogout = () => {
+    Alert.alert("Logout", "Are you sure you want to log out?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: async () => {
+          await clearStorage();
+          navigation.replace("Login");
+        },
+      },
+    ]);
+  };
+
   if (loading) {
     return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#702186" />
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#7817a1" />
         <Text style={{ color: "#fff", marginTop: 10 }}>Loading profile...</Text>
-      </View>
-    );
-  }
-
-  if (!user) {
-    return (
-      <View style={styles.loading}>
-        <Text style={{ color: "#fff" }}>No profile found. Please login.</Text>
-        <TouchableOpacity
-          style={styles.logoutBtn}
-          onPress={async () => {
-            await clearStorage();
-            navigation.replace("Login");
-          }}
-        >
-          <Text style={styles.logoutText}>Go to Login</Text>
-        </TouchableOpacity>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Text style={styles.backText}>←</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Profile</Text>
-          <View style={{ width: 24 }} />
-        </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <MaterialIcons name="arrow-back" size={26} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Profile</Text>
+        <TouchableOpacity>
+          <MaterialIcons name="more-vert" size={26} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
-        {/* Profile Info */}
-        <View style={styles.profileSection}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Avatar & Info */}
+        <View style={styles.center}>
           <View style={styles.avatarWrapper}>
-            <Image
+            <ImageBackground
               source={{
                 uri:
-                  user.avatar ||
-                  "https://via.placeholder.com/100x100.png?text=Avatar",
+                  "https://lh3.googleusercontent.com/aida-public/AB6AXuBxf9cWl33htLElQdCkGPCvcGQlswJmnjAtS2g5y70rFFQfsawNF_BKlFdMTKeDqcYbgVQJGgBGmCgUVEl1Q8XkXbrKikSoOBYXycfK2AWfr6M5ksZrI14BO4HRa-sJjFsOrHOJca4eW5nML82qlXIHO6PnXja52rtUyiwGFtANpqXm6RpiLmU5VoxCz7ms7BmCP3HntQJ5WZd242eWEGganS6LSxHyHSEZF2Nm3uX4ftyAjYvoC6Wdu9qWqMP-54vP_qrjsAuZbFo",
               }}
               style={styles.avatar}
+              imageStyle={{ borderRadius: 64 }}
             />
-            <TouchableOpacity style={styles.editButton}>
-              <Text style={{ color: "#fff", fontSize: 12 }}>✎</Text>
+            <TouchableOpacity style={styles.avatarEdit}>
+              <MaterialIcons name="edit" size={18} color="#fff" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.role}>{user.role}</Text>
-          <Text style={styles.userId}>ID: {user.id}</Text>
+          <Text style={styles.name}>{profile?.name}</Text>
+          <Text style={styles.role}>{profile?.role}</Text>
+          <Text style={styles.location}>{profile?.location}</Text>
         </View>
 
-        {/* Stats */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Text style={styles.statValue}>{user.assessments || 0}</Text>
-            <Text style={styles.statLabel}>Assessments</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statValue}>{user.submissions || 0}</Text>
-            <Text style={styles.statLabel}>Submissions</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statValue}>{user.pending || 0}</Text>
-            <Text style={styles.statLabel}>Pending</Text>
-          </View>
-        </View>
-
-        {/* Personal Info */}
-        <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Personal Information</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Date of Birth</Text>
-            <Text style={styles.infoValue}>{user.dob}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Gender</Text>
-            <Text style={styles.infoValue}>{user.gender}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Sport</Text>
-            <Text style={styles.infoValue}>{user.sport}</Text>
+        {/* Personal Details */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Personal Details</Text>
+          <View style={styles.detailCard}>
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Date of Birth</Text>
+              <Text style={styles.value}>{profile?.dob}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Location</Text>
+              <Text style={styles.value}>{profile?.location}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Height</Text>
+              <Text style={styles.value}>{profile?.height}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Weight</Text>
+              <Text style={styles.value}>{profile?.weight}</Text>
+            </View>
           </View>
         </View>
 
-        {/* 🔹 Complete Profile Section */}
-        <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Complete Your Profile</Text>
+        {/* Account */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Account</Text>
+          <View style={styles.detailCard}>
+            <TouchableOpacity
+              style={styles.detailRow}
+              onPress={() => navigation.navigate("AthleteDetails")}
+            >
+              <Text style={styles.label}>Settings</Text>
+              <MaterialIcons name="chevron-right" size={20} color="#bbb" />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => navigation.navigate("AddressForm")}
-          >
-            <Text style={styles.actionBtnText}>
-              {user.address ? "Edit Address" : "Add Address"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => navigation.navigate("MediaForm")}
-          >
-            <Text style={styles.actionBtnText}>
-              {user.media ? "Update Photos" : "Upload Photos"}
-            </Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.detailRow} onPress={handleLogout}>
+              <Text style={[styles.label, { color: "#ff4d4d" }]}>Logout</Text>
+              <MaterialIcons name="logout" size={20} color="#ff4d4d" />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
 
-      {/* Logout Button */}
-      <TouchableOpacity
-        style={styles.logoutBtn}
-        onPress={async () => {
-          await clearStorage();
-          navigation.replace("Login");
-        }}
-      >
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-
-      {/* Footer Nav */}
+      {/* Footer */}
       <FooterNav navigation={navigation} active="Profile" />
     </View>
   );
@@ -168,87 +169,48 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
 export default Profile;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0d0d0d" },
-  scrollContainer: { padding: 16, paddingBottom: 120 },
-  header: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
-  backButton: { width: 24 },
-  backText: { fontSize: 20, color: "#fff" },
-  headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff",
+  container: { flex: 1, backgroundColor: "#1c1121" },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 16,
   },
-
-  profileSection: { alignItems: "center", marginBottom: 20 },
+  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  scrollContent: { padding: 16, paddingBottom: 100 },
+  center: { alignItems: "center", marginBottom: 20 },
   avatarWrapper: { position: "relative" },
-  avatar: { width: 100, height: 100, borderRadius: 50 },
-  editButton: {
+  avatar: { width: 128, height: 128, borderRadius: 64 },
+  avatarEdit: {
     position: "absolute",
     bottom: 0,
     right: 0,
-    backgroundColor: "#702186",
-    borderRadius: 12,
-    padding: 4,
+    backgroundColor: "#7817a1",
+    padding: 6,
+    borderRadius: 20,
   },
-  name: { fontSize: 22, fontWeight: "bold", color: "#fff", marginTop: 10 },
-  role: { fontSize: 16, color: "#aaa" },
-  userId: { fontSize: 12, color: "#666" },
-
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 20,
-  },
-  statCard: {
-    flex: 1,
-    marginHorizontal: 4,
-    backgroundColor: "#1e1e1e",
-    borderRadius: 12,
-    padding: 12,
-    alignItems: "center",
-  },
-  statValue: { fontSize: 20, fontWeight: "bold", color: "#ed6037" },
-  statLabel: { fontSize: 12, color: "#aaa" },
-
-  infoSection: {
-    backgroundColor: "#1e1e1e",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-  },
-  sectionTitle: { fontSize: 18, fontWeight: "bold", color: "#fff", marginBottom: 10 },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  name: { fontSize: 22, fontWeight: "bold", color: "#fff", marginTop: 8 },
+  role: { fontSize: 16, color: "#bbb" },
+  location: { fontSize: 14, color: "#aaa" },
+  section: { marginBottom: 24 },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#bbb",
     marginBottom: 8,
+    textTransform: "uppercase",
   },
-  infoLabel: { color: "#aaa" },
-  infoValue: { color: "#fff" },
-
-  actionBtn: {
-    backgroundColor: "#702186",
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginTop: 10,
+  detailCard: {
+    backgroundColor: "rgba(255,255,255,0.05)",
+    borderRadius: 16,
   },
-  actionBtnText: { color: "#fff", textAlign: "center", fontWeight: "bold" },
-
-  logoutBtn: {
-    backgroundColor: "#ed6037",
-    borderRadius: 8,
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     padding: 14,
-    alignItems: "center",
-    margin: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.1)",
   },
-  logoutText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-
-  loading: {
-    flex: 1,
-    backgroundColor: "#0d0d0d",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  label: { color: "#bbb" },
+  value: { color: "#fff", fontWeight: "500" },
 });

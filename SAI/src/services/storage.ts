@@ -1,51 +1,53 @@
 // src/services/storage.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Save phone number
+// ========== AUTH ==========
+export const saveToken = async (token: string) => {
+  await AsyncStorage.setItem("authToken", token);
+};
+
+export const getToken = async () => {
+  return await AsyncStorage.getItem("authToken");
+};
+
 export const savePhone = async (phone: string) => {
-  await AsyncStorage.setItem("phone", phone);
+  await AsyncStorage.setItem("userPhone", phone);
 };
 
-// Get phone
-export const getPhone = async (): Promise<string | null> => {
-  return await AsyncStorage.getItem("phone");
+// Save overall score
+export const saveOverallScore = async (score: number) => {
+  try {
+    await AsyncStorage.setItem("overallScore", score.toString());
+  } catch (e) {
+    console.error("Error saving overall score", e);
+  }
 };
 
-// Save user profile (with address + media)
-export const saveUserProfile = async (profile: any) => {
-  await AsyncStorage.setItem("userData", JSON.stringify(profile));
-  await AsyncStorage.setItem("athleteForm", "true");
+// Get overall score
+export const getOverallScore = async (): Promise<number | null> => {
+  try {
+    const value = await AsyncStorage.getItem("overallScore");
+    return value ? parseInt(value, 10) : null;
+  } catch (e) {
+    console.error("Error reading overall score", e);
+    return null;
+  }
+};
+export const getPhone = async () => {
+  return await AsyncStorage.getItem("userPhone");
 };
 
-// Get user profile
-export const getUserProfile = async () => {
-  const json = await AsyncStorage.getItem("userData");
-  return json ? JSON.parse(json) : null;
+// ========== PROFILE ==========
+export const setProfileCompleted = async (value: boolean) => {
+  await AsyncStorage.setItem("profileCompleted", value ? "true" : "false");
 };
 
-// Save address separately
-export const saveAddress = async (address: any) => {
-  const user = await getUserProfile();
-  const updated = { ...user, address };
-  await saveUserProfile(updated);
-  return updated;
-};
-
-// Save media separately
-export const saveMedia = async (media: string[]) => {
-  const user = await getUserProfile();
-  const updated = { ...user, media };
-  await saveUserProfile(updated);
-  return updated;
-};
-
-// Check if profile is complete
-export const isProfileCompleted = async (): Promise<boolean> => {
-  const val = await AsyncStorage.getItem("athleteForm");
+export const isProfileCompleted = async () => {
+  const val = await AsyncStorage.getItem("profileCompleted");
   return val === "true";
 };
 
-// Clear all storage (logout)
+// ========== CLEAR STORAGE ==========
 export const clearStorage = async () => {
   await AsyncStorage.clear();
 };
