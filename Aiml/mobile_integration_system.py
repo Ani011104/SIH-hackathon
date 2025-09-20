@@ -4,6 +4,7 @@ from collections import Counter
 from flask import Flask, request, jsonify
 import logging
 from datetime import datetime, timezone
+import base64
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -343,38 +344,47 @@ def analyze_mobile():
             temp_path, exercise_type, user_id, base_dir, ref_dir, generate_video, save_json
         )
 
-        return jsonify(results)
+        # Provide base64 encoded video (if generated) and include saved JSON content inline.
+        response_payload = {"analysis_result": results}
+
+        # include saved JSON file content if present
+        saved_json_name = results.get('saved_json')
+        if saved_json_name:
+            saved_json_path = os.path.join(base_dir, "json_result", saved_json_name)
+            try:
+                if os.path.exists(saved_json_path):
+                    with open(saved_json_path, 'r', encoding='utf-8') as jf:
+                        response_payload['saved_json_content'] = json.load(jf)
+                        response_payload['saved_json_filename'] = saved_json_name
+                else:
+                    logger.warning(f"Saved JSON file not found: {saved_json_path}")
+            except Exception as e:
+                logger.warning(f"Failed to read saved JSON: {e}")
+
+        # include generated video as base64 string (careful: large payloads)
+        gen_video_name = results.get('generated_video')
+        if gen_video_name:
+            gen_video_path = os.path.join(base_dir, "generated_video", gen_video_name)
+            try:
+                if os.path.exists(gen_video_path):
+                    with open(gen_video_path, 'rb') as vf:
+                        encoded = base64.b64encode(vf.read()).decode('utf-8')
+                        response_payload['generated_video_base64'] = encoded
+                        response_payload['generated_video_filename'] = gen_video_name
+                else:
+                    logger.warning(f"Generated video not found: {gen_video_path}")
+            except Exception as e:
+                logger.warning(f"Failed to read/encode generated video: {e}")
+
+        # add a note about size (client should handle large payloads accordingly)
+        if 'generated_video_base64' in response_payload:
+            response_payload['note'] = "generated_video_base64 may be large; consider downloading via direct file endpoint."
+
+        return jsonify(response_payload)
     except Exception as e:
         logger.error(f"❌ Mobile API error: {e}")
         return jsonify({'error': f'Mobile analysis failed: {str(e)}'}), 500
-
-# health-check route
-@app.route('/mobile_health', methods=['GET'])
-def mobile_health():
-    return jsonify({
-        'status': 'healthy' if mobile_system else 'error',
-        'system_loaded': mobile_system is not None,
-        'version': 'mobile_v1.0',
-        'optimization': 'smartphone',
-        'features': [
-            '📱 Mobile-optimized processing',
-            '⚡ Real-time rep counting in video',
-            '🔍 Fast cheat detection',
-            '👤 Face verification',
-            '🎯 Keypoint visualization',
-            '📄 JSON file output',
-            '🚀 3x faster than desktop version'
-        ],
-        'supported_exercises': ['pushups', 'situps', 'squats', 'vertical_jump', 'long_jump'],
-        'mobile_improvements': [
-            '✅ Frame skipping for speed',
-            '✅ Resolution optimization', 
-            '✅ Memory efficient buffers',
-            '✅ Real-time counting display',
-            '✅ Mobile-friendly video encoding',
-            '✅ Simplified UI overlays'
-        ]
-    })
+# ...existing code...
 
 # NEW comprehensive route (replaces v3comprehensive_analysis.py)
 @app.route('/comprehensiveAnalysis', methods=['POST'])
