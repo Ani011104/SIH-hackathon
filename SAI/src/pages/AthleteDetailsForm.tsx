@@ -16,8 +16,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "react-native-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getPhone, getAuthToken, setProfileCompleted } from "../services/storage";
 
-const API_BASE = "http://10.237.136.179:5000";
+const API_BASE = "http://10.204.81.179:3001";
 
 const AthleteDetailsForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState("");
@@ -31,9 +32,9 @@ const AthleteDetailsForm = ({ navigation }: any) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const pickImage = async () => {
-    const options = {
-      mediaType: "photo" as const,
-      quality: 0.8,
+    const options: ImagePicker.ImageLibraryOptions = {
+      mediaType: "photo",
+      quality: 0.8 as ImagePicker.PhotoQuality,
     };
 
     ImagePicker.launchImageLibrary(options, (response) => {
@@ -46,7 +47,7 @@ const AthleteDetailsForm = ({ navigation }: any) => {
 
   // Update user profile function
   const updateUser = async (userData: any) => {
-    const token = await AsyncStorage.getItem("authToken");
+    const token = await getAuthToken(); // ✅ Use your service
     
     const response = await fetch(`${API_BASE}/user/updateuser`, {
       method: "PATCH",
@@ -67,11 +68,10 @@ const AthleteDetailsForm = ({ navigation }: any) => {
 
   // Upload media function
   const uploadMedia = async (imageAsset: any) => {
-    const token = await AsyncStorage.getItem("authToken");
+    const token = await getAuthToken(); // ✅ Use your service
     
     const formData = new FormData();
     
-    // Create the file object correctly
     const fileObj = {
       uri: imageAsset.uri,
       type: imageAsset.type || "image/jpeg",
@@ -84,8 +84,6 @@ const AthleteDetailsForm = ({ navigation }: any) => {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
-        // Don't set Content-Type header when using FormData
-        // React Native will set it automatically with boundary
       },
       body: formData,
     });
@@ -107,15 +105,14 @@ const AthleteDetailsForm = ({ navigation }: any) => {
     setLoading(true);
 
     try {
-      // Get saved phone + token
-      const phone = await AsyncStorage.getItem("userPhone");
-      const token = await AsyncStorage.getItem("authToken");
+      // ✅ Use your storage service
+      const phone = await getPhone();
+      const token = await getAuthToken();
 
       if (!phone || !token) {
         throw new Error("User not logged in properly");
       }
 
-      // Update user profile first
       const userData = {
         username: fullName,
         phone,
@@ -123,15 +120,17 @@ const AthleteDetailsForm = ({ navigation }: any) => {
         weight: Number(weight),
         gender,
         Dob: dob.toISOString(),
-        email: "test@gmail.com", // You might want to make this optional or get from user input
+        email: "test@gmail.com",
       };
 
       await updateUser(userData);
 
-      // Upload profile pic if selected
       if (profilePic) {
         await uploadMedia(profilePic);
       }
+
+      // ✅ Mark profile as completed using your service
+      await setProfileCompleted();
 
       setLoading(false);
       Alert.alert("Success", "Profile saved successfully", [
@@ -146,7 +145,7 @@ const AthleteDetailsForm = ({ navigation }: any) => {
       Alert.alert("Error", error.message || "Failed to save profile");
     }
   };
-
+  
   const formatDate = (date: Date | null) => {
     if (!date) return "";
     return date.toISOString().split("T")[0]; // YYYY-MM-DD

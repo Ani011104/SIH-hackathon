@@ -10,8 +10,8 @@ import {
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const API_BASE = "http://10.237.136.179:5000";
+import { saveAuthToken, savePhone } from "../services/storage";
+const API_BASE = "http://10.204.81.179:3001";
 
 
 type Props = StackScreenProps<RootStackParamList, "OtpVerify">;
@@ -44,42 +44,41 @@ export default function OtpVerify({ route, navigation }: Props) {
 
 
 const handleVerify = async () => {
-  const enteredOtp = otp.join("");
-  if (enteredOtp.length !== 6) {
-    Alert.alert("Error", "Please enter the complete 6-digit OTP");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API_BASE}/auth/signup/verifyotp`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone, otp: enteredOtp }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "OTP verification failed");
-
-    // ✅ Save token
-    if (data.token) {
-      await AsyncStorage.setItem("authToken", data.token);
+    const enteredOtp = otp.join("");
+    if (enteredOtp.length !== 6) {
+      Alert.alert("Error", "Please enter the complete 6-digit OTP");
+      return;
     }
 
-    // ✅ Save phone number
-    if (phone) {
-      await AsyncStorage.setItem("userPhone", phone);
-    }
+    try {
+      const res = await fetch(`${API_BASE}/auth/signup/verifyotp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, otp: enteredOtp }),
+      });
 
-    // ✅ Navigation
-    if (data.profileCompleted) {
-      navigation.replace("Dashboard");
-    } else {
-      navigation.replace("AthleteDetails");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "OTP verification failed");
+
+      // ✅ Use your storage service
+      if (data.token) {
+        await saveAuthToken(data.token);
+      }
+
+      if (phone) {
+        await savePhone(phone);
+      }
+
+      // Navigation
+      if (data.profileCompleted) {
+        navigation.replace("Dashboard");
+      } else {
+        navigation.replace("AthleteDetails");
+      }
+    } catch (err: any) {
+      Alert.alert("Error", err.message || "Network error or server unavailable");
     }
-  } catch (err: any) {
-    Alert.alert("Error", err.message || "Network error or server unavailable");
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
