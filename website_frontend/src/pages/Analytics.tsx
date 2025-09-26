@@ -85,41 +85,6 @@ export default function Analytics() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-       
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Top Performing Tests</CardTitle>
-            <CardDescription>Most popular and highest scoring assessments</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                { test: "Vertical Jump", participants: 4, avgScore: 84.2, trend: "up" },
-                { test: "Squats", participants: 5, avgScore: 79.8, trend: "up" },
-                { test: "Sit-ups (1 min)", participants: 7, avgScore: 76.5, trend: "down" },
-                { test: "Push-ups", participants: 8, avgScore: 81.3, trend: "up" },
-              ].map((test) => (
-                <div key={test.test} className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">{test.test}</div>
-                    <div className="text-sm text-muted-foreground">{test.participants} participants</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{test.avgScore}</span>
-                      <Badge variant={test.trend === "up" ? "default" : "secondary"}>
-                        {test.trend === "up" ? "↗" : "↘"}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
 
       <Card>
         <CardHeader>

@@ -13,8 +13,8 @@ const stats = [
   {
     title: "Pending Reviews",
     value: "4",
-    icon: AlertTriangle,
-    change: "3 flagged for review"
+    icon: AlertTriangle
+    
   },
   {
     title: "Top Performers",
@@ -22,12 +22,6 @@ const stats = [
     icon: Trophy,
     change: "Above 90th percentile"
   },
-  {
-    title: "Active Regions",
-    value: "8",
-    icon: MapPin,
-    change: "Across 8 states"
-  }
 ];
 
 const recentActions = [
@@ -36,7 +30,7 @@ const recentActions = [
     athlete: "Amrutha",
     test: "Vertical Jump",
     score: "50cm",
-    status: "flagged",
+    status: "verified",
     timestamp: "2 mins ago"
   },
   {

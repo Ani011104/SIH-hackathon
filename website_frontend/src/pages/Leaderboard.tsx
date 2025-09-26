@@ -121,16 +121,7 @@ export default function Leaderboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Perfect Scores</CardTitle>
-            <Award className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">15</div>
-            <p className="text-xs text-muted-foreground">This year</p>
-          </CardContent>
-        </Card>
+        
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

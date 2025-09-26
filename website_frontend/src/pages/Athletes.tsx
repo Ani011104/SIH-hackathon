@@ -15,9 +15,6 @@ const athletes = [
     age: 19,
     gender: "Female",
     location: "Bangalore",
-    status: "Verified",
-    lastTest: "Sit-ups",
-    score: "32reps",
     date: "2024-01-15"
   },
   {
@@ -26,9 +23,7 @@ const athletes = [
     age: 20,
     gender: "Male",
     location: "Mumbai",
-    status: "Flagged",
-    lastTest: "Vertical Jump",
-    score: "45cm",
+    status: "Pending",
     date: "2024-01-14"
   },
   {
@@ -37,9 +32,6 @@ const athletes = [
     age: 21,
     gender: "Male",
     location: "Hyderabad",
-    status: "Pending",
-    lastTest: "Sit-ups",
-    score: "45 reps",
     date: "2024-01-13"
   },
   {
@@ -48,9 +40,7 @@ const athletes = [
     age: 20,
     gender: "Male",
     location: "Chennai",
-    status: "Verified",
-    lastTest: "Push-ups",
-    score: "50 reps",
+  
     date: "2024-01-12"
   },
   {
@@ -59,34 +49,31 @@ const athletes = [
     age:16 ,
     gender: "Female",
     location: "Delhi",
-    status: "Pending",
-    lastTest: "Squats",
-    score: "25 reps",
+    
     date: "2024-01-11"
   }
 ];
 
 export default function Athletes() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [ageFilter, setAgeFilter] = useState("all");
   const [genderFilter, setGenderFilter] = useState("all");
   const navigate = useNavigate();
 
   const filteredAthletes = athletes.filter(athlete => {
     const matchesSearch = athlete.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          athlete.location.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || athlete.status.toLowerCase() === statusFilter;
+    const matchesAge = ageFilter === "all" || athlete.age.toString() === ageFilter;
     const matchesGender = genderFilter === "all" || athlete.gender.toLowerCase() === genderFilter;
     
-    return matchesSearch && matchesStatus && matchesGender;
+    return matchesSearch && matchesAge && matchesGender;
   });
 
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
       case 'verified':
         return <Badge className="bg-success text-success-foreground">Verified</Badge>;
-      case 'flagged':
-        return <Badge variant="destructive">Flagged</Badge>;
+      
       case 'pending':
         return <Badge variant="secondary">Pending</Badge>;
       default:
@@ -117,15 +104,19 @@ export default function Athletes() {
                 className="pl-10"
               />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select value={ageFilter} onValueChange={setAgeFilter}>
               <SelectTrigger className="w-32">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder="Age" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="verified">Verified</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="flagged">Flagged</SelectItem>
+                <SelectItem value="all">All Age</SelectItem>
+                <SelectItem value="16">16</SelectItem>
+                <SelectItem value="17">17</SelectItem>
+                <SelectItem value="18">18</SelectItem>
+                <SelectItem value="19">19</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="21">21</SelectItem>
+                
               </SelectContent>
             </Select>
             <Select value={genderFilter} onValueChange={setGenderFilter}>
@@ -159,9 +150,7 @@ export default function Athletes() {
                 <TableHead>Age</TableHead>
                 <TableHead>Gender</TableHead>
                 <TableHead>Location</TableHead>
-                <TableHead>Last Test</TableHead>
-                <TableHead>Score</TableHead>
-                <TableHead>Status</TableHead>
+    
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -172,9 +161,9 @@ export default function Athletes() {
                   <TableCell>{athlete.age}</TableCell>
                   <TableCell>{athlete.gender}</TableCell>
                   <TableCell>{athlete.location}</TableCell>
-                  <TableCell>{athlete.lastTest}</TableCell>
-                  <TableCell className="font-mono">{athlete.score}</TableCell>
-                  <TableCell>{getStatusBadge(athlete.status)}</TableCell>
+                  
+                  
+                  
                   <TableCell>
                     <Button
                       variant="outline"

@@ -123,71 +123,17 @@ export default function AthleteProfile() {
             <p className="text-sm text-muted-foreground">Verified</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-muted-foreground">{athleteData.pendingTests}</div>
-            <p className="text-sm text-muted-foreground">Pending</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-destructive">{athleteData.flaggedTests}</div>
-            <p className="text-sm text-muted-foreground">Flagged</p>
-          </CardContent>
-        </Card>
+
+        
       </div>
 
       <Tabs defaultValue="tests" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="tests">Test History</TabsTrigger>
-          <TabsTrigger value="videos">Video Evidence</TabsTrigger>
           <TabsTrigger value="analysis">Performance Analysis</TabsTrigger>
+          <TabsTrigger value="videos">Video Evidence</TabsTrigger>
+          
         </TabsList>
 
-        <TabsContent value="tests" className="space-y-4">
-          {testHistory.map((test) => (
-            <Card key={test.id}>
-              <CardContent className="pt-6">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-lg font-semibold">{test.test}</h3>
-                      {getStatusBadge(test.status)}
-                      {test.status === 'Flagged' && (
-                        <AlertTriangle className="h-4 w-4 text-destructive" />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        {test.date}
-                      </span>
-                      {test.video && (
-                        <Button variant="link" size="sm" className="p-0 h-auto">
-                          <Play className="h-4 w-4 mr-1" />
-                          View Video
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className="text-right space-y-1">
-                    <div className="text-2xl font-bold">{test.score}</div>
-                    <div className="text-sm text-muted-foreground">
-                      Benchmark: {test.benchmark}
-                    </div>
-                  </div>
-                </div>
-                
-                {test.notes && (
-                  <div className="mt-4 p-3 bg-muted rounded-lg">
-                    <p className="text-sm">{test.notes}</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
 
         <TabsContent value="videos" className="space-y-4">
           <Card>
