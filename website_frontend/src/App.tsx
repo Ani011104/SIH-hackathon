@@ -28,7 +28,7 @@ const App = () => (
           <Route path="/athletes" element={<DashboardLayout><Athletes /></DashboardLayout>} />
           <Route path="/athlete/:id" element={<DashboardLayout><AthleteProfile /></DashboardLayout>} />
           <Route path="/analytics" element={<DashboardLayout><Analytics /></DashboardLayout>} />
-        
+          
           <Route path="/leaderboard" element={<DashboardLayout><Leaderboard /></DashboardLayout>} />
           <Route path="/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
           <Route path="*" element={<NotFound />} />
