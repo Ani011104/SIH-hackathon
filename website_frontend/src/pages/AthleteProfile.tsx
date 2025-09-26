@@ -14,7 +14,7 @@ const athleteData = {
   gender: "Male",
   location: "Bengalore",
   photo: "/placeholder-avatar.jpg",
-  status: "Flagged",
+  status: "verified",
   totalTests: 12,
   verifiedTests: 9,
   pendingTests: 2,
@@ -28,7 +28,7 @@ const testHistory = [
     score: "68cm",
     benchmark: "65cm",
     date: "2025-01-15",
-    status: "Flagged",
+    status: "verified",
     video: true,
     notes: "Suspicious technique detected"
   },
