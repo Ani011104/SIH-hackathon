@@ -129,7 +129,7 @@ export default function Events() {
                 <TableHead>Sport</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Location</TableHead>
-                <TableHead>Actions</TableHead>
+                
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -139,16 +139,7 @@ export default function Events() {
                   <TableCell>{event.sport}</TableCell>
                   <TableCell>{event.date}</TableCell>
                   <TableCell>{event.location}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate(`/event/${event.id}`)}
-                    >
-                      <Eye className="h-3 w-3 mr-1" />
-                      View
-                    </Button>
-                  </TableCell>
+                 
                 </TableRow>
               ))}
             </TableBody>
