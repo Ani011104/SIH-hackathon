@@ -35,10 +35,7 @@ const Dashboard: React.FC<DashProps> = ({navigation}) => {
           <View style={{flexDirection: "column", gap: 8}}>
             <TouchableOpacity style={{flex: 1, flexDirection: 'row', alignItems: 'center', paddingVertical: 14, borderRadius: 12, backgroundColor: '#7817a1'}}
               onPress={() => 
-                navigation.navigate('Record',{
-                  exerciseId: exercises[0].id,
-                  exerciseName: exercises[0].key,
-                })
+                navigation.navigate('SelectSport')
               }>
                 <MaterialIcons name="videocam" size={28} color='#fff' style={{marginLeft: 28}}/>
                 <Text style={{color: '#fff', fontSize: 16, fontWeight: '600', marginLeft: 40}}>Record New Test</Text>
@@ -63,14 +60,16 @@ const Dashboard: React.FC<DashProps> = ({navigation}) => {
                 </View>
                 <View style={{}}>
                   <TouchableOpacity style={{ backgroundColor:'#7817a1', padding:10, borderRadius: 10, width:100, alignItems: 'center'}}>
-                    <Text style={{color: '#fff'}}>join event</Text>
+                    <Text style={{color: '#fff', fontWeight: 'bold'}}>Join event</Text>
                   </TouchableOpacity>
                 </View>
               </View>
 
               <Text style={{color:'#bbb', textAlign: 'center'}}>All events in the country</Text>
 
-              <TouchableOpacity style={{flex:1, flexDirection: 'row', backgroundColor:'#333333', alignItems: 'center', paddingVertical: 8, justifyContent: 'center', borderRadius: 24}}>
+              <TouchableOpacity style={{flex:1, flexDirection: 'row', backgroundColor:'#333333', alignItems: 'center', paddingVertical: 8, justifyContent: 'center', borderRadius: 24}} 
+              onPress={()=>
+                navigation.navigate('Events')}>
                 <Text style={{color:'#fff'}}>View details</Text>
                 <MaterialIcons name="east" size={24} color='#fff' style={{marginLeft:8}}/>
               </TouchableOpacity>

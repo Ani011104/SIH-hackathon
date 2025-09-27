@@ -1,141 +1,345 @@
-import React, { useState, useEffect } from "react";
+// src/pages/Record.tsx
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
+  Linking,
   Alert,
-  SafeAreaView,
-  Image,
+  ActivityIndicator,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import { exercises } from "../config/exercises";
+import FooterNav from "../components/FooterNav";
+import Tts from "react-native-tts";
+import {
+  Camera,
+  useCameraDevices,
+  CameraDevice,
+  CameraDeviceFormat,
+} from "react-native-vision-camera";
 
-type RecordProps = StackScreenProps<RootStackParamList, "Record">;
+type Props = StackScreenProps<RootStackParamList, "Record">;
 
-const Record: React.FC<RecordProps> = ({ route, navigation }) => {
-  const { exerciseId } = route.params as RootStackParamList["Record"];
-  const currentIndex = Math.max(0, exercises.findIndex((ex) => ex.id === exerciseId));
-  const exercise = currentIndex >= 0 ? exercises[currentIndex] : exercises[0];
+const Record: React.FC<Props> = ({ route, navigation }) => {
+  const { exerciseId } = route.params || { exerciseId: exercises[0].id };
 
-  const DEFAULT_DURATION_SECONDS = 60;
-  const [timer, setTimer] = useState(DEFAULT_DURATION_SECONDS);
-  const [isRunning, setIsRunning] = useState(false);
+  const currentIndex = Math.max(
+    0,
+    exercises.findIndex((ex) => ex.id === exerciseId)
+  );
+  const exercise = exercises[currentIndex] ?? exercises[0];
 
+  const [recording, setRecording] = useState(false);
+  const [preCountdown, setPreCountdown] = useState<number | null>(null);
+  const [exerciseTimer, setExerciseTimer] = useState<number | null>(null);
+  const [permission, setPermission] = useState(false);
+
+  const camera = useRef<Camera>(null);
+  const devices = useCameraDevices();
+  const device: CameraDevice | undefined = devices.find(
+    (d) => d.position === "back"
+  );
+
+  const format: CameraDeviceFormat | undefined = device?.formats.find(
+    (f) => f.videoHeight <= 720
+  );
+
+  // Permissions
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | undefined;
-    if (isRunning && timer > 0) {
-      interval = setInterval(() => setTimer((previous: number) => previous - 1), 1000);
-    } else if (timer === 0) {
-      Alert.alert("Time's up!", "Move to the next exercise.");
-      setIsRunning(false);
+    (async () => {
+      const cam = await Camera.requestCameraPermission();
+      const mic = await Camera.requestMicrophonePermission();
+      setPermission(cam === "granted" && mic === "granted");
+    })();
+  }, []);
+
+  // Text to speech helper
+  const safeSpeak = async (text: string) => {
+    try {
+      const status = await Tts.getInitStatus();
+      if (status) {
+        Tts.stop();
+        Tts.setDefaultLanguage("en-US");
+        Tts.setDefaultRate(0.5);
+        Tts.speak(text);
+      }
+    } catch (err) {
+      console.warn("TTS unavailable:", err);
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isRunning, timer]);
+  };
+
+  // Restart current exercise
+  const handleRestart = () => {
+    navigation.replace("Record", {
+      exerciseId: exercise.id,
+      exerciseName: exercise.key,
+    });
+  };
+
+  // Go directly to next exercise (no processing)
+  const handleRecordNext = () => {
+    if (recording) {
+      Alert.alert("Please stop recording first");
+      return;
+    }
+    if (currentIndex < exercises.length - 1) {
+      navigation.replace("Record", {
+        exerciseId: exercises[currentIndex + 1].id,
+        exerciseName: exercises[currentIndex + 1].key,
+      });
+    } else {
+      navigation.replace("AssessmentResults", { results: {} });
+    }
+  };
+
+  // Start countdown then recording
+  const handleStart = () => {
+    if (recording) return;
+    setRecording(true);
+    setPreCountdown(3);
+  };
+
+  // Pre-countdown
+  useEffect(() => {
+    if (preCountdown === null) return;
+    if (preCountdown < 0) {
+      setPreCountdown(null);
+      setExerciseTimer(60);
+      startRecording();
+      return;
+    }
+    safeSpeak(preCountdown === 0 ? "Go!" : String(preCountdown));
+    const timeout = setTimeout(() => setPreCountdown(preCountdown - 1), 1000);
+    return () => clearTimeout(timeout);
+  }, [preCountdown]);
+
+  // Timer
+  useEffect(() => {
+    if (exerciseTimer === null) return;
+    if (exerciseTimer <= 0) {
+      stopRecording();
+      return;
+    }
+    const timeout = setTimeout(() => setExerciseTimer(exerciseTimer - 1), 1000);
+    return () => clearTimeout(timeout);
+  }, [exerciseTimer]);
+
+  // Start recording
+  const startRecording = async () => {
+    try {
+      if (camera.current) {
+        await camera.current.startRecording({
+          flash: "off",
+          onRecordingFinished: (video) => {
+            console.log("📹 Video recorded:", video.path);
+            // After stop → show processing screen
+            navigation.replace("Processing", {
+              videoPath: video.path,
+              exerciseIndex: currentIndex,
+            });
+          },
+          onRecordingError: (err) => {
+            console.error("❌ Recording error:", err);
+            setRecording(false);
+            Alert.alert(
+              "Recording Error",
+              "Failed to record video. Please try again."
+            );
+          },
+        });
+      }
+    } catch (err) {
+      console.error("❌ Start recording error:", err);
+      setRecording(false);
+    }
+  };
+
+  // Stop recording
+  const stopRecording = async () => {
+    try {
+      if (camera.current) {
+        await camera.current.stopRecording();
+      }
+    } catch (err) {
+      console.error("❌ Stop recording error:", err);
+    } finally {
+      setRecording(false);
+      setExerciseTimer(null);
+    }
+  };
+
+  // Permission not granted
+  if (!device || !permission) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator color="#fff" size="large" />
+        <Text style={{ color: "#fff", marginTop: 10 }}>
+          Requesting camera permission…
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <MaterialIcons name="arrow-back" size={28} color="#fff" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <View style={styles.backBtn}>
+            <MaterialIcons name="arrow-back" size={24} color="#fff" />
+          </View>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Fitness Assessment</Text>
-        <View style={{ width: 48 }} />
+        <View style={{ width: 40 }} />
       </View>
 
-      {/* Progress */}
-      <View style={styles.progressContainer}>
-        <Text style={styles.exerciseText}>Exercise {currentIndex + 1} of {exercises.length}</Text>
-        <View style={styles.progressBar}>
-          <View
-            style={[
-              styles.progressFill,
-              { width: `${((currentIndex + 1) / exercises.length) * 100}%` },
-            ]}
+      <ScrollView style={{ flex: 1 }}>
+        {/* Progress */}
+        <View style={styles.progressWrapper}>
+          <Text style={styles.progressText}>
+            Exercise {currentIndex + 1} of {exercises.length}
+          </Text>
+          <View style={styles.progressBar}>
+            <View
+              style={[
+                styles.progressFill,
+                { width: `${((currentIndex + 1) / exercises.length) * 100}%` },
+              ]}
+            />
+          </View>
+        </View>
+
+        {/* Camera preview */}
+        <View style={styles.videoBox}>
+          <Camera
+            ref={camera}
+            style={StyleSheet.absoluteFill}
+            device={device}
+            format={format}
+            isActive={true}
+            video={true}
+            audio={true}
           />
+          <View style={styles.overlay}>
+            {preCountdown !== null ? (
+              <Text style={styles.countdownText}>
+                {preCountdown === 0 ? "GO!" : preCountdown}
+              </Text>
+            ) : recording ? (
+              <Text style={styles.timerText}>
+                {exerciseTimer !== null ? `${exerciseTimer}s` : ""}
+              </Text>
+            ) : (
+              <TouchableOpacity
+                style={styles.playBtn}
+                onPress={handleStart}
+                disabled={recording}
+              >
+                <MaterialIcons name="play-arrow" size={40} color="#fff" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-      </View>
 
-      {/* Video Placeholder */}
-      <View style={styles.videoBox}>
-        <Image
-          source={{ uri: "https://placehold.co/600x400" }}
-          style={{ width: "100%", height: "100%", borderRadius: 16 }}
-        />
-        <View style={styles.overlay}>
-          <TouchableOpacity
-            style={styles.playBtn}
-            onPress={() => setIsRunning(true)}
-          >
-            <MaterialIcons name="play-arrow" size={40} color="#fff" />
+        {/* Stop Recording */}
+        {recording && (
+          <TouchableOpacity style={styles.stopBtn} onPress={stopRecording}>
+            <Text style={styles.stopBtnText}>⏹ Stop Recording</Text>
           </TouchableOpacity>
+        )}
+
+        {/* Info */}
+        <View style={styles.infoBox}>
+          <Text style={styles.exerciseTitle}>{exercise.title}</Text>
+          <Text style={styles.exerciseDesc}>{exercise.description}</Text>
+          <Text style={styles.exerciseInstructions}>
+            {exercise.instructions}
+          </Text>
+
+          {exercise.tutorialVideo && (
+            <TouchableOpacity
+              style={styles.tutorialBtn}
+              onPress={() => Linking.openURL(exercise.tutorialVideo!)}
+            >
+              <Text style={styles.tutorialBtnText}>▶ Watch Tutorial</Text>
+            </TouchableOpacity>
+          )}
         </View>
-      </View>
+      </ScrollView>
 
-      {/* Exercise Info */}
-      <Text style={styles.exerciseName}>{exercise.description ? exercise.title : exercise.title}</Text>
-      <Text style={styles.description}>{exercise.description}</Text>
-      <Text style={styles.timer}>Time Remaining: {timer}s</Text>
-
-      {/* Buttons */}
-      <View style={styles.actions}>
+      {/* Footer */}
+      <View style={styles.footerActions}>
         <TouchableOpacity
-          style={[styles.btn, { backgroundColor: "#7817a1" }]}
-          onPress={() => {
-            const nextIndex = currentIndex + 1;
-            const nextEx = exercises[nextIndex];
-            if (nextEx) {
-              navigation.replace("Record", { exerciseId: nextEx.id, exerciseName: nextEx.key } as RootStackParamList["Record"]);
-            } else {
-              Alert.alert("Completed!", "All exercises done.");
-              navigation.replace("Dashboard");
-            }
-          }}
+          style={[styles.footerBtn, { backgroundColor: "#332938" }]}
+          onPress={handleRestart}
         >
-          <Text style={styles.btnText}>Record Next Exercise</Text>
+          <Text style={styles.footerBtnText}>Restart</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
-          style={[styles.btn, { backgroundColor: "#1F1A21" }]}
-          onPress={() => {
-            setTimer(DEFAULT_DURATION_SECONDS);
-            setIsRunning(false);
-          }}
+          style={[styles.footerBtn, { backgroundColor: "#7817a1" }]}
+          onPress={handleRecordNext}
         >
-          <Text style={styles.btnText}>Restart</Text>
+          <Text style={styles.footerBtnText}>
+            {currentIndex < exercises.length - 1
+              ? "Next Exercise"
+              : "Finish & Analyze"}
+          </Text>
         </TouchableOpacity>
       </View>
+
+      <FooterNav navigation={navigation} active="Record" />
     </SafeAreaView>
   );
 };
 
+export default Record;
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#100D11", padding: 16 },
+  container: { flex: 1, backgroundColor: "#161117" },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    padding: 16,
+    justifyContent: "space-between",
   },
-  backBtn: { width: 48, height: 48, alignItems: "center", justifyContent: "center" },
-  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-
-  progressContainer: { marginBottom: 12 },
-  exerciseText: { color: "#D4C3DA", fontSize: 14, marginBottom: 6 },
-  progressBar: { height: 8, borderRadius: 8, backgroundColor: "#1F1A21" },
-  progressFill: { height: 8, borderRadius: 8, backgroundColor: "#7817a1" },
-
-  videoBox: { width: "100%", aspectRatio: 16 / 9, marginVertical: 12 },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.3)",
+  backBtn: {
+    backgroundColor: "#332938",
+    borderRadius: 20,
+    padding: 8,
+    width: 40,
+    height: 40,
     alignItems: "center",
     justifyContent: "center",
+  },
+  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  progressWrapper: { paddingHorizontal: 16, marginBottom: 12 },
+  progressText: { color: "#fff", fontSize: 14, marginBottom: 6 },
+  progressBar: { height: 8, borderRadius: 8, backgroundColor: "#4c3d52" },
+  progressFill: {
+    height: 8,
+    borderRadius: 8,
+    backgroundColor: "#7817a1",
+  },
+  videoBox: {
+    margin: 16,
     borderRadius: 16,
+    backgroundColor: "#000",
+    aspectRatio: 1 / 1,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
   },
   playBtn: {
     width: 64,
@@ -145,14 +349,71 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  exerciseName: { fontSize: 20, fontWeight: "bold", color: "#fff", marginTop: 12 },
-  description: { fontSize: 14, color: "#D4C3DA", marginVertical: 6 },
-  timer: { fontSize: 16, fontWeight: "600", color: "#fff", marginVertical: 8 },
-
-  actions: { flexDirection: "column", gap: 12, marginTop: 16 },
-  btn: { padding: 14, borderRadius: 24, alignItems: "center" },
-  btnText: { color: "#fff", fontWeight: "bold" },
+  countdownText: {
+    fontSize: 64,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  timerText: {
+    fontSize: 36,
+    fontWeight: "bold",
+    color: "#00ff88",
+  },
+  stopBtn: {
+    alignSelf: "center",
+    marginVertical: 12,
+    backgroundColor: "red",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  stopBtnText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  infoBox: { paddingHorizontal: 16, marginBottom: 24 },
+  exerciseTitle: { fontSize: 22, fontWeight: "bold", color: "#fff" },
+  exerciseDesc: { color: "#bbb", marginTop: 6 },
+  exerciseInstructions: { color: "#ccc", marginTop: 8, fontStyle: "italic" },
+  tutorialBtn: {
+    marginTop: 12,
+    backgroundColor: "#332938",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignSelf: "flex-start",
+  },
+  tutorialBtnText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  footerActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+    padding: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#332938",
+    backgroundColor: "#161117",
+  },
+  footerBtn: {
+    flex: 1,
+    height: 48,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  footerBtnText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  loading: {
+    flex: 1,
+    backgroundColor: "#161117",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
-
-export default Record;
