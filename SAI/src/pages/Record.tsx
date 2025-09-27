@@ -141,7 +141,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
             // After stop → show processing screen
             navigation.replace("Processing", {
               videoPath: video.path,
-              exerciseIndex: currentIndex,
+              exerciseIndex: String(currentIndex),
             });
           },
           onRecordingError: (err) => {

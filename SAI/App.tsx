@@ -15,6 +15,7 @@ import Profile from "./src/pages/Profile";
 import Leaderboard from "./src/pages/Leaderboard";
 import Events from "./src/pages/Events";
 import SelectSport from "./src/pages/SelectSport";
+import Processing from "./src/pages/Processing";
 
 import AssessmentResults from "./src/pages/AssessmentResults";
 import {SafeAreaProvider} from "react-native-safe-area-context";
@@ -92,7 +93,7 @@ export type RootStackParamList = {
   AddressForm: undefined;
   MediaForm: undefined;
   Record: { exerciseId: string; exerciseName: string };
-  Processing: { videoPath: string; exerciseId: string };
+  Processing: { videoPath: string; exerciseIndex: string };
   ScoreAnalysis: undefined;
   AssessmentResults: { results: any };
   Dashboard: undefined;
@@ -121,7 +122,7 @@ const App = () => {
         <Stack.Screen name="AddressForm" component={AddressForm} />
         <Stack.Screen name="MediaForm" component={MediaForm} />
         <Stack.Screen name="Record" component={Record} />
-      
+          <Stack.Screen name="Processing" component={Processing} />
         <Stack.Screen name="ScoreAnalysis" component={ScoreAnalysis} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="Profile" component={Profile} />
