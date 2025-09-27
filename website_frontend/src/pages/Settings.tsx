@@ -17,6 +17,36 @@ export default function Settings() {
     { id: 3, name: "Amar", email: "amar@gmail.com", role: "Reviewer", status: "inactive", lastLogin: "2025-08-10" },
   ]);
 
+  // State for form inputs
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("");
+
+  // Function to handle form submission
+  const handleAddOfficial = () => {
+    if (fullName && email && role) {
+      const newOfficial = {
+        id: officials.length + 1, // Simple ID generation (consider using UUID in production)
+        name: fullName,
+        email,
+        role: role.charAt(0).toUpperCase() + role.slice(1), // Capitalize role
+        status: "active", // Default status
+        lastLogin: new Date().toISOString().split("T")[0], // Current date
+      };
+      setOfficials([...officials, newOfficial]);
+      // Reset form
+      setFullName("");
+      setEmail("");
+      setPhone("");
+      setRole("");
+    }
+  };
+
+  // Function to handle deleting an official
+  const handleDeleteOfficial = (id: number) => {
+    setOfficials(officials.filter(official => official.id !== id));
+  };
 
   return (
     <div className="space-y-6">
@@ -34,22 +64,14 @@ export default function Settings() {
       <Tabs defaultValue="officials" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="officials">Officials</TabsTrigger>
-           <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
 
         <TabsContent value="officials" className="space-y-6">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Manage Officials</CardTitle>
-                  <CardDescription>Add, edit, and manage dashboard user accounts</CardDescription>
-                </div>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Official
-                </Button>
-              </div>
+              <CardTitle>Manage Officials</CardTitle>
+              <CardDescription>Add, edit, and manage dashboard user accounts</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -72,12 +94,16 @@ export default function Settings() {
                       <Button variant="outline" size="sm">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => handleDeleteOfficial(official.id)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
                 ))}
+                <Button className="mt-4">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Official
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -91,19 +117,36 @@ export default function Settings() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full Name</Label>
-                  <Input id="fullName" placeholder="Enter full name" />
+                  <Input
+                    id="fullName"
+                    placeholder="Enter full name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" placeholder="Enter email address" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" type="tel" placeholder="Enter phone number" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="Enter phone number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">Role</Label>
-                  <Select>
+                  <Select value={role} onValueChange={setRole}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
@@ -115,14 +158,14 @@ export default function Settings() {
                   </Select>
                 </div>
                 <div className="md:col-span-2">
-                  <Button className="w-full">Create Official Account</Button>
+                  <Button className="w-full" onClick={handleAddOfficial}>
+                    Create Official Account
+                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
-
-      
 
         <TabsContent value="notifications" className="space-y-6">
           <Card>
@@ -167,7 +210,6 @@ export default function Settings() {
             </CardContent>
           </Card>
         </TabsContent>
-        
       </Tabs>
     </div>
   );
