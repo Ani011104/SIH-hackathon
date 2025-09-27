@@ -14,8 +14,9 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
-import { getUserProfile } from "../services";
+import { getUserProfile } from "../services/storage";
 import { clearStorage } from "../services/storage";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 type Props = StackScreenProps<RootStackParamList, "Profile">;
 
@@ -84,6 +85,7 @@ const Profile: React.FC<Props> = ({ navigation }) => {
   }
 
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor: '#121212'}}>
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
@@ -162,14 +164,16 @@ const Profile: React.FC<Props> = ({ navigation }) => {
 
       {/* Footer */}
       <FooterNav navigation={navigation} active="Profile" />
+     
     </View>
+     </SafeAreaView>
   );
 };
 
 export default Profile;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#1c1121" },
+  container: { flex: 1, backgroundColor: "#121212" },
   header: {
     flexDirection: "row",
     alignItems: "center",

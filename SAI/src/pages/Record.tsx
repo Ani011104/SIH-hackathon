@@ -5,11 +5,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   ScrollView,
   Linking,
   Alert,
+  ActivityIndicator,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
@@ -45,12 +46,11 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
     (d) => d.position === "back"
   );
 
-  // ✅ Pick format with max height ≤ 480
   const format: CameraDeviceFormat | undefined = device?.formats.find(
-    (f) => f.videoHeight <= 480
+    (f) => f.videoHeight <= 720
   );
 
-  // request permissions
+  // Permissions
   useEffect(() => {
     (async () => {
       const cam = await Camera.requestCameraPermission();
@@ -59,7 +59,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
     })();
   }, []);
 
-  // 🔊 Safe TTS
+  // Text to speech helper
   const safeSpeak = async (text: string) => {
     try {
       const status = await Tts.getInitStatus();
@@ -74,6 +74,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
     }
   };
 
+  // Restart current exercise
   const handleRestart = () => {
     navigation.replace("Record", {
       exerciseId: exercise.id,
@@ -81,6 +82,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
     });
   };
 
+  // Go directly to next exercise (no processing)
   const handleRecordNext = () => {
     if (recording) {
       Alert.alert("Please stop recording first");
@@ -92,17 +94,18 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
         exerciseName: exercises[currentIndex + 1].key,
       });
     } else {
-      navigation.replace("ScoreAnalysis");
+      navigation.replace("AssessmentResults", { results: {} });
     }
   };
 
+  // Start countdown then recording
   const handleStart = () => {
     if (recording) return;
     setRecording(true);
     setPreCountdown(3);
   };
 
-  // pre-countdown
+  // Pre-countdown
   useEffect(() => {
     if (preCountdown === null) return;
     if (preCountdown < 0) {
@@ -111,13 +114,12 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
       startRecording();
       return;
     }
-
     safeSpeak(preCountdown === 0 ? "Go!" : String(preCountdown));
     const timeout = setTimeout(() => setPreCountdown(preCountdown - 1), 1000);
     return () => clearTimeout(timeout);
   }, [preCountdown]);
 
-  // timer (only UI, no auto-next)
+  // Timer
   useEffect(() => {
     if (exerciseTimer === null) return;
     if (exerciseTimer <= 0) {
@@ -128,49 +130,58 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
     return () => clearTimeout(timeout);
   }, [exerciseTimer]);
 
-  // camera recording
+  // Start recording
   const startRecording = async () => {
     try {
       if (camera.current) {
         await camera.current.startRecording({
           flash: "off",
           onRecordingFinished: (video) => {
-            console.log("Video file:", video.path);
-            // ✅ Navigate to Processing screen
+            console.log("📹 Video recorded:", video.path);
+            // After stop → show processing screen
             navigation.replace("Processing", {
               videoPath: video.path,
-              exerciseId: exercise.id,
+              exerciseIndex: currentIndex,
             });
           },
           onRecordingError: (err) => {
-            console.error("Recording error", err);
+            console.error("❌ Recording error:", err);
             setRecording(false);
+            Alert.alert(
+              "Recording Error",
+              "Failed to record video. Please try again."
+            );
           },
         });
       }
     } catch (err) {
-      console.error("Start recording error:", err);
+      console.error("❌ Start recording error:", err);
       setRecording(false);
     }
   };
 
+  // Stop recording
   const stopRecording = async () => {
     try {
       if (camera.current) {
         await camera.current.stopRecording();
       }
     } catch (err) {
-      console.error("Stop recording error:", err);
+      console.error("❌ Stop recording error:", err);
     } finally {
       setRecording(false);
       setExerciseTimer(null);
     }
   };
 
+  // Permission not granted
   if (!device || !permission) {
     return (
       <View style={styles.loading}>
-        <Text style={{ color: "#fff" }}>Requesting camera permission…</Text>
+        <ActivityIndicator color="#fff" size="large" />
+        <Text style={{ color: "#fff", marginTop: 10 }}>
+          Requesting camera permission…
+        </Text>
       </View>
     );
   }
@@ -210,7 +221,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
             ref={camera}
             style={StyleSheet.absoluteFill}
             device={device}
-            format={format} // ✅ ensure 480p (or closest lower)
+            format={format}
             isActive={true}
             video={true}
             audio={true}
@@ -236,22 +247,25 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
           </View>
         </View>
 
-        {/* Stop Recording button (separate below camera) */}
+        {/* Stop Recording */}
         {recording && (
           <TouchableOpacity style={styles.stopBtn} onPress={stopRecording}>
             <Text style={styles.stopBtnText}>⏹ Stop Recording</Text>
           </TouchableOpacity>
         )}
 
-        {/* Exercise Info */}
+        {/* Info */}
         <View style={styles.infoBox}>
           <Text style={styles.exerciseTitle}>{exercise.title}</Text>
           <Text style={styles.exerciseDesc}>{exercise.description}</Text>
+          <Text style={styles.exerciseInstructions}>
+            {exercise.instructions}
+          </Text>
 
-          {exercise.tutorialUrl && (
+          {exercise.tutorialVideo && (
             <TouchableOpacity
               style={styles.tutorialBtn}
-              onPress={() => Linking.openURL(exercise.tutorialUrl!)}
+              onPress={() => Linking.openURL(exercise.tutorialVideo!)}
             >
               <Text style={styles.tutorialBtnText}>▶ Watch Tutorial</Text>
             </TouchableOpacity>
@@ -259,7 +273,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Footer buttons */}
+      {/* Footer */}
       <View style={styles.footerActions}>
         <TouchableOpacity
           style={[styles.footerBtn, { backgroundColor: "#332938" }]}
@@ -274,7 +288,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
         >
           <Text style={styles.footerBtnText}>
             {currentIndex < exercises.length - 1
-              ? "Record Next"
+              ? "Next Exercise"
               : "Finish & Analyze"}
           </Text>
         </TouchableOpacity>
@@ -305,7 +319,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-
   progressWrapper: { paddingHorizontal: 16, marginBottom: 12 },
   progressText: { color: "#fff", fontSize: 14, marginBottom: 6 },
   progressBar: { height: 8, borderRadius: 8, backgroundColor: "#4c3d52" },
@@ -314,12 +327,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#7817a1",
   },
-
   videoBox: {
     margin: 16,
     borderRadius: 16,
     backgroundColor: "#000",
-    aspectRatio: 16 / 9,
+    aspectRatio: 1 / 1,
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
@@ -347,7 +359,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#00ff88",
   },
-
   stopBtn: {
     alignSelf: "center",
     marginVertical: 12,
@@ -361,11 +372,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-
-  infoBox: { paddingHorizontal: 16 },
+  infoBox: { paddingHorizontal: 16, marginBottom: 24 },
   exerciseTitle: { fontSize: 22, fontWeight: "bold", color: "#fff" },
   exerciseDesc: { color: "#bbb", marginTop: 6 },
-
+  exerciseInstructions: { color: "#ccc", marginTop: 8, fontStyle: "italic" },
   tutorialBtn: {
     marginTop: 12,
     backgroundColor: "#332938",
@@ -379,12 +389,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 14,
   },
-
   footerActions: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 12,
-    padding: 16,
+    padding: 12,
     borderTopWidth: 1,
     borderTopColor: "#332938",
     backgroundColor: "#161117",

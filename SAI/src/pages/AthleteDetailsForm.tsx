@@ -15,14 +15,10 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "react-native-image-picker";
-// OLD
-// import { updateUser, uploadMedia } from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getPhone, getAuthToken, setProfileCompleted } from "../services/storage";
 
-// NEW
-import { updateUser, uploadMedia } from "../services";
-
-
-const MOCK_MODE = true; // ✅ Toggle ON for testing without backend
+const API_BASE = "http://10.204.81.179:3001";
 
 const AthleteDetailsForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState("");
@@ -34,17 +30,69 @@ const AthleteDetailsForm = ({ navigation }: any) => {
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const pickImage = () => {
-    ImagePicker.launchImageLibrary({ mediaType: "photo", quality: 0.8 }, (res) => {
-      if (res.assets && res.assets[0]) {
-        setProfilePic(res.assets[0]);
+  const pickImage = async () => {
+    const options: ImagePicker.ImageLibraryOptions = {
+      mediaType: "photo",
+      quality: 0.8 as ImagePicker.PhotoQuality,
+    };
+
+    ImagePicker.launchImageLibrary(options, (response) => {
+      if (response.assets && response.assets[0]) {
+        const asset = response.assets[0];
+        setProfilePic(asset); // Store the full asset object
       }
     });
   };
 
-  const formatDate = (date: Date | null) => {
-    if (!date) return "";
-    return date.toISOString().split("T")[0]; // YYYY-MM-DD
+  // Update user profile function
+  const updateUser = async (userData: any) => {
+    const token = await getAuthToken(); // ✅ Use your service
+    
+    const response = await fetch(`${API_BASE}/user/updateuser`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update user");
+    }
+
+    return await response.json();
+  };
+
+  // Upload media function
+  const uploadMedia = async (imageAsset: any) => {
+    const token = await getAuthToken(); // ✅ Use your service
+    
+    const formData = new FormData();
+    
+    const fileObj = {
+      uri: imageAsset.uri,
+      type: imageAsset.type || "image/jpeg",
+      name: imageAsset.fileName || `profile_${Date.now()}.jpg`,
+    };
+    
+    formData.append("media", fileObj as any);
+
+    const response = await fetch(`${API_BASE}/media/upload`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to upload media");
+    }
+
+    return await response.json();
   };
 
   const submitProfile = async () => {
@@ -54,33 +102,35 @@ const AthleteDetailsForm = ({ navigation }: any) => {
     }
 
     setLoading(true);
+
     try {
-      if (MOCK_MODE) {
-        console.log("✅ MOCK: Saving profile...");
-        console.log({ fullName, dob, gender, height, weight, profilePic });
-        setTimeout(() => {
-          setLoading(false);
-          Alert.alert("Success", " profile saved", [
-            { text: "OK", onPress: () => navigation.replace("Dashboard") },
-          ]);
-        }, 1000);
-        return;
+      // ✅ Use your storage service
+      const phone = await getPhone();
+      const token = await getAuthToken();
+
+      if (!phone || !token) {
+        throw new Error("User not logged in properly");
       }
 
-      // 🟣 Update user profile
-      await updateUser({
+      const userData = {
         username: fullName,
         height: Number(height),
         weight: Number(weight),
         gender,
         Dob: dob.toISOString(),
-      });
+        email: "test@gmail.com",
+      };
 
-      // 🟣 Upload profile picture
+      await updateUser(userData);
+
       if (profilePic) {
         await uploadMedia([profilePic]);
       }
 
+      // ✅ Mark profile as completed using your service
+      await setProfileCompleted();
+
+      setLoading(false);
       Alert.alert("Success", "Profile saved successfully", [
         { text: "OK", onPress: () => navigation.replace("Dashboard") },
       ]);
@@ -89,6 +139,11 @@ const AthleteDetailsForm = ({ navigation }: any) => {
     } finally {
       setLoading(false);
     }
+  };
+  
+  const formatDate = (date: Date | null) => {
+    if (!date) return "";
+    return date.toISOString().split("T")[0]; // YYYY-MM-DD
   };
 
   return (
