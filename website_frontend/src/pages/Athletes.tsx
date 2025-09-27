@@ -8,13 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Filter, Download, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const athletes = [
+export const athletes = [
   {
     id: 1,
     name: "Amrutha",
     age: 19,
     gender: "Female",
     location: "Bangalore",
+    status: "Verified", // Add status
     date: "2024-01-15"
   },
   {
@@ -32,6 +33,7 @@ const athletes = [
     age: 21,
     gender: "Male",
     location: "Hyderabad",
+    status: "Verified", // Add status
     date: "2024-01-13"
   },
   {
@@ -40,16 +42,16 @@ const athletes = [
     age: 20,
     gender: "Male",
     location: "Chennai",
-  
+    status: "Pending", // Add status
     date: "2024-01-12"
   },
   {
     id: 5,
     name: "Disha",
-    age:16 ,
+    age: 16,
     gender: "Female",
     location: "Delhi",
-    
+    status: "Verified", // Add status
     date: "2024-01-11"
   }
 ];
