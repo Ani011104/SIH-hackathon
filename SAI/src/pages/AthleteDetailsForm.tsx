@@ -154,10 +154,10 @@ const AthleteDetailsForm = ({ navigation }: any) => {
     >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text style={styles.backBtn}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Athlete Profile</Text>
+        </TouchableOpacity> */}
+        <Text style={styles.title}>        Athlete Profile</Text>
         <View style={{ width: 24 }} />
       </View>
 

@@ -15,7 +15,7 @@ import FooterNav from "../components/FooterNav";
 import { exercises } from "../config/exercises";
 
 // ✅ Import local storage score
-import { getOverallScore } from "../services/storage";
+
 import { getFinalResult } from "../services";
 
 type DashProps = StackScreenProps<RootStackParamList, 'Dashboard'>;

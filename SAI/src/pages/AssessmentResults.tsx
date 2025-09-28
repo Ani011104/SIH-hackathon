@@ -45,11 +45,15 @@ const AssessmentResults: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.sectionTitle}>Individual Exercise Results</Text>
         <View style={{ marginTop: 12 }}>
           {[
-            { icon: "self-improvement", name: "Push-ups", result: "30 reps" },
-            { icon: "directions-run", name: "Squats", result: "40 reps" },
-            { icon: "accessibility", name: "Sit-ups", result: "25 reps" },
-           { icon: "vertical-align-top", name: "Vertical Jump", result: "1m" },
-            { icon: "fitness-center", name: "Long Jump", result: "3.5m" },
+      { icon: "self-improvement", name: "Sit and Reach", result: "15cm" },
+           { icon: "vertical-align-top", name: "Standing Vertical Jump", result: "1m" },
+            { icon: "fitness-center", name: "Standing Broad Jump", result: "3.5m" },
+           { icon: "sports-handball", name: "30m standing start sprint", result: "4.5s" },
+           { icon: "sports-kabaddi", name: "4*10m Shuttle Run", result: "12s" },
+           { icon: "accessibility", name: "Sit-ups", result: "25 reps" },
+            
+            
+                  
           ].map((item, i) => (
             <TouchableOpacity key={i} style={styles.exerciseCard}>
               <View style={styles.exerciseLeft}>

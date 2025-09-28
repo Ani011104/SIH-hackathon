@@ -150,7 +150,7 @@ const Profile: React.FC<Props> = ({ navigation }) => {
               style={styles.detailRow}
               onPress={() => navigation.navigate("AthleteDetails")}
             >
-              <Text style={styles.label}>Settings</Text>
+              <Text style={styles.label}>Edit athlete details</Text>
               <MaterialIcons name="chevron-right" size={20} color="#bbb" />
             </TouchableOpacity>
 

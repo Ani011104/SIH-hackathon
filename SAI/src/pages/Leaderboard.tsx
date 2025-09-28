@@ -200,7 +200,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
 export default Leaderboard;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#161117" },
+  container: { flex: 1, backgroundColor: "#121212" },
   header: {
     flexDirection: "row",
     alignItems: "center",
