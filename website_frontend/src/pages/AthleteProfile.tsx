@@ -204,6 +204,6 @@ export default function AthleteProfile() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>
+  );
 }
