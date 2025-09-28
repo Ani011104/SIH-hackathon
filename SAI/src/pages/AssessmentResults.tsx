@@ -7,7 +7,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import FooterNav from "../components/FooterNav";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
+import i18n from "../i18n";
 type Props = StackScreenProps<RootStackParamList, "AssessmentResults">;
 
 const AssessmentResults: React.FC<Props> = ({ navigation }) => {
@@ -18,31 +18,31 @@ const AssessmentResults: React.FC<Props> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back" size={28} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Assessment Results</Text>
+        <Text style={styles.headerTitle}>{i18n.t("Assessment Results")}</Text>
         <View style={{ width: 28 }} />
       </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
         {/* Congrats Section */}
         <View style={styles.centerText}>
-          <Text style={styles.congratsText}>Congratulations, Chinmai!</Text>
-          <Text style={styles.subText}>You've successfully completed the entire fitness assessment.</Text>
+          <Text style={styles.congratsText}>{i18n.t("Congratulations, Chinmai!")}</Text>
+          <Text style={styles.subText}>{i18n.t("You've successfully completed the entire fitness assessment.")}</Text>
         </View>
 
         {/* Score Summary */}
         <View style={styles.row}>
           <View style={styles.scoreCard}>
-            <Text style={styles.cardLabel}>Total Score</Text>
+            <Text style={styles.cardLabel}>{i18n.t("Total Score")}</Text>
             <Text style={styles.cardValue}>85/100</Text>
           </View>
           <View style={styles.scoreCard}>
-            <Text style={styles.cardLabel}>Overall Rating</Text>
-            <Text style={styles.cardValue}>Excellent</Text>
+            <Text style={styles.cardLabel}>{i18n.t("Overall Rating")}</Text>
+            <Text style={styles.cardValue}>{i18n.t("Excellent")}</Text>
           </View>
         </View>
 
         {/* Individual Exercises */}
-        <Text style={styles.sectionTitle}>Individual Exercise Results</Text>
+        <Text style={styles.sectionTitle}>{i18n.t("Individual Exercise Results")}</Text>
         <View style={{ marginTop: 12 }}>
           {[
       { icon: "self-improvement", name: "Sit and Reach", result: "15cm" },

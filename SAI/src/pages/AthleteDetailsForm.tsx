@@ -17,7 +17,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "react-native-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getPhone, getAuthToken, setProfileCompleted } from "../services/storage";
-
+import i18n from "../i18n";
 const API_BASE = "http://10.204.81.179:3001";
 
 const AthleteDetailsForm = ({ navigation }: any) => {
@@ -157,7 +157,7 @@ const AthleteDetailsForm = ({ navigation }: any) => {
         {/* <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text style={styles.backBtn}>←</Text>
         </TouchableOpacity> */}
-        <Text style={styles.title}>        Athlete Profile</Text>
+        <Text style={styles.title}>{i18n.t("Athlete Profile")}</Text>
         <View style={{ width: 24 }} />
       </View>
 

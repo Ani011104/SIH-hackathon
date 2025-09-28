@@ -20,7 +20,7 @@ import Processing from "./src/pages/Processing";
 import AssessmentResults from "./src/pages/AssessmentResults";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import "./src/i18n";
 const API_BASE = "http://10.204.81.179:3001";
 
 export const checkAuthAndProfile = async () => {

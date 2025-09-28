@@ -15,7 +15,6 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import { sendLoginOtp } from "../services/api";  // ✅ Login OTP
 import { savePhone } from "../services/storage";
-
 type Props = StackScreenProps<RootStackParamList, "Login">;
 
 // // Mock toggle

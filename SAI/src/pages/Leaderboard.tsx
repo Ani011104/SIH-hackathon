@@ -16,7 +16,7 @@ import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import i18n from "../i18n";
 // Mock mode toggle
 const MOCK_MODE = true;
 
@@ -87,7 +87,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back-ios" size={22} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Leaderboard</Text>
+        <Text style={styles.headerTitle}>{i18n.t("Leaderboard")}</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -111,7 +111,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
               source={{
                 uri:
                   currentUser?.avatar ||
-                  "https://via.placeholder.com/80x80.png?text=User",
+                  "https://via.placeholder.com/100x100.png?text=User",
               }}
               style={[
                 styles.avatar,
@@ -162,7 +162,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
               source={{
                 uri:
                   currentUser?.avatar ||
-                  "https://via.placeholder.com/50x50.png?text=User",
+                  "https://lh3.googleusercontent.com/aida-public/AB6AXuBxf9cWl33htLElQdCkGPCvcGQlswJmnjAtS2g5y70rFFQfsawNF_BKlFdMTKeDqcYbgVQJGgBGmCgUVEl1Q8XkXbrKikSoOBYXycfK2AWfr6M5ksZrI14BO4HRa-sJjFsOrHOJca4eW5nML82qlXIHO6PnXja52rtUyiwGFtANpqXm6RpiLmU5VoxCz7ms7BmCP3HntQJ5WZd242eWEGganS6LSxHyHSEZF2Nm3uX4ftyAjYvoC6Wdu9qWqMP-54vP_qrjsAuZbFo",
               }}
               style={styles.rowAvatar}
               imageStyle={{ borderRadius: 25 }}
@@ -180,7 +180,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
               source={{
                 uri:
                   currentUser.avatar ||
-                  "https://via.placeholder.com/50x50.png?text=User",
+                  "https://lh3.googleusercontent.com/aida-public/AB6AXuBxf9cWl33htLElQdCkGPCvcGQlswJmnjAtS2g5y70rFFQfsawNF_BKlFdMTKeDqcYbgVQJGgBGmCgUVEl1Q8XkXbrKikSoOBYXycfK2AWfr6M5ksZrI14BO4HRa-sJjFsOrHOJca4eW5nML82qlXIHO6PnXja52rtUyiwGFtANpqXm6RpiLmU5VoxCz7ms7BmCP3HntQJ5WZd242eWEGganS6LSxHyHSEZF2Nm3uX4ftyAjYvoC6Wdu9qWqMP-54vP_qrjsAuZbFo",
               }}
               style={styles.rowAvatar}
               imageStyle={{ borderRadius: 25 }}

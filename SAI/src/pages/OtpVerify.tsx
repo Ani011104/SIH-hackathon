@@ -14,6 +14,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { saveAuthToken, savePhone } from "../services/storage";
+
 const API_BASE = "http://10.204.81.179:3001";
 
 
@@ -138,7 +139,7 @@ const handleVerify = async () => {
       {/* Resend OTP */}
       <TouchableOpacity
         style={styles.resendBtn}
-        onPress={handleResendOtp}
+        onPress={handleResend}
         disabled={resending}
       >
         {resending ? (

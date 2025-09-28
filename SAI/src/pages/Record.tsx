@@ -23,7 +23,7 @@ import {
   CameraDevice,
   CameraDeviceFormat,
 } from "react-native-vision-camera";
-
+import i18n from "../i18n";
 type Props = StackScreenProps<RootStackParamList, "Record">;
 
 const Record: React.FC<Props> = ({ route, navigation }) => {
@@ -195,7 +195,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
             <MaterialIcons name="arrow-back" size={24} color="#fff" />
           </View>
         </TouchableOpacity> */}
-        <Text style={styles.headerTitle}>Fitness Assessment</Text>
+        <Text style={styles.headerTitle}>{i18n.t("Fitness Assessment")}</Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -203,7 +203,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
         {/* Progress */}
         <View style={styles.progressWrapper}>
           <Text style={styles.progressText}>
-            Exercise {currentIndex + 1} of {exercises.length}
+            {i18n.t("Exercise")} {currentIndex + 1} {i18n.t("of")} {exercises.length}
           </Text>
           <View style={styles.progressBar}>
             <View
@@ -250,7 +250,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
         {/* Stop Recording */}
         {recording && (
           <TouchableOpacity style={styles.stopBtn} onPress={stopRecording}>
-            <Text style={styles.stopBtnText}>⏹ Stop Recording</Text>
+            <Text style={styles.stopBtnText}> Stop Recording</Text>
           </TouchableOpacity>
         )}
 
@@ -259,7 +259,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
           <Text style={styles.exerciseTitle}>{exercise.title}</Text>
           <Text style={styles.exerciseDesc}>{exercise.description}</Text>
           <View style={{backgroundColor: '#1E1E1E', padding: 10, borderRadius: 12, marginTop: 10, borderWidth: 1, borderColor: 'rgba(78, 71, 71, 0.6)'}}>
-            <Text style={{color: '#ccc'}}>Instructions</Text>
+            <Text style={{color: '#ccc'}}>{i18n.t("Instructions")}</Text>
           <Text style={styles.exerciseInstructions}>
             {exercise.instructions}
           </Text>
@@ -270,7 +270,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
               style={styles.tutorialBtn}
               onPress={() => Linking.openURL(exercise.tutorialVideo!)}
             >
-              <Text style={styles.tutorialBtnText}>▶ Watch Tutorial</Text>
+              <Text style={styles.tutorialBtnText}>▶ {i18n.t("Watch Tutorial")}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -282,7 +282,7 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
           style={[styles.footerBtn, { backgroundColor: "#332938" }]}
           onPress={handleRestart}
         >
-          <Text style={styles.footerBtnText}>Restart</Text>
+          <Text style={styles.footerBtnText}>{i18n.t("Restart")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -291,8 +291,8 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
         >
           <Text style={styles.footerBtnText}>
             {currentIndex < exercises.length - 1
-              ? "Next Exercise"
-              : "Finish & Analyze"}
+              ? i18n.t("Next Exercise")
+              : i18n.t("Finish & Analyze")}
           </Text>
         </TouchableOpacity>
       </View>

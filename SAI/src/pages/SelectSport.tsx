@@ -1,3 +1,4 @@
+// src/pages/SelectSport.tsx
 import React, { useState } from "react";
 import {
   View,
@@ -14,6 +15,7 @@ import { RootStackParamList } from "../../App";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FooterNav from "../components/FooterNav";
 import { exercises } from "../config/exercises";
+import i18n from "../i18n";  // ✅ import i18n
 
 type SportProps = StackScreenProps<RootStackParamList, "SelectSport">;
 
@@ -39,19 +41,16 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
 
   const handleNext = () => {
     if (!height || !weight) {
-      alert("Please enter both height and weight.");
+      alert(i18n.t("Please enter both height and weight"));
       return;
     }
     if (selectedSport) {
       navigation.navigate("Record", {
         exerciseId: exercises[0].id,
         exerciseName: exercises[0].key,
-        // You can also pass height and weight if needed
-        // height: height,
-        // weight: weight,
       });
     } else {
-      alert("Please select a sport to continue");
+      alert(i18n.t("Please select a sport to continue"));
     }
   };
 
@@ -73,7 +72,7 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
                 marginBottom: 2,
               }}
             >
-              All the Best For
+              {i18n.t("All The Best For\n Your Tests")}
             </Text>
             <Text
               style={{
@@ -84,7 +83,6 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
                 marginBottom: 20,
               }}
             >
-              Your Test
             </Text>
 
             {/* HEIGHT & WEIGHT INPUTS */}
@@ -97,7 +95,7 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
                 marginBottom: 8,
               }}
             >
-              Athlete Details
+              {i18n.t("Athlete Details")}
             </Text>
 
             <View
@@ -108,7 +106,7 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
               }}
             >
               <TextInput
-                placeholder="Height (cm)"
+                placeholder={i18n.t("Height (cm)")}
                 placeholderTextColor="#aaa"
                 keyboardType="numeric"
                 value={height}
@@ -126,7 +124,7 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
                 }}
               />
               <TextInput
-                placeholder="Weight (kg)"
+                placeholder={i18n.t("Weight (kg)")}
                 placeholderTextColor="#aaa"
                 keyboardType="numeric"
                 value={weight}
@@ -154,7 +152,7 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
                 marginBottom: 8,
               }}
             >
-              Select Your Sport
+              {i18n.t("Select Your Sport")}
             </Text>
           </View>
 
@@ -193,7 +191,7 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
                     fontWeight: "600",
                   }}
                 >
-                  {sport}
+                  {i18n.t(sport)} {/* ✅ sport names translatable */}
                 </Text>
                 {selectedSport === sport && (
                   <MaterialIcons name="check-circle" size={24} color="#fff" />
@@ -227,7 +225,7 @@ const SelectSport: React.FC<SportProps> = ({ navigation }) => {
                   fontWeight: "bold",
                 }}
               >
-                Continue
+                {i18n.t("Continue")}
               </Text>
             </TouchableOpacity>
           </View>

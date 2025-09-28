@@ -13,7 +13,7 @@ import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import { exercises } from "../config/exercises";
-
+import i18n from "../i18n";
 type Props = StackScreenProps<RootStackParamList, "Processing">;
 
 const Processing: React.FC<Props> = ({ navigation, route }) => {

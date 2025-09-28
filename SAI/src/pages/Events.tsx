@@ -6,7 +6,7 @@ import { RootStackParamList } from '../../App';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FooterNav from '../components/FooterNav';
 import { Picker } from '@react-native-picker/picker';
-
+import i18n from '../i18n';
 type EventProps = StackScreenProps<RootStackParamList, 'Events'>;
 
 const StateDropdown = () => {
@@ -59,14 +59,14 @@ const StateDropdown = () => {
                     style={{color: '#fff', height: 50, width: '100%'}}
                     dropdownIconColor={'#fff'}>
 
-                    <Picker.Item label="     Select State" value="" color="#aaa" />
+                    <Picker.Item label={i18n.t("Select State")} value="" color="#aaa" />
                     {indianStates.map((state, index) => (
-                        <Picker.Item key={index} label={state} value={state} color="#fff" />
+                        <Picker.Item key={index} label={i18n.t(state)} value={state} color="#fff" />
                     ))}
                 </Picker>
             </View>
             {selectedstate !== "" && (
-                <Text style={{color: "#00FFAA", marginTop: 10, fontSize: 16,fontWeight: "bold"}}>Selected: {selectedstate}</Text>
+                <Text style={{color: "#00FFAA", marginTop: 10, fontSize: 16,fontWeight: "bold"}}>{i18n.t("Selected")}: {i18n.t(selectedstate)}</Text>
             )}
         </View>
     );
@@ -78,7 +78,7 @@ const Events: React.FC<EventProps> = ({ navigation }) => {
         <View style={{ flex: 1, justifyContent: 'space-between' }}>
             {/* HEADER */}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 14 }}>
-                <Text style={{ color: '#fff', marginLeft: 8, fontSize: 22, fontWeight: "bold" }}>Events</Text>
+                <Text style={{ color: '#fff', marginLeft: 8, fontSize: 22, fontWeight: "bold" }}>{i18n.t("Events")}</Text>
                 <TouchableOpacity style={{ marginRight: 4, width: 48, height: 30, alignItems: 'center', justifyContent: 'center' }}>
                     <MaterialIcons name="settings" size={26} color='#fff' />
                 </TouchableOpacity>
@@ -110,7 +110,7 @@ const Events: React.FC<EventProps> = ({ navigation }) => {
                         <Text style={{color: '#fff', marginLeft: 120}}>08/10/25</Text>
                     </View>
                     <TouchableOpacity style={{backgroundColor:'#7817a1', padding: 10, borderRadius: 30, width:300, flexDirection: "row", alignItems:"center", marginBottom:12, justifyContent: 'center', borderWidth: 0.5, borderColor: 'rgba(78, 71, 71, 0.77)'}}>
-                        <Text style={{color: '#fff'}}>View more</Text>
+                        <Text style={{color: '#fff'}}>{i18n.t("View More")}</Text>
                         <MaterialIcons name="keyboard-arrow-down" size={24} color='#fff' style={{marginLeft:8}}/>
                     </TouchableOpacity>
                 </View>
