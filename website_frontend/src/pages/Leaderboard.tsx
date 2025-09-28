@@ -33,10 +33,10 @@ export default function Leaderboard() {
   };
 
   const regionalRankings = [
-    { region: "North Region", athletes: 10, avgScore: 81.2, topAthlete: "Alex Rodriguez", improvement: "+2.3%" },
-    { region: "West Region", athletes: 7, avgScore: 80.8, topAthlete: "Sarah Chen", improvement: "+1.8%" },
-    { region: "East Region", athletes: 5, avgScore: 78.9, topAthlete: "Marcus Johnson", improvement: "+3.1%" },
-    { region: "South Region", athletes: 8, avgScore: 78.1, topAthlete: "Emily Davis", improvement: "+1.2%" },
+    { region: "North Region", athletes: 10, avgScore: 81.2, topAthlete: "Dhusyanth", improvement: "+2.3%" },
+    { region: "West Region", athletes: 7, avgScore: 80.8, topAthlete: "Aniruddh", improvement: "+1.8%" },
+    { region: "East Region", athletes: 5, avgScore: 78.9, topAthlete: "Amrutha", improvement: "+3.1%" },
+    { region: "South Region", athletes: 8, avgScore: 78.1, topAthlete: "Sumadhwa", improvement: "+1.2%" },
     
   ];
 
