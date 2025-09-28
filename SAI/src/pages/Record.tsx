@@ -190,11 +190,11 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
           <View style={styles.backBtn}>
             <MaterialIcons name="arrow-back" size={24} color="#fff" />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text style={styles.headerTitle}>Fitness Assessment</Text>
         <View style={{ width: 40 }} />
       </View>
@@ -258,9 +258,12 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
         <View style={styles.infoBox}>
           <Text style={styles.exerciseTitle}>{exercise.title}</Text>
           <Text style={styles.exerciseDesc}>{exercise.description}</Text>
+          <View style={{backgroundColor: '#1E1E1E', padding: 10, borderRadius: 12, marginTop: 10, borderWidth: 1, borderColor: 'rgba(78, 71, 71, 0.6)'}}>
+            <Text style={{color: '#ccc'}}>Instructions</Text>
           <Text style={styles.exerciseInstructions}>
             {exercise.instructions}
           </Text>
+          </View>
 
           {exercise.tutorialVideo && (
             <TouchableOpacity
@@ -302,11 +305,11 @@ const Record: React.FC<Props> = ({ route, navigation }) => {
 export default Record;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#161117" },
+  container: { flex: 1, backgroundColor: "#121212", padding: 4 },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16,
+    padding: 20,
     justifyContent: "space-between",
   },
   backBtn: {
@@ -318,7 +321,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  headerTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  headerTitle: { color: "#fff", fontSize: 20, fontWeight: "bold" },
   progressWrapper: { paddingHorizontal: 16, marginBottom: 12 },
   progressText: { color: "#fff", fontSize: 14, marginBottom: 6 },
   progressBar: { height: 8, borderRadius: 8, backgroundColor: "#4c3d52" },
@@ -328,13 +331,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#7817a1",
   },
   videoBox: {
-    margin: 16,
-    borderRadius: 16,
+    margin: 12,
+    borderRadius: 14,
     backgroundColor: "#000",
     aspectRatio: 1 / 1,
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
+    marginLeft : 28
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -375,7 +379,7 @@ const styles = StyleSheet.create({
   infoBox: { paddingHorizontal: 16, marginBottom: 24 },
   exerciseTitle: { fontSize: 22, fontWeight: "bold", color: "#fff" },
   exerciseDesc: { color: "#bbb", marginTop: 6 },
-  exerciseInstructions: { color: "#ccc", marginTop: 8, fontStyle: "italic" },
+  exerciseInstructions: { color: "#ccc", marginTop: 8, marginBottom: 6 },
   tutorialBtn: {
     marginTop: 12,
     backgroundColor: "#332938",
