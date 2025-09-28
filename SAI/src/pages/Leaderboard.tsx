@@ -15,6 +15,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FooterNav from "../components/FooterNav";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // Mock mode toggle
 const MOCK_MODE = true;
@@ -79,6 +80,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
   const isInTop = players.some((p) => p.name === currentUser?.username);
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#121212" }}>
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
@@ -191,6 +193,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
 
       <FooterNav navigation={navigation} active="Leaderboard" />
     </View>
+    </SafeAreaView>
   );
 };
 

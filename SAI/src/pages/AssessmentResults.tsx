@@ -25,7 +25,7 @@ const AssessmentResults: React.FC<Props> = ({ navigation }) => {
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
         {/* Congrats Section */}
         <View style={styles.centerText}>
-          <Text style={styles.congratsText}>Congratulations, Aarav!</Text>
+          <Text style={styles.congratsText}>Congratulations, Chinmai!</Text>
           <Text style={styles.subText}>You've successfully completed the entire fitness assessment.</Text>
         </View>
 
@@ -48,7 +48,7 @@ const AssessmentResults: React.FC<Props> = ({ navigation }) => {
             { icon: "self-improvement", name: "Push-ups", result: "30 reps" },
             { icon: "directions-run", name: "Squats", result: "40 reps" },
             { icon: "accessibility", name: "Sit-ups", result: "25 reps" },
-           { icon: "vertical-align-top", name: "Vertical Jump", result: "2.1m" },
+           { icon: "vertical-align-top", name: "Vertical Jump", result: "1m" },
             { icon: "fitness-center", name: "Long Jump", result: "3.5m" },
           ].map((item, i) => (
             <TouchableOpacity key={i} style={styles.exerciseCard}>
