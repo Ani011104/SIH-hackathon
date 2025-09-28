@@ -7,10 +7,19 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 type FooterNavProps = {
   navigation: StackNavigationProp<RootStackParamList>;
-  active: "Dashboard" | "Record" | "Leaderboard" | "Profile";
+  active: "Dashboard" | "Record" | "Leaderboard" | "Profile" | "";
 };
 
 const FooterNav: React.FC<FooterNavProps> = ({ navigation, active }) => {
+  const handleNavigation = (tabKey: string) => {
+    if (tabKey === "Record") {
+      // 👇 Instead of going to Record directly, go to SelectSport
+      navigation.navigate("SelectSport" as any);
+    } else {
+      navigation.navigate(tabKey as any);
+    }
+  };
+
   return (
     <View style={styles.footer}>
       {[
@@ -22,7 +31,7 @@ const FooterNav: React.FC<FooterNavProps> = ({ navigation, active }) => {
         <TouchableOpacity
           key={tab.key}
           style={styles.footerItem}
-          onPress={() => navigation.navigate(tab.key as any)}
+          onPress={() => handleNavigation(tab.key)}
         >
           <MaterialIcons
             name={tab.icon as any}

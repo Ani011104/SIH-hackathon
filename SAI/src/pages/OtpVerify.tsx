@@ -12,8 +12,10 @@ import {
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
-import { verifyLoginOtp, sendLoginOtp } from "../services/api"; // ✅ Login OTP
-import { saveToken, savePhone } from "../services/storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { saveAuthToken, savePhone } from "../services/storage";
+const API_BASE = "http://10.204.81.179:3001";
+
 
 type Props = StackScreenProps<RootStackParamList, "OtpVerify">;
 
@@ -34,47 +36,53 @@ export default function OtpVerify({ route, navigation }: Props) {
     if (text && index < 5) inputs.current[index + 1]?.focus();
   };
 
-  // ✅ Verify OTP
-  const handleVerify = async () => {
+  const handleKeyPress = (e: any, index: number) => {
+    if (e.nativeEvent.key === "Backspace" && otp[index] === "" && index > 0) {
+      inputs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleResend = () => {
+    setOtp(["", "", "", "", "", ""]);
+    inputs.current[0]?.focus();
+    Alert.alert("OTP Resent", `New OTP sent to +91 ${phone}`);
+  };
+
+
+const handleVerify = async () => {
     const enteredOtp = otp.join("");
     if (enteredOtp.length !== 6) {
       Alert.alert("Error", "Please enter the complete 6-digit OTP");
       return;
     }
 
-    setLoading(true);
     try {
-      const data = await verifyLoginOtp(phone, enteredOtp);
-      console.log("Login verify response:", data);
+      const res = await fetch(`${API_BASE}/auth/signup/verifyotp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, otp: enteredOtp }),
+      });
 
-      if (!data.token) throw new Error(data.message || "OTP verification failed");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "OTP verification failed");
 
-      await saveToken(data.token);
-      await savePhone(phone);
+      // ✅ Use your storage service
+      if (data.token) {
+        await saveAuthToken(data.token);
+      }
 
-      // ✅ Always go to Dashboard after login
-      navigation.replace("Dashboard");
-    } catch (err: any) {
-      Alert.alert("Error", err.message || "Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (phone) {
+        await savePhone(phone);
+      }
 
-  // ✅ Resend OTP
-  const handleResendOtp = async () => {
-    try {
-      setResending(true);
-      const res = await sendLoginOtp(phone);
-      if (res.message?.includes("OTP")) {
-        Alert.alert("Success", "OTP resent successfully");
+      // Navigation
+      if (data.profileCompleted) {
+        navigation.replace("Dashboard");
       } else {
-        Alert.alert("Error", res.message || "Failed to resend OTP");
+        navigation.replace("AthleteDetails");
       }
     } catch (err: any) {
-      Alert.alert("Error", err.message || "Network error");
-    } finally {
-      setResending(false);
+      Alert.alert("Error", err.message || "Network error or server unavailable");
     }
   };
 

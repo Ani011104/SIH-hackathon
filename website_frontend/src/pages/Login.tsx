@@ -49,7 +49,7 @@ export default function Login() {
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="+91 1234-567-898"
                     value={loginData.phone}
                     onChange={(e) => setLoginData(prev => ({ ...prev, phone: e.target.value }))}
                     required

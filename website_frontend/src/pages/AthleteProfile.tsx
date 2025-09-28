@@ -6,31 +6,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, X, AlertTriangle, Play, Calendar, MapPin } from "lucide-react";
+import { athletes } from "./Athletes"; // Adjust path if needed
 
-const athleteData = {
-  id: 1,
-  name: "Dhushyanth",
-  age: 19,
-  gender: "Male",
-  location: "Bengalore",
-  photo: "/placeholder-avatar.jpg",
-  status: "verified",
-  totalTests: 12,
-  verifiedTests: 9,
-  pendingTests: 2,
-  flaggedTests: 1
-};
-
-const testHistory = [
+// Base test templates with same sport names
+const testTemplates = [
   {
     id: 1,
     test: "Vertical Jump",
     score: "68cm",
     benchmark: "65cm",
     date: "2025-01-15",
-    status: "verified",
+    status: "Pending",
     video: true,
-    notes: "Suspicious technique detected"
+    notes: ""
   },
   {
     id: 2,
@@ -40,7 +28,7 @@ const testHistory = [
     date: "2025-01-10",
     status: "Verified",
     video: true,
-    notes: ""
+    notes: "Good"
   },
   {
     id: 3,
@@ -56,9 +44,34 @@ const testHistory = [
 
 export default function AthleteProfile() {
   const { id } = useParams();
+  const athlete = athletes.find(a => a.id === parseInt(id || "0"));
 
-  const getStatusBadge = (status: string) => {
-    switch (status.toLowerCase()) {
+  if (!athlete) {
+    return <div>Athlete not found</div>;
+  }
+
+  // Generate test history with varying number of tests (1 to 3 tests) based on athlete ID
+  const testCount = (athlete.id % 3) + 1; // 1 to 3 tests
+  const testHistory = testTemplates.slice(0, testCount).map(test => ({
+    ...test,
+    id: test.id + athlete.id * 10 // Ensure unique IDs across athletes
+  }));
+
+  const athleteData = {
+    id: athlete.id,
+    name: athlete.name,
+    age: athlete.age,
+    gender: athlete.gender,
+    location: athlete.location,
+    photo: "/placeholder-avatar.jpg",
+    status: athlete.status || "Pending", // Fallback to "Pending" if status is undefined
+    totalTests: testHistory.length,
+    verifiedTests: testHistory.filter(test => test.status.toLowerCase() === "verified").length
+  };
+
+  const getStatusBadge = (status: string | undefined) => {
+    const statusLower = status?.toLowerCase() || "pending"; // Default to "pending" if undefined
+    switch (statusLower) {
       case 'verified':
         return <Badge className="bg-success text-success-foreground">Verified</Badge>;
       case 'flagged':
@@ -66,7 +79,7 @@ export default function AthleteProfile() {
       case 'pending':
         return <Badge variant="secondary">Pending</Badge>;
       default:
-        return <Badge>{status}</Badge>;
+        return <Badge>{statusLower}</Badge>;
     }
   };
 
@@ -110,7 +123,7 @@ export default function AthleteProfile() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{athleteData.totalTests}</div>
@@ -123,17 +136,13 @@ export default function AthleteProfile() {
             <p className="text-sm text-muted-foreground">Verified</p>
           </CardContent>
         </Card>
-
-        
       </div>
 
-      <Tabs defaultValue="tests" className="space-y-4">
+      <Tabs defaultValue="analysis" className="space-y-4">
         <TabsList>
           <TabsTrigger value="analysis">Performance Analysis</TabsTrigger>
           <TabsTrigger value="videos">Video Evidence</TabsTrigger>
-          
         </TabsList>
-
 
         <TabsContent value="videos" className="space-y-4">
           <Card>
@@ -165,18 +174,12 @@ export default function AthleteProfile() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span>Vertical Jump</span>
-                    <span className="font-mono">68cm (+5%)</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Sit-ups</span>
-                    <span className="font-mono">45 reps (+12%)</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Shuttle Run</span>
-                    <span className="font-mono">9.8s (-3%)</span>
-                  </div>
+                  {testHistory.map((test) => (
+                    <div key={test.id} className="flex justify-between items-center">
+                      <span>{test.test}</span>
+                      <span className="font-mono">{test.score}</span>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -201,6 +204,6 @@ export default function AthleteProfile() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>
+  );
 }
