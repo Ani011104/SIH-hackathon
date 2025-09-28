@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, X, AlertTriangle, Play, Calendar, MapPin } from "lucide-react";
 import { athletes } from "./Athletes"; // Adjust path if needed
 
-// Base test templates with same sport names
+// Base test templates with sport names
 const testTemplates = [
   {
     id: 1,
@@ -18,6 +18,7 @@ const testTemplates = [
     date: "2025-01-15",
     status: "Pending",
     video: true,
+    videoUrl: "/videos/vertical-jump.mp4", // Placeholder for other athletes
     notes: ""
   },
   {
@@ -28,6 +29,7 @@ const testTemplates = [
     date: "2025-01-10",
     status: "Verified",
     video: true,
+    videoUrl: "/videos/sit-ups.mp4", // Placeholder for other athletes
     notes: "Good"
   },
   {
@@ -38,7 +40,19 @@ const testTemplates = [
     date: "2025-01-05",
     status: "Verified",
     video: true,
+    videoUrl: "/videos/squats.mp4", // Path to actual squats video
     notes: "Excellent form"
+  },
+  {
+    id: 4,
+    test: "Push-ups",
+    score: "30 reps",
+    benchmark: "25 reps",
+    date: "2025-01-07",
+    status: "Pending",
+    video: true,
+    videoUrl: "/videos/push-ups.mp4", // Path to actual push-ups video
+    notes: "Good effort"
   }
 ];
 
@@ -50,12 +64,23 @@ export default function AthleteProfile() {
     return <div>Athlete not found</div>;
   }
 
-  // Generate test history with varying number of tests (1 to 3 tests) based on athlete ID
-  const testCount = (athlete.id % 3) + 1; // 1 to 3 tests
-  const testHistory = testTemplates.slice(0, testCount).map(test => ({
-    ...test,
-    id: test.id + athlete.id * 10 // Ensure unique IDs across athletes
-  }));
+  // Generate test history based on athlete ID
+  let testHistory;
+  if (athlete.id === 4) { // Sumadhwa
+    testHistory = [
+      testTemplates.find(test => test.test === "Squats"),
+      testTemplates.find(test => test.test === "Push-ups")
+    ].filter(test => test !== undefined).map(test => ({
+      ...test!,
+      id: test!.id + athlete.id * 10 // Ensure unique IDs
+    }));
+  } else {
+    const testCount = (athlete.id % 3) + 1; // 1 to 3 tests for other athletes
+    testHistory = testTemplates.slice(0, testCount).map(test => ({
+      ...test,
+      id: test.id + athlete.id * 10 // Ensure unique IDs
+    }));
+  }
 
   const athleteData = {
     id: athlete.id,
@@ -154,7 +179,14 @@ export default function AthleteProfile() {
                 {testHistory.filter(test => test.video).map((test) => (
                   <div key={test.id} className="border rounded-lg p-4 space-y-2">
                     <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                      <Play className="h-12 w-12 text-muted-foreground" />
+                      {test.videoUrl ? (
+                        <video controls className="w-full h-full rounded-lg">
+                          <source src={test.videoUrl} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : (
+                        <Play className="h-12 w-12 text-muted-foreground" />
+                      )}
                     </div>
                     <h4 className="font-medium">{test.test}</h4>
                     <p className="text-sm text-muted-foreground">{test.date}</p>
