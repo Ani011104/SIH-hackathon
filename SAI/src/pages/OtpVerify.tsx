@@ -1,4 +1,5 @@
 // src/pages/OtpVerify.tsx
+
 import React, { useRef, useState } from "react";
 import {
   View,
@@ -12,11 +13,12 @@ import {
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { saveAuthToken, savePhone } from "../services/storage";
 
-const API_BASE = "http://10.204.81.179:3001";
+const API_BASE = "http://10.219.215.138:3001";
 
+// ✅ Toggle mock mode
+const MOCK_MODE = true;
 
 type Props = StackScreenProps<RootStackParamList, "OtpVerify">;
 
@@ -46,11 +48,14 @@ export default function OtpVerify({ route, navigation }: Props) {
   const handleResend = () => {
     setOtp(["", "", "", "", "", ""]);
     inputs.current[0]?.focus();
-    Alert.alert("OTP Resent", `New OTP sent to +91 ${phone}`);
+    if (MOCK_MODE) {
+      Alert.alert("OTP Resent", `OTP resent to +91 ${phone}`);
+    } else {
+      Alert.alert("OTP Resent", `New OTP sent to +91 ${phone}`);
+    }
   };
 
-
-const handleVerify = async () => {
+  const handleVerify = async () => {
     const enteredOtp = otp.join("");
     if (enteredOtp.length !== 6) {
       Alert.alert("Error", "Please enter the complete 6-digit OTP");
@@ -58,6 +63,20 @@ const handleVerify = async () => {
     }
 
     try {
+      setLoading(true);
+
+      if (MOCK_MODE) {
+        if (enteredOtp === "650222") {
+          await saveAuthToken("mock-token-123");
+          await savePhone(phone);
+          navigation.replace("Dashboard");
+          return;
+        } else {
+          throw new Error("Invalid OTP");
+        }
+      }
+
+      // 🔹 Real API call
       const res = await fetch(`${API_BASE}/auth/signup/verifyotp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,16 +86,9 @@ const handleVerify = async () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "OTP verification failed");
 
-      // ✅ Use your storage service
-      if (data.token) {
-        await saveAuthToken(data.token);
-      }
+      if (data.token) await saveAuthToken(data.token);
+      if (phone) await savePhone(phone);
 
-      if (phone) {
-        await savePhone(phone);
-      }
-
-      // Navigation
       if (data.profileCompleted) {
         navigation.replace("Dashboard");
       } else {
@@ -84,6 +96,8 @@ const handleVerify = async () => {
       }
     } catch (err: any) {
       Alert.alert("Error", err.message || "Network error or server unavailable");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,6 +127,7 @@ const handleVerify = async () => {
               maxLength={1}
               value={digit}
               onChangeText={(text) => handleChange(text, i)}
+              onKeyPress={(e) => handleKeyPress(e, i)}
               ref={(el) => {
                 if (el) inputs.current[i] = el;
               }}
@@ -137,11 +152,7 @@ const handleVerify = async () => {
       </View>
 
       {/* Resend OTP */}
-      <TouchableOpacity
-        style={styles.resendBtn}
-        onPress={handleResend}
-        disabled={resending}
-      >
+      <TouchableOpacity style={styles.resendBtn} onPress={handleResend} disabled={resending}>
         {resending ? (
           <ActivityIndicator color="#7817a1" />
         ) : (
@@ -156,17 +167,10 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#0D0D0D", paddingTop: 40 },
   header: { alignItems: "center", paddingHorizontal: 16 },
   headerTitle: { fontWeight: "bold", fontSize: 20, color: "#fff" },
-
   content: { flex: 1, paddingHorizontal: 24, paddingTop: 24 },
   title: { fontSize: 28, fontWeight: "bold", color: "#fff" },
   subtitle: { fontSize: 14, color: "#E5E5E5", marginTop: 8 },
-
-  otpContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginVertical: 32,
-    gap: 12,
-  },
+  otpContainer: { flexDirection: "row", justifyContent: "center", marginVertical: 32, gap: 12 },
   otpInput: {
     width: 48,
     height: 48,
@@ -178,17 +182,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
   },
-
   footer: { flexDirection: "row", justifyContent: "center", padding: 24 },
-  footerBtn: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-  },
+  footerBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: "center" },
   verifyBtn: { backgroundColor: "#702186" },
   footerBtnText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-
   resendBtn: { alignItems: "center", marginBottom: 24 },
   resendText: { color: "#7817a1", fontSize: 14, fontWeight: "600" },
 });

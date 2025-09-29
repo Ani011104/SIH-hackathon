@@ -89,29 +89,33 @@ const Dashboard: React.FC<DashProps> = ({navigation}) => {
               <View style={{backgroundColor: '#333', padding: 20, borderRadius: 12, flexDirection: "row", alignItems:"center", marginBottom:12}}>
                 <View style={{flex:1}}>
                   <Text style={{color:'#bbb', fontSize: 14}}>{i18n.t("Your Best Score")}</Text>
-                  <Text style={{color: '#fff', fontSize: 28, marginTop: 4, marginLeft: 20, fontWeight: 'bold'}}>85</Text>
+                  <Text style={{color: '#fff', fontSize: 28, marginTop: 4, marginLeft: 20, fontWeight: 'bold'}}>90</Text>
               </View>
               <View style={{width: 80, height: 80, borderRadius: 40, borderWidth: 4, borderColor: "#7817a1", backgroundColor: "#333"}}/>
         </View>
         <View style={{flex:1, flexDirection: 'row', backgroundColor: '#333', padding:12, borderRadius: 12, justifyContent: 'space-between'}}>
-          <Text style={{color:'#fff', marginLeft: 8}}>Squats</Text>
-          <Text style={{color:'#fff', marginRight: 20}}>23</Text>
+          <Text style={{color:'#fff', marginLeft: 8}}>Sit And Reach</Text>
+          <Text style={{color:'#fff', marginRight: 20}}>15 cm</Text>
         </View>
         <View style={{flex:1, flexDirection: 'row', backgroundColor: '#333', padding:12, borderRadius: 12, justifyContent: 'space-between', marginTop: 6}}>
-          <Text style={{color:'#fff', marginLeft: 8}}>Sit-ups</Text>
-          <Text style={{color:'#fff', marginRight: 20}}>20</Text>
+          <Text style={{color:'#fff', marginLeft: 8}}>Standing Vertical jump</Text>
+          <Text style={{color:'#fff', marginRight: 20}}>100 cm</Text>
         </View>
         <View style={{flex:1, flexDirection: 'row', backgroundColor: '#333', padding:12, borderRadius: 12, justifyContent: 'space-between', marginTop: 6}}>
-          <Text style={{color:'#fff', marginLeft: 8}}>Vertical-Jumps</Text>
-          <Text style={{color:'#fff', marginRight: 10}}>60 cm</Text>
+          <Text style={{color:'#fff', marginLeft: 8}}>Standing Broad Jump</Text>
+          <Text style={{color:'#fff', marginRight: 10}}>200 cm</Text>
         </View>
         <View style={{flex:1, flexDirection: 'row', backgroundColor: '#333', padding:12, borderRadius: 12, justifyContent: 'space-between', marginTop: 6}}>
-          <Text style={{color:'#fff', marginLeft: 8}}>Push-ups</Text>
-          <Text style={{color:'#fff', marginRight: 20}}>33</Text>
+          <Text style={{color:'#fff', marginLeft: 8}}>30m Standing Start</Text>
+          <Text style={{color:'#fff', marginRight: 20}}>6 sec</Text>
         </View>
         <View style={{flex:1, flexDirection: 'row', backgroundColor: '#333', padding:12, borderRadius: 12, justifyContent: 'space-between', marginTop: 6}}>
-          <Text style={{color:'#fff', marginLeft: 8}}>Long-jump</Text>
-          <Text style={{color:'#fff', marginRight: 2}}>240 cm</Text>
+          <Text style={{color:'#fff', marginLeft: 8}}>4*10m Shuttle Run</Text>
+          <Text style={{color:'#fff', marginRight: 2}}>12 sec</Text>
+        </View>
+         <View style={{flex:1, flexDirection: 'row', backgroundColor: '#333', padding:12, borderRadius: 12, justifyContent: 'space-between', marginTop: 6}}>
+          <Text style={{color:'#fff', marginLeft: 8}}>Sit-Ups</Text>
+          <Text style={{color:'#fff', marginRight: 2}}>15</Text>
         </View>
       </View>
       </View>

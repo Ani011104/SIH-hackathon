@@ -7,10 +7,12 @@ import {
   Animated,
   Easing,
   Image,
+  Dimensions,
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import LinearGradient from "react-native-linear-gradient";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 // storage helpers
 import { getToken } from "../services/storage";
@@ -25,37 +27,28 @@ interface Props {
 }
 
 const SplashScreen: React.FC<Props> = ({ navigation }) => {
-  const rotate1 = useRef(new Animated.Value(0)).current;
-  const rotate2 = useRef(new Animated.Value(0)).current;
-  const rotate3 = useRef(new Animated.Value(0)).current;
+  const screenWidth = Dimensions.get("window").width;
+  const runAnim = useRef(new Animated.Value(-50)).current; // start off-screen left
 
   useEffect(() => {
-    // 🔄 Animate rings
-    const createLoop = (val: Animated.Value, duration: number) =>
-      Animated.loop(
-        Animated.timing(val, {
-          toValue: 1,
-          duration,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        })
-      );
-
-    createLoop(rotate1, 1500).start();
-    createLoop(rotate2, 2000).start();
-    createLoop(rotate3, 2500).start();
+    // 🏃 Animate runner once
+    Animated.timing(runAnim, {
+      toValue: screenWidth, // run across to right
+      duration: 2000,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
 
     // 🔑 Navigation logic
     const checkLogin = async () => {
       const token = await getToken();
-
       setTimeout(() => {
         if (token) {
           navigation.replace("Dashboard");
         } else {
           navigation.replace("Login");
         }
-      }, 2000);
+      }, 2500);
     };
 
     checkLogin();
@@ -63,7 +56,7 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <LinearGradient
-      colors={["#702186", "#130866"]}
+      colors={["#3c1059ff", "#000000ff"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
@@ -71,66 +64,22 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
       {/* Logo & Title */}
       <View style={styles.centerContent}>
         <Image
-          source={{
-            uri: "https://via.placeholder.com/150x150.png?text=SAI",
-          }}
+          source={require("../resources/icon.png")} // ✅ your app logo PNG
           style={styles.logo}
         />
         <Text style={styles.title}>SAI</Text>
         <Text style={styles.subtitle}>Fitness Assessment</Text>
       </View>
 
-      {/* Loader rings */}
-      <View style={styles.loader}>
-        <Animated.View
-          style={[
-            styles.ring,
-            {
-              borderBottomColor: "#EFEFFA",
-              transform: [
-                {
-                  rotate: rotate1.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ["0deg", "360deg"],
-                  }),
-                },
-              ],
-            },
-          ]}
-        />
-        <Animated.View
-          style={[
-            styles.ring,
-            {
-              borderRightColor: "#EFEFFA",
-              transform: [
-                {
-                  rotate: rotate2.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ["0deg", "360deg"],
-                  }),
-                },
-              ],
-            },
-          ]}
-        />
-        <Animated.View
-          style={[
-            styles.ring,
-            {
-              borderTopColor: "#EFEFFA",
-              transform: [
-                {
-                  rotate: rotate3.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ["0deg", "360deg"],
-                  }),
-                },
-              ],
-            },
-          ]}
-        />
-      </View>
+      {/* Runner animation */}
+      <Animated.View
+        style={[
+          styles.runnerContainer,
+          { transform: [{ translateX: runAnim }] },
+        ]}
+      >
+        <MaterialIcons name="directions-run" size={42} color="#fff" />
+      </Animated.View>
     </LinearGradient>
   );
 };
@@ -146,24 +95,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 64,
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: "#000000ff",
   },
   title: { fontSize: 36, fontWeight: "900", color: "#fff", marginBottom: 6 },
   subtitle: { fontSize: 18, color: "#ccc", marginBottom: 40 },
-  loader: {
-    width: 120,
-    height: 120,
-    justifyContent: "center",
-    alignItems: "center",
+  runnerContainer: {
     position: "absolute",
-    bottom: 64,
-  },
-  ring: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: "transparent",
+    bottom: 80, // slightly above bottom
+    left: 0,
   },
 });

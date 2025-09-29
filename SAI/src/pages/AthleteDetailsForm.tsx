@@ -18,7 +18,7 @@ import * as ImagePicker from "react-native-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getPhone, getAuthToken, setProfileCompleted } from "../services/storage";
 import i18n from "../i18n";
-const API_BASE = "http://10.204.81.179:3001";
+const API_BASE = "http://10.219.215.138:3001";
 
 const AthleteDetailsForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState("");

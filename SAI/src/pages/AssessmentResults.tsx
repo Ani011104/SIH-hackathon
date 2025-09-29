@@ -47,10 +47,10 @@ const AssessmentResults: React.FC<Props> = ({ navigation }) => {
           {[
       { icon: "self-improvement", name: "Sit and Reach", result: "15cm" },
            { icon: "vertical-align-top", name: "Standing Vertical Jump", result: "1m" },
-            { icon: "fitness-center", name: "Standing Broad Jump", result: "3.5m" },
-           { icon: "sports-handball", name: "30m standing start sprint", result: "4.5s" },
+            { icon: "fitness-center", name: "Standing Broad Jump", result: "2m" },
+           { icon: "sports-handball", name: "30m standing start sprint", result: "6s" },
            { icon: "sports-kabaddi", name: "4*10m Shuttle Run", result: "12s" },
-           { icon: "accessibility", name: "Sit-ups", result: "25 reps" },
+           { icon: "accessibility", name: "Sit-ups", result: "5 reps" },
             
             
                   

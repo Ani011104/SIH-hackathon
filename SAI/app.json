@@ -1,4 +1,5 @@
 {
   "name": "SAI",
-  "displayName": "SAI"
+  "displayName": "SAI",
+  "icon": "../resources/logo.ico"
 }

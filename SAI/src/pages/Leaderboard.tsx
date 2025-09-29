@@ -34,13 +34,13 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ navigation }) => {
         console.log("✅ MOCK: Loading leaderboard...");
 
         // ✅ Hard-coded user score
-        const userScore = 85;
+        const userScore = 90;
 
         setTimeout(() => {
           const mockPlayers = [
             { rank: 1, name: "Arjun S.", score: 95 },
             { rank: 2, name: "Priya S.", score: 92 },
-            { rank: 3, name: "Rohan V.", score: 90 },
+            { rank: 3, name: "Rohan V.", score: 91 },
             { rank: 4, name: "You", score: userScore },
           ];
           setPlayers(mockPlayers);
