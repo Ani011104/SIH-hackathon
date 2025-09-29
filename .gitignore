@@ -18,4 +18,5 @@ debug.log
 build/
 dist/
 android/app/build/
-ios/build/
+ios/build/.DS_Store
+.DS_Store

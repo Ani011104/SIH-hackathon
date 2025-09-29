@@ -124,7 +124,7 @@ export default function Leaderboard() {
         
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
@@ -170,37 +170,7 @@ export default function Leaderboard() {
           </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Regional Rankings</CardTitle>
-            <CardDescription>Performance by geographic region</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {regionalRankings.map((region, index) => (
-                <div key={region.region} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded bg-primary text-primary-foreground text-xs flex items-center justify-center">
-                        {index + 1}
-                      </div>
-                      <span className="font-medium text-sm">{region.region}</span>
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {region.improvement}
-                    </Badge>
-                  </div>
-                  <div className="text-xs text-muted-foreground ml-8">
-                    {region.athletes} athletes • Avg: {region.avgScore}
-                  </div>
-                  <div className="text-xs text-muted-foreground ml-8">
-                    Top: {region.topAthlete}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        
       </div>
 
       <Card>
